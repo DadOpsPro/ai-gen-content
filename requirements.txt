@@ -1,0 +1,21 @@
+# Core
+anthropic>=0.40.0
+httpx>=0.27.0
+feedparser>=6.0.11
+
+# Publishing
+stripe>=8.0.0
+
+# HTML / markdown processing
+python-slugify>=8.0.0
+
+# Scheduling & utilities
+python-dotenv>=1.0.0
+click>=8.1.0
+
+# Optional: better keyword extraction
+# keybert>=0.8.0
+# spacy>=3.7.0
+
+# Dashboard (optional)
+flask>=3.0.0

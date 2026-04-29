@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  # ── Content Engine (pipeline runner) ─────────────────────────────
+  content-engine:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file: ../.env
+    volumes:
+      - ../site/output:/app/site/output   # persist generated site
+      - ../state.json:/app/state.json     # persist publish state
+    restart: unless-stopped
+    # Override CMD to run daily pipeline
+    command: ["python", "-m", "pipeline.orchestrator", "--mode", "daily"]
+
+  # ── Static site server (serves generated HTML) ───────────────────
+  site-server:
+    image: nginx:alpine
+    volumes:
+      - ../site/output:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    depends_on:
+      - content-engine
+
+  # ── Dashboard (monitoring) ────────────────────────────────────────
+  dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dashboard
+    env_file: ../.env
+    ports:
+      - "3001:3001"
+    volumes:
+      - ../state.json:/app/state.json:ro
+      - ../site/output:/app/site/output:ro
+    restart: unless-stopped
+
+  # ── Scheduled cron runner ─────────────────────────────────────────
+  scheduler:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file: ../.env
+    volumes:
+      - ../site/output:/app/site/output
+      - ../state.json:/app/state.json
+    restart: unless-stopped
+    # Run daily at 7am UTC
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "0 7 * * * cd /app && python -m pipeline.orchestrator --mode daily >> /var/log/engine.log 2>&1" | crontab -
+        echo "0 9 * * 1 cd /app && python -m pipeline.orchestrator --mode newsletter >> /var/log/engine.log 2>&1" | crontab -
+        crond -f
+
+volumes:
+  site_output:

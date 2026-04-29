@@ -1,0 +1,116 @@
+name: Content Engine — Daily Run
+
+on:
+  schedule:
+    # Run daily at 7:00 AM UTC
+    - cron: "0 7 * * *"
+    # Run newsletter every Monday at 9:00 AM UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Pipeline mode"
+        required: true
+        default: "daily"
+        type: choice
+        options:
+          - daily
+          - seed
+          - newsletter
+          - plan
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore site state
+        uses: actions/cache@v4
+        with:
+          path: |
+            state.json
+            site/output
+          key: site-state-${{ github.run_number }}
+          restore-keys: site-state-
+
+      - name: Determine run mode
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=${{ github.event.inputs.mode }}" >> $GITHUB_OUTPUT
+          elif [ "$(date +%u)" = "1" ]; then
+            echo "mode=newsletter" >> $GITHUB_OUTPUT
+          else
+            echo "mode=daily" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run content pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SERPER_API_KEY:    ${{ secrets.SERPER_API_KEY }}
+          WORDPRESS_URL:     ${{ secrets.WORDPRESS_URL }}
+          WORDPRESS_USER:    ${{ secrets.WORDPRESS_USER }}
+          WORDPRESS_APP_PW:  ${{ secrets.WORDPRESS_APP_PW }}
+          MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
+          MAILCHIMP_LIST_ID: ${{ secrets.MAILCHIMP_LIST_ID }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          ADSENSE_PUB_ID:    ${{ secrets.ADSENSE_PUB_ID }}
+          AMAZON_TAG:        ${{ secrets.AMAZON_TAG }}
+          SITE_URL:          ${{ secrets.SITE_URL }}
+        run: python -m pipeline.orchestrator --mode ${{ steps.mode.outputs.mode }}
+
+      - name: Save updated state
+        uses: actions/cache@v4
+        with:
+          path: |
+            state.json
+            site/output
+          key: site-state-${{ github.run_number }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: success()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site/output
+          commit_message: "Auto-publish: ${{ steps.mode.outputs.mode }} run"
+
+  # Seed job: run manually to generate initial articles
+  seed-content:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.mode == 'seed'
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - run: pip install -r requirements.txt
+      - name: Run seed pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SERPER_API_KEY:    ${{ secrets.SERPER_API_KEY }}
+          WORDPRESS_URL:     ${{ secrets.WORDPRESS_URL }}
+          WORDPRESS_USER:    ${{ secrets.WORDPRESS_USER }}
+          WORDPRESS_APP_PW:  ${{ secrets.WORDPRESS_APP_PW }}
+          SITE_URL:          ${{ secrets.SITE_URL }}
+        run: python -m pipeline.orchestrator --mode seed --count 15
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site/output
