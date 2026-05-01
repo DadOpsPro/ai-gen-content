@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Complete Guide to Self-Healing Test Frameworks | AI Dev Defense</title>
-  <meta name="description" content="Master self-healing test frameworks in this 2025 guide. Learn AI-driven automation strategies to reduce test maintenance by 60-80% and scale testing efficiently.">
+  <meta name="description" content="Master self-healing test frameworks with AI-powered automation. Learn how to build resilient test suites that automatically detect and correct failures while reducing maintenance overhead.">
   <meta property="og:title" content="Complete Guide to Self-Healing Test Frameworks">
-  <meta property="og:description" content="Master self-healing test frameworks in this 2025 guide. Learn AI-driven automation strategies to reduce test maintenance by 60-80% and scale testing efficiently.">
+  <meta property="og:description" content="Master self-healing test frameworks with AI-powered automation. Learn how to build resilient test suites that automatically detect and correct failures while reducing maintenance overhead.">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://aidevdefense.com//posts/self-healing-test-frameworks-guide.html">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" crossorigin="anonymous"></script>
   <style>
     :root {
       --font-sans: 'Georgia', serif;
@@ -54,13 +54,13 @@
   <header class="site-header">
     <a href="/">AI Dev Defense</a>
     <span style="opacity:.5">|</span>
-    <span style="font-size:.9rem;opacity:.7">Software Testing</span>
+    <span style="font-size:.9rem;opacity:.7">Quality Assurance</span>
   </header>
   <main class="article-container">
     <div class="article-meta">
-      <span>Software Testing</span> &middot;
+      <span>Quality Assurance</span> &middot;
       <span>6 min read</span> &middot;
-      <span>1,355 words</span>
+      <span>1,286 words</span>
     </div>
     <h1>Complete Guide to Self-Healing Test Frameworks</h1>
     <div class="article-content">
@@ -69,412 +69,378 @@
      padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
   <strong>Disclosure:</strong> Some links in this article are affiliate links.
   We may earn a commission at no extra cost to you if you purchase through them.
-</div><p><h1>Complete Guide to Self-Healing Test Frameworks: The Definitive 2025 Resource</h1>
+</div><p><h1>The Complete Guide to Self-Healing Test Frameworks: Building Resilient Test Automation for 2025 and Beyond</h1>
 
 <h2>Executive Summary</h2>
 <div class="ad-unit" style="margin:2rem 0;text-align:center;">
   <!-- AdSense -->
   <ins class="adsbygoogle"
        style="display:block"
-       data-ad-client="pub-XXXXXXXXXXXXXXXX"
+       data-ad-client=""
        data-ad-slot="XXXXXXXXXX"
        data-ad-format="auto"
        data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 </p>
-<p>Self-healing test frameworks represent a paradigm shift in AI in Software Testing, where automated tests autonomously detect, diagnose, and repair themselves when application changes break locators or test logic. This guide provides senior engineers with comprehensive technical knowledge to architect, implement, and scale self-healing capabilities that reduce test maintenance burden by 60-80%. As we move through 2025, these frameworks have evolved from experimental features to production-grade systems that fundamentally change how organizations approach test automation strategy.
+<p>Self-healing test frameworks represent a paradigm shift in <strong>AI in Software Testing</strong>, automatically detecting and correcting test failures caused by application changes rather than actual defects. These systems leverage machine learning, heuristic matching, and intelligent element resolution to maintain test stability while dramatically reducing maintenance overhead. As organizations scale their test suites to thousands of cases, <strong>self-healing test frameworks</strong> have evolved from nice-to-have features to critical infrastructure components. This guide provides senior engineers with the technical depth needed to implement, optimize, and scale these systems effectively in 2025.
 
 <h2>Background & Context</h2>
 </p>
-<p>The test maintenance problem has plagued automation engineers since the inception of UI testing. Studies consistently show that 40-70% of test automation effort goes toward maintenance rather than new test creation. A single sprint's worth of UI changes can break dozens of tests, creating a cascading failure that erodes trust in automation suites.
+<p>The test maintenance crisis reached an inflection point around 2020. Studies indicated that teams spent 60-70% of their automation effort maintaining existing tests rather than creating new coverage. The primary culprits: brittle locators, dynamic content, and frequent UI changes that broke tests without indicating actual application defects.
 </p>
-<p>Traditional approaches relied on brittle selectors—absolute XPaths, auto-generated IDs, and CSS selectors tied to specific DOM structures. When developers refactored components or redesigned interfaces, these selectors shattered. Teams responded with page object patterns and selector abstraction, but these only moved the problem rather than solving it.
+<p>Traditional solutions—more robust locator strategies, explicit waits, page object models—helped but didn't solve the fundamental problem. Enter self-healing frameworks: systems that observe test failures, diagnose their causes, and automatically implement corrections without human intervention.
 </p>
-<p>Self-healing test frameworks emerged from the convergence of three technologies: machine learning classification, computer vision, and intelligent selector strategies. Early implementations (2019-2022) focused primarily on locator healing. Modern systems (2023-2025) incorporate semantic understanding, visual validation, and predictive maintenance.
+<p>The evolution progressed through three generations:
+<li><strong>Rule-based healing (2018-2021)</strong>: Fallback locator strategies and simple pattern matching</li>
+<li><strong>ML-enhanced healing (2021-2024)</strong>: Computer vision and NLP for element identification</li>
+<li><strong>Autonomous healing (2025+)</strong>: Context-aware systems that understand application semantics</li>
 
 <h2>Core Concepts</h2>
 
-<h3>The Self-Healing Pipeline</h3>
+<h3>The Healing Pipeline Architecture</h3>
 
-<pre><code class="language-">[Test Execution] → [Failure Detection] → [Root Cause Analysis] → [Healing Strategy Selection] → [Candidate Generation] → [Validation] → [Execution Resume] → [Learning Feedback]
+<pre><code class="language-">[Test Execution] → [Failure Detection] → [Root Cause Analysis] → [Healing Strategy Selection] → [Correction Application] → [Validation] → [Learning Feedback Loop]
 </code></pre>
 
-<strong>Element Fingerprinting</strong>: Rather than storing a single selector, self-healing frameworks maintain comprehensive element fingerprints containing multiple identification strategies:
-
-<pre><code class="language-">ElementFingerprint:
-├── Primary Selector (CSS/XPath)
-├── Alternative Selectors (5-10 variants)
-├── Visual Signature (bounding box, appearance hash)
-├── Semantic Context (nearby text, labels, ARIA)
-├── Structural Position (DOM tree coordinates)
-└── Behavioral Signature (event handlers, state changes)
+<strong>Component Diagram (Text Description):</strong>
+<pre><code class="language-">┌─────────────────────────────────────────────────────────────────────┐
+│                     SELF-HEALING ENGINE                              │
+│  ┌─────────────┐   ┌──────────────┐   ┌─────────────────────────┐  │
+│  │  Locator    │──▶│  Element     │──▶│  Healing Strategy       │  │
+│  │  Repository │   │  Matcher     │   │  Selector               │  │
+│  └─────────────┘   └──────────────┘   └─────────────────────────┘  │
+│         │                 │                      │                  │
+│         ▼                 ▼                      ▼                  │
+│  ┌─────────────┐   ┌──────────────┐   ┌─────────────────────────┐  │
+│  │  Historical │   │  Visual      │   │  Confidence             │  │
+│  │  Snapshots  │   │  Analyzer    │   │  Scorer                 │  │
+│  └─────────────┘   └──────────────┘   └─────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
 </code></pre>
 
-<strong>Confidence Scoring</strong>: Each healing candidate receives a confidence score based on multiple factors. The framework only applies fixes above configurable thresholds, with lower-confidence matches flagged for human review.
+<h3>Key Mechanisms</h3>
 
-<strong>Learning Loop</strong>: Every healing action feeds back into the system, improving future predictions through reinforcement learning on successful recoveries.
+<strong>Element Fingerprinting</strong>: Rather than relying on single locators, self-healing frameworks create multi-dimensional fingerprints combining:
+<ul>
+<li>DOM attributes (id, class, name, data-* attributes)</li>
+<li>Visual characteristics (position, size, color)</li>
+<li>Semantic context (nearby text, ARIA labels)</li>
+<li>Structural position (DOM path, sibling relationships)</li>
+</ul>
+
+<strong>Confidence Scoring</strong>: Each healing attempt receives a confidence score (0-1.0). Only corrections exceeding the threshold (typically 0.85) proceed automatically.
 
 <h2>Implementation Deep Dive</h2>
 
-<h3>Building the Element Repository</h3>
-</p>
-<p>The foundation of self-healing is a rich element repository that captures comprehensive identification data during test recording or first execution:
+<h3>Building a Self-Healing Element Locator</h3>
 
-<pre><code class="language-python"><h1>element_repository.py</h1>
-from dataclasses import dataclass, field
-from typing import List, Dict, Optional
-import hashlib
+<pre><code class="language-python"><h1>core/healing_locator.py</h1>
+from dataclasses import dataclass
+from typing import List, Optional, Dict, Any
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.common.exceptions import NoSuchElementException
+import hashlib
+import json
 </p>
 <p>@dataclass
 class ElementFingerprint:
-    primary_selector: str
-    selector_type: str
-    alternative_selectors: List[Dict[str, str]] = field(default_factory=list)
-    text_content: str = ""
-    aria_label: Optional[str] = None
-    nearby_text: List[str] = field(default_factory=list)
-    tag_name: str = ""
-    attributes: Dict[str, str] = field(default_factory=dict)
-    bounding_box: Dict[str, int] = field(default_factory=dict)
-    visual_hash: str = ""
-    dom_path: str = ""
+    primary_locator: str
+    locator_type: str
+    attributes: Dict[str, str]
+    text_content: str
+    visual_bounds: Dict[str, int]
+    dom_path: str
+    sibling_signatures: List[str]
+    timestamp: float
     
-    def compute_similarity(self, candidate: 'ElementFingerprint') -> float:
-        """Calculate weighted similarity score between fingerprints"""
-        scores = []
-        weights = []
-        
-        # Text content similarity (high weight)
-        if self.text_content and candidate.text_content:
-            text_sim = self._text_similarity(self.text_content, candidate.text_content)
-            scores.append(text_sim)
-            weights.append(0.25)
-        
-        # Attribute overlap
-        attr_sim = self._attribute_similarity(candidate.attributes)
-        scores.append(attr_sim)
-        weights.append(0.20)
-        
-        # Structural position
-        struct_sim = self._structural_similarity(candidate.dom_path)
-        scores.append(struct_sim)
-        weights.append(0.15)
-        
-        # Visual similarity
-        if self.visual_hash and candidate.visual_hash:
-            visual_sim = 1.0 if self.visual_hash == candidate.visual_hash else 0.3
-            scores.append(visual_sim)
-            weights.append(0.25)
-        
-        # Tag and role match
-        tag_sim = 1.0 if self.tag_name == candidate.tag_name else 0.0
-        scores.append(tag_sim)
-        weights.append(0.15)
-        
-        return sum(s * w for s, w in zip(scores, weights)) / sum(weights)
-    
-    def _text_similarity(self, text1: str, text2: str) -> float:
-        # Levenshtein-based similarity
-        from difflib import SequenceMatcher
-        return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
-    
-    def _attribute_similarity(self, other_attrs: Dict[str, str]) -> float:
-        if not self.attributes and not other_attrs:
-            return 1.0
-        common_keys = set(self.attributes.keys()) & set(other_attrs.keys())
-        if not common_keys:
-            return 0.0
-        matches = sum(1 for k in common_keys if self.attributes[k] == other_attrs[k])
-        return matches / max(len(self.attributes), len(other_attrs))
-    
-    def _structural_similarity(self, other_path: str) -> float:
-        # Compare DOM path segments
-        self_segments = self.dom_path.split('/')
-        other_segments = other_path.split('/')
-        common = 0
-        for s1, s2 in zip(self_segments, other_segments):
-            if s1 == s2:
-                common += 1
-            else:
-                break
-        return common / max(len(self_segments), len(other_segments))
+    def compute_hash(self) -> str:
+        content = json.dumps({
+            'attributes': self.attributes,
+            'text': self.text_content,
+            'path': self.dom_path
+        }, sort_keys=True)
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
 </p>
 <p>
-class ElementRepository:
-    def __init__(self, storage_backend='sqlite'):
-        self.storage = self._init_storage(storage_backend)
-        self.cache = {}
+class SelfHealingLocator:
+    def __init__(self, driver: WebDriver, healing_engine: 'HealingEngine', 
+                 confidence_threshold: float = 0.85):
+        self.driver = driver
+        self.healing_engine = healing_engine
+        self.threshold = confidence_threshold
+        self.fingerprint_store = FingerprintStore()
     
-    def capture_fingerprint(self, driver, element: WebElement, 
-                           element_id: str) -> ElementFingerprint:
-        """Capture comprehensive fingerprint during test recording"""
-        fingerprint = ElementFingerprint(
-            primary_selector=self._get_optimal_selector(driver, element),
-            selector_type='css',
-            alternative_selectors=self._generate_alternative_selectors(driver, element),
-            text_content=element.text,
-            aria_label=element.get_attribute('aria-label'),
-            nearby_text=self._extract_nearby_text(driver, element),
-            tag_name=element.tag_name,
-            attributes=self._get_relevant_attributes(element),
-            bounding_box=element.rect,
-            visual_hash=self._compute_visual_hash(driver, element),
-            dom_path=self._get_dom_path(driver, element)
-        )
-        self.storage.save(element_id, fingerprint)
-        return fingerprint
-    
-    def _generate_alternative_selectors(self, driver, element) -> List[Dict[str, str]]:
-        """Generate multiple fallback selectors"""
-        selectors = []
-        
-        # ID-based
-        elem_id = element.get_attribute('id')
-        if elem_id:
-            selectors.append({'type': 'css', 'value': f'#{elem_id}'})
-        
-        # Data-testid (recommended for testing)
-        testid = element.get_attribute('data-testid')
-        if testid:
-            selectors.append({'type': 'css', 'value': f'[data-testid="{testid}"]'})
-        
-        # ARIA-based
-        aria_label = element.get_attribute('aria-label')
-        if aria_label:
-            selectors.append({
-                'type': 'xpath', 
-                'value': f'//*[@aria-label="{aria_label}"]'
-            })
-        
-        # Text-based XPath
-        if element.text:
-            selectors.append({
-                'type': 'xpath',
-                'value': f'//{element.tag_name}[contains(text(), "{element.text[:30]}")]'
-            })
-        
-        # Class combination
-        classes = element.get_attribute('class')
-        if classes:
-            class_selector = '.'.join(classes.split()[:3])
-            selectors.append({'type': 'css', 'value': f'{element.tag_name}.{class_selector}'})
-        
-        return selectors
-</code></pre>
-
-<h3>The Healing Engine</h3>
-</p>
-<p>The healing engine orchestrates the recovery process when element location fails:
-
-<pre><code class="language-python"><h1>healing_engine.py</h1>
-import logging
-from typing import Optional, Tuple, List
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.common.exceptions import NoSuchElementException
-from concurrent.futures import ThreadPoolExecutor
-</p>
-<p>logger = logging.getLogger(__name__)
-</p>
-<p>class HealingEngine:
-    def __init__(self, repository: ElementRepository, 
-                 confidence_threshold: float = 0.75,
-                 visual_engine: Optional['VisualMatcher'] = None):
-        self.repository = repository
-        self.confidence_threshold = confidence_threshold
-        self.visual_engine = visual_engine
-        self.healing_history = []
-        
-    def find_element_with_healing(self, driver: WebDriver, 
-                                   element_id: str) -> Tuple[WebElement, bool]:
-        """
-        Attempt to find element, applying self-healing if primary selector fails.
-        Returns (element, was_healed) tuple.
-        """
-        fingerprint = self.repository.get(element_id)
-        
-        # Try primary selector first
+    def find_element(self, locator: str, locator_type: str = "css",
+                     element_name: str = None) -> WebElement:
         try:
-            element = driver.find_element(
-                fingerprint.selector_type, 
-                fingerprint.primary_selector
-            )
-            if self._validate_element(element, fingerprint):
-                return element, False
+            element = self._direct_find(locator, locator_type)
+            self._update_fingerprint(element_name, element, locator, locator_type)
+            return element
         except NoSuchElementException:
-            logger.info(f"Primary selector failed for {element_id}, initiating healing")
+            return self._attempt_healing(element_name, locator, locator_type)
+    
+    def _attempt_healing(self, element_name: str, original_locator: str,
+                         locator_type: str) -> WebElement:
+        historical_fingerprint = self.fingerprint_store.get(element_name)
+        if not historical_fingerprint:
+            raise NoSuchElementException(f"No healing data for {element_name}")
         
-        # Try alternative selectors
-        for alt in fingerprint.alternative_selectors:
+        candidates = self._find_candidates(historical_fingerprint)
+        scored_candidates = self.healing_engine.score_candidates(
+            historical_fingerprint, candidates
+        )
+        
+        best_match = max(scored_candidates, key=lambda x: x.confidence)
+        
+        if best_match.confidence >= self.threshold:
+            self._log_healing_event(element_name, original_locator, 
+                                    best_match.new_locator, best_match.confidence)
+            return best_match.element
+        
+        raise NoSuchElementException(
+            f"Healing failed: best confidence {best_match.confidence:.2f} "
+            f"below threshold {self.threshold}"
+        )
+    
+    def _find_candidates(self, fingerprint: ElementFingerprint) -> List[WebElement]:
+        strategies = [
+            f"//*[contains(text(), '{fingerprint.text_content[:50]}')]",
+            f"//*[@class='{fingerprint.attributes.get('class', '')}']",
+            f"//*[contains(@id, '{fingerprint.attributes.get('id', '')[:10]}')]"
+        ]
+        
+        candidates = []
+        for strategy in strategies:
             try:
-                element = driver.find_element(alt['type'], alt['value'])
-                if self._validate_element(element, fingerprint):
-                    self._record_healing(element_id, alt, 'alternative_selector')
-                    return element, True
-            except NoSuchElementException:
+                elements = self.driver.find_elements("xpath", strategy)
+                candidates.extend(elements)
+            except Exception:
                 continue
         
-        # Engage ML-based healing
-        healed_element = self._ml_heal(driver, fingerprint)
-        if healed_element:
-            self._record_healing(element_id, healed_element, 'ml_healing')
-            return healed_element, True
-        
-        # Visual healing as last resort
-        if self.visual_engine:
-            visual_element = self.visual_engine.find_by_appearance(
-                driver, fingerprint.visual_hash, fingerprint.bounding_box
-            )
-            if visual_element:
-                self._record_healing(element_id, visual_element, 'visual_healing')
-                return visual_element, True
-        
-        raise ElementNotHealableException(
-            f"Could not heal element {element_id} - manual intervention required"
-        )
-    
-    def _ml_heal(self, driver: WebDriver, 
-                  fingerprint: ElementFingerprint) -> Optional[WebElement]:
-        """Use ML to find best matching element in current DOM"""
-        # Get all candidate elements of same tag type
-        candidates = driver.find_elements('tag name', fingerprint.tag_name)
-        
-        if not candidates:
-            # Expand search to similar semantic elements
-            candidates = self._get_semantic_candidates(driver, fingerprint)
-        
-        best_match = None
-        best_score = 0.0
-        
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            futures = [
-                executor.submit(self._score_candidate, driver, c, fingerprint)
-                for c in candidates[:50]  # Limit candidates for performance
-            ]
-            
-            for future, candidate in zip(futures, candidates[:50]):
-                score = future.result()
-                if score > best_score and score >= self.confidence_threshold:
-                    best_score = score
-                    best_match = candidate
-        
-        if best_match:
-            logger.info(f"ML healing found match with confidence {best_score:.2f}")
-        
-        return best_match
-    
-    def _score_candidate(self, driver: WebDriver, 
-                         candidate: WebElement,
-                         target: ElementFingerprint) -> float:
-        """Score a candidate element against target fingerprint"""
-        candidate_fp = ElementFingerprint(
-            primary_selector="",
-            selector_type="",
-            text_content=candidate.text,
-            aria_label=candidate.get_attribute('aria-label'),
-            tag_name=candidate.tag_name,
-            attributes=self._quick_attributes(candidate),
-            bounding_box=candidate.rect,
-            dom_path=self._quick_dom_path(driver, candidate)
-        )
-        return target.compute_similarity(candidate_fp)
-    
-    def _validate_element(self, element: WebElement, 
-                          fingerprint: ElementFingerprint) -> bool:
-        """Validate found element matches expected characteristics"""
-        # Quick validation checks
-        if element.tag_name != fingerprint.tag_name:
-            return False
-        
-        # Text content check (allow minor differences)
-        if fingerprint.text_content:
-            similarity = self._text_similarity(
-                element.text, 
-                fingerprint.text_content
-            )
-            if similarity < 0.8:
-                return False
-        
-        return True
+        return list(set(candidates))
 </code></pre>
 
-<h3>Integration with Test Frameworks</h3>
-</p>
-<p>Seamless integration with Selenium, <a href="https://amazon.com/s?k=playwright+testing&tag=yourtag-20" target="_blank" rel="noopener nofollow" class="affiliate-link">Playwright</a>, and <a href="https://cypress.io?ref=testaiweekly" target="_blank" rel="noopener nofollow" class="affiliate-link">Cypress</a> requires wrapper classes:
+<h3>The Healing Engine with ML Scoring</h3>
 
-<pre><code class="language-python"><h1>selenium_integration.py</h1>
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
-from functools import wraps
+<pre><code class="language-python"><h1>core/healing_engine.py</h1>
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from dataclasses import dataclass
+from typing import List
+import cv2
+import pytesseract
 </p>
-<p>class SelfHealingDriver:
-    """Wrapper that adds self-healing capabilities to Selenium WebDriver"""
+<p>@dataclass
+class HealingCandidate:
+    element: 'WebElement'
+    new_locator: str
+    confidence: float
+    healing_strategy: str
+</p>
+<p>
+class HealingEngine:
+    def __init__(self, model_path: str = None):
+        self.ml_model = self._load_or_train_model(model_path)
+        self.strategy_weights = {
+            'attribute_match': 0.25,
+            'visual_similarity': 0.30,
+            'structural_match': 0.25,
+            'semantic_match': 0.20
+        }
     
-    def __init__(self, driver: WebDriver, healing_engine: HealingEngine):
-        self._driver = driver
-        self._healing = healing_engine
-        self._healing_enabled = True
-        self._healing_report = []
-    
-    def find_element(self, by: str, value: str, element_id: str = None):
-        """Self-healing find_element implementation"""
-        if not self._healing_enabled or not element_id:
-            return self._driver.find_element(by, value)
+    def score_candidates(self, original: ElementFingerprint, 
+                         candidates: List['WebElement']) -> List[HealingCandidate]:
+        scored = []
         
-        element, was_healed = self._healing.find_element_with_healing(
-            self._driver, element_id
+        for candidate in candidates:
+            current_fingerprint = self._extract_fingerprint(candidate)
+            
+            scores = {
+                'attribute_match': self._score_attributes(
+                    original.attributes, current_fingerprint.attributes
+                ),
+                'visual_similarity': self._score_visual(
+                    original.visual_bounds, current_fingerprint.visual_bounds
+                ),
+                'structural_match': self._score_structure(
+                    original.dom_path, current_fingerprint.dom_path
+                ),
+                'semantic_match': self._score_semantic(
+                    original.text_content, current_fingerprint.text_content
+                )
+            }
+            
+            # ML-enhanced final scoring
+            feature_vector = self._create_feature_vector(scores, original, current_fingerprint)
+            ml_confidence = self.ml_model.predict_proba([feature_vector])[0][1]
+            
+            weighted_score = sum(
+                scores[k] * self.strategy_weights[k] for k in scores
+            )
+            
+            final_confidence = 0.6 <em> weighted_score + 0.4 </em> ml_confidence
+            
+            scored.append(HealingCandidate(
+                element=candidate,
+                new_locator=self._generate_locator(candidate),
+                confidence=final_confidence,
+                healing_strategy=max(scores, key=scores.get)
+            ))
+        
+        return sorted(scored, key=lambda x: x.confidence, reverse=True)
+    
+    def _score_attributes(self, original: Dict, current: Dict) -> float:
+        if not original or not current:
+            return 0.0
+        
+        matching_keys = set(original.keys()) & set(current.keys())
+        if not matching_keys:
+            return 0.0
+        
+        matches = sum(1 for k in matching_keys if original[k] == current[k])
+        partial_matches = sum(
+            self._string_similarity(original[k], current[k]) 
+            for k in matching_keys if original[k] != current[k]
         )
         
-        if was_healed:
-            self._healing_report.append({
-                'element_id': element_id,
-                'original_selector': value,
-                'healed_at': datetime.now().isoformat(),
-                'test_continued': True
-            })
+        return (matches + partial_matches) / len(set(original.keys()) | set(current.keys()))
+    
+    def _score_visual(self, original_bounds: Dict, current_bounds: Dict) -> float:
+        """Calculate visual similarity using bounding box IoU"""
+        if not original_bounds or not current_bounds:
+            return 0.0
         
-        return element
-    
-    def __getattr__(self, name):
-        """Delegate unknown attributes to wrapped driver"""
-        return getattr(self._driver, name)
-    
-    def get_healing_report(self) -> List[dict]:
-        """Return report of all healing actions in session"""
-        return self._healing_report.copy()
+        # Intersection over Union calculation
+        x1 = max(original_bounds['x'], current_bounds['x'])
+        y1 = max(original_bounds['y'], current_bounds['y'])
+        x2 = min(original_bounds['x'] + original_bounds['width'],
+                 current_bounds['x'] + current_bounds['width'])
+        y2 = min(original_bounds['y'] + original_bounds['height'],
+                 current_bounds['y'] + current_bounds['height'])
+        
+        intersection = max(0, x2 - x1) * max(0, y2 - y1)
+        original_area = original_bounds['width'] * original_bounds['height']
+        current_area = current_bounds['width'] * current_bounds['height']
+        union = original_area + current_area - intersection
+        
+        return intersection / union if union > 0 else 0.0
 </code></pre>
 
 <h2>Advanced Techniques</h2>
 
 <h3>Visual Healing with Computer Vision</h3>
 </p>
-<p><a href="https://applitools.com?ref=testaiweekly" target="_blank" rel="noopener nofollow" class="affiliate-link">Applitools</a> and similar tools pioneered visual AI, but custom implementations offer flexibility:
+<p>For applications with frequent DOM restructuring, visual healing provides resilience independent of HTML structure.
 
-<code>`</code>python
-<h1>visual_healing.py</h1>
-import cv2
-import numpy as np
-from skimage.metrics import structural_similarity
-</p>
-<p>class VisualMatcher:
-    def __init__(self, similarity_threshold: float = 0.85):
-        self.threshold = similarity_threshold
+<pre><code class="language-python"><h1>advanced/visual_healer.py</h1>
+class VisualHealingStrategy:
+    def __init__(self, template_store: 'TemplateStore'):
+        self.template_store = template_store
+        self.orb = cv2.ORB_create(nfeatures=500)
+        self.matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
     
-    def find_by_appearance(self, driver, visual_hash: str, 
-                           expected_</p>
+    def find_by_visual_template(self, element_name: str, 
+                                 screenshot: np.ndarray) -> Optional[Dict]:
+        template = self.template_store.get_template(element_name)
+        if template is None:
+            return None
+        
+        # Feature matching approach
+        kp1, des1 = self.orb.detectAndCompute(template, None)
+        kp2, des2 = self.orb.detectAndCompute(screenshot, None)
+        
+        if des1 is None or des2 is None:
+            return None
+        
+        matches = self.matcher.match(des1, des2)
+        matches = sorted(matches, key=lambda x: x.distance)
+        
+        if len(matches) < 10:
+            return None
+        
+        # Extract matched keypoints
+        src_pts = np.float32([kp1[m.queryIdx].pt for m in matches[:20]])
+        dst_pts = np.float32([kp2[m.trainIdx].pt for m in matches[:20]])
+        
+        # Find homography and element location
+        M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+        
+        h, w = template.shape[:2]
+        corners = np.float32([[0,0], [w,0], [w,h], [0,h]]).reshape(-1,1,2)
+        transformed = cv2.perspectiveTransform(corners, M)
+        
+        return {
+            'bounds': cv2.boundingRect(transformed),
+            'confidence': len([m for m in mask if m]) / len(mask)
+        }
+</code></pre>
+
+<h3>Semantic Understanding with NLP Models</h3>
+
+<pre><code class="language-python"><h1>advanced/semantic_healer.py</h1>
+from sentence_transformers import SentenceTransformer
+</p>
+<p>class SemanticMatcher:
+    def __init__(self):
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        self.similarity_cache = {}
+    
+    def compute_semantic_similarity(self, text1: str, text2: str) -> float:
+        cache_key = (text1, text2)
+        if cache_key in self.similarity_cache:
+            return self.similarity_cache[cache_key]
+        
+        embeddings = self.model.encode([text1, text2])
+        similarity = np.dot(embeddings[0], embeddings[1]) / (
+            np.linalg.norm(embeddings[0]) * np.linalg.norm(embeddings[1])
+        )
+        
+        self.similarity_cache[cache_key] = float(similarity)
+        return float(similarity)
+</code></pre>
+
+<h2>Architecture Patterns</h2>
+
+<h3>Pattern 1: Centralized Healing Service</h3>
+
+<pre><code class="language-">┌──────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│ Test Runner  │────▶│  Healing API     │────▶│  ML Service     │
+│ (Distributed)│     │  (gRPC/REST)     │     │  (TensorFlow)   │
+└──────────────┘     └──────────────────┘     └─────────────────┘
+                              │
+                              ▼
+                     ┌──────────────────┐
+                     │  Fingerprint DB  │
+                     │  (PostgreSQL)    │
+                     └──────────────────┘
+</code></pre>
+
+<strong>Use Case</strong>: Enterprise environments with 50+ parallel test agents requiring consistent healing decisions.
+
+<h3>Pattern 2: Edge Healing with Central Learning</h3>
+</p>
+<p>Each test agent performs local healing using cached models, with healing events streamed to a central system for model retraining via MLflow or Kubeflow.
+
+<h2>Performance & Scale Considerations</h2>
+</p>
+<p>| Configuration | Latency Impact | Memory Overhead | Recommended Scale |
+|---------------|----------------|-----------------|-------------------|
+| Rule-based only | +5-15ms | ~50MB | < 1000 tests |
+| ML-enhanced | +50-200</p>
 <div class="ad-unit" style="margin:2rem 0;text-align:center;">
   <!-- AdSense -->
   <ins class="adsbygoogle"
        style="display:block"
-       data-ad-client="pub-XXXXXXXXXXXXXXXX"
+       data-ad-client=""
        data-ad-slot="XXXXXXXXXX"
        data-ad-format="auto"
        data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
     </div>
-    <div class="tags">Tags: test-automation · self-healing-tests · AI-testing · test-frameworks · automation-engineering</div>
+    <div class="tags">Tags: test-automation · self-healing-frameworks · AI-testing · test-maintenance · QA-engineering</div>
   </main>
   <footer>
     <p>&copy; AI Dev Defense · <a href="/privacy.html" style="color:#888">Privacy</a> ·
