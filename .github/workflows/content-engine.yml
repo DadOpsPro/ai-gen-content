@@ -2,28 +2,30 @@ name: Content Engine — Daily Run
 
 on:
   schedule:
-    # Run daily at 7:00 AM UTC
     - cron: "0 7 * * *"
-    # Run newsletter every Monday at 9:00 AM UTC
     - cron: "0 9 * * 1"
   workflow_dispatch:
     inputs:
       mode:
         description: "Pipeline mode"
         required: true
-        default: "daily"
+        default: "seed"
         type: choice
         options:
-          - daily
           - seed
+          - daily
           - newsletter
           - plan
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   generate-content:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -88,28 +90,27 @@ jobs:
           publish_dir: ./site/output
           commit_message: "Auto-publish: ${{ steps.mode.outputs.mode }} run"
 
-  # Seed job: run manually to generate initial articles
   seed-content:
     runs-on: ubuntu-latest
     if: github.event.inputs.mode == 'seed'
     timeout-minutes: 60
-
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"
+
       - run: pip install -r requirements.txt
+
       - name: Run seed pipeline
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SERPER_API_KEY:    ${{ secrets.SERPER_API_KEY }}
-          WORDPRESS_URL:     ${{ secrets.WORDPRESS_URL }}
-          WORDPRESS_USER:    ${{ secrets.WORDPRESS_USER }}
-          WORDPRESS_APP_PW:  ${{ secrets.WORDPRESS_APP_PW }}
           SITE_URL:          ${{ secrets.SITE_URL }}
         run: python -m pipeline.orchestrator --mode seed --count 15
+
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
