@@ -167,8 +167,41 @@ class StaticSiteGenerator:
         index_path = self.output_dir / "index.html"
         index_path.write_text(index, encoding="utf-8")
         print(f"  ✅ Index built: {len(self.published_articles)} articles")
+        self.build_sitemap()
+      
         return str(index_path)
-
+      
+    def build_sitemap(self) -> str:
+        """Generate sitemap.xml for SEO."""
+        urls = []
+        
+        # Homepage
+        urls.append(f"""
+        <url>
+            <loc>{SITE_URL}/</loc>
+            <changefreq>daily</changefreq>
+            <priority>1.0</priority>
+        </url>""")
+        
+        # All articles
+        for article in self.published_articles:
+            urls.append(f"""
+        <url>
+            <loc>{SITE_URL}/posts/{article.slug}.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>""")
+        
+        sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {''.join(urls)}
+    </urlset>"""
+        
+        path = self.output_dir / "sitemap.xml"
+        path.write_text(sitemap, encoding="utf-8")
+        print(f"  ✅ Sitemap: {len(urls)} URLs written")
+        return str(path)
+      
     def _render_article_page(self, article: GeneratedArticle) -> str:
         """Render article to full HTML page."""
         content_with_ads = wrap_with_ads(article.content_html)
@@ -186,7 +219,6 @@ class StaticSiteGenerator:
             adsense_pub=ADSENSE_PUBLISHER_ID,
             adsense_slot=ADSENSE_SLOT_ID,
         )
-
 
 # ── MAILCHIMP NEWSLETTER ───────────────────────────────────────────────────────
 
