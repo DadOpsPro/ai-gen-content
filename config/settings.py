@@ -9,10 +9,10 @@ from typing import List, Dict
 
 # ── NICHE CONFIGURATION ────────────────────────────────────────────────────────
 NICHE = "AI in Software Testing"          # Change to your niche
-SITE_NAME = "TestAI Weekly"
-SITE_TAGLINE = "The pulse of AI-powered software quality"
-SITE_URL = "https://yourdomain.com"       # Your deployed site URL
-AUTHOR_NAME = "TestAI Editorial Team"
+SITE_NAME = "AI Dev Defense"
+SITE_TAGLINE = "AI-powered insights for software testing & application security"
+SITE_URL = "https://aidevdefense.com/"      # Your deployed site URL
+AUTHOR_NAME = "DadOpsPro"
 
 # Topic clusters for content generation (mix evergreen + trending)
 TOPIC_CLUSTERS = [
