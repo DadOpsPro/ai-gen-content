@@ -155,12 +155,12 @@ class StaticSiteGenerator:
                     <span class="category">{article.category}</span>
                     <span class="read-time">~{article.word_count // 200} min read</span>
                 </div>
-                <h2><a href="/posts/{article.slug}.html">{article.title}</a></h2>
+                <h2><a href="posts/{article.slug}.html">{article.title}</a></h2>
                 <p class="excerpt">{article.excerpt}</p>
                 <div class="tags">
                     {''.join(f'<span class="tag">{t}</span>' for t in article.tags[:3])}
                 </div>
-                <a href="/posts/{article.slug}.html" class="read-more">Read article →</a>
+                <a href="posts/{article.slug}.html" class="read-more">Read article →</a>
             </article>"""
 
         index = INDEX_TEMPLATE.replace("{{POSTS}}", cards_html)
