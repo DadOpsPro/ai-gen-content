@@ -322,34 +322,39 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="{site_url}/posts/{slug}.html">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={adsense_pub}" crossorigin="anonymous"></script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{adsense_pub}}" crossorigin="anonymous"></script>
   <style>
     :root {{
       --font-sans: 'Georgia', serif;
       --font-mono: 'Courier New', monospace;
       --max-width: 760px;
       --color-text: #1a1a2e;
-      --color-accent: #0070f3;
+      --color-accent: #00c896;
       --color-muted: #666;
     }}
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: var(--font-sans); color: var(--color-text);
             line-height: 1.7; background: #fff; }}
-    .site-header {{ background: #0a0a1a; color: #fff; padding: 1rem 2rem;
+    .site-header {{ background: #0a0f1e; color: #fff; padding: 1rem 2rem;
                     display: flex; align-items: center; gap: 1rem; }}
-    .site-header a {{ color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; }}
+    .site-header a {{ color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }}
     .article-container {{ max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }}
     .article-meta {{ color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }}
     h1 {{ font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
-          margin-bottom: 1.5rem; color: #0a0a1a; }}
-    h2 {{ font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0a1a; }}
+          margin-bottom: 1.5rem; color: #0a0f1e; }}
+    h2 {{ font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }}
     h3 {{ font-size: 1.2rem; margin: 2rem 0 0.75rem; }}
     p {{ margin-bottom: 1.25rem; }}
     ul, ol {{ margin: 1rem 0 1.5rem 1.5rem; }}
     li {{ margin-bottom: 0.4rem; }}
     code {{ background: #f4f4f4; padding: 0.15rem 0.4rem;
             border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }}
-    pre {{ background: #0a0a1a; color: #e0e0e0; padding: 1.25rem;
+    pre {{ background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
            border-radius: 8px; overflow-x: auto; margin: 1.5rem 0; }}
     pre code {{ background: none; padding: 0; color: inherit; }}
     .affiliate-link {{ color: var(--color-accent); font-weight: 600; }}
@@ -358,10 +363,11 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
     th {{ background: #f4f4f4; font-weight: bold; }}
     .tags {{ margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
              color: var(--color-muted); font-size: 0.85rem; }}
-    footer {{ background: #0a0a1a; color: #888; text-align: center;
+    footer {{ background: #0a0f1e; color: #888; text-align: center;
               padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }}
   </style>
 </head>
+
 <body>
   <header class="site-header">
     <a href="/">{site_name}</a>
@@ -395,6 +401,11 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{SITE_NAME} — {SITE_URL}</title>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <style>
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: 'Georgia', serif; color: #1a1a2e; background: #f9f9f9; }}

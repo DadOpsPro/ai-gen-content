@@ -59,6 +59,9 @@ jobs:
             echo "mode=daily" >> $GITHUB_OUTPUT
           fi
 
+      - name: Copy static assets
+        run: cp -r static/. site/output/
+        
       - name: Run content pipeline
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

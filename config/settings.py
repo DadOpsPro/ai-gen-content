@@ -8,11 +8,11 @@ from dataclasses import dataclass, field
 from typing import List, Dict
 
 # ── NICHE CONFIGURATION ────────────────────────────────────────────────────────
-NICHE = "AI in Software Testing"          # Change to your niche
+NICHE = "AI in Software Testing and Security"
 SITE_NAME = "AI Dev Defense"
 SITE_TAGLINE = "AI-powered insights for software testing & application security"
-SITE_URL = "https://aidevdefense.com/"      # Your deployed site URL
-AUTHOR_NAME = "DadOpsPro"
+SITE_URL = "https://aidevdefense.com/"
+AUTHOR_NAME = "Chris"
 
 # Topic clusters for content generation (mix evergreen + trending)
 TOPIC_CLUSTERS = [
