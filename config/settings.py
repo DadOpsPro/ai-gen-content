@@ -11,7 +11,7 @@ from typing import List, Dict
 NICHE = "AI in Software Testing and Security"
 SITE_NAME = "AI Dev Defense"
 SITE_TAGLINE = "AI-powered insights for software testing & application security"
-SITE_URL = "https://aidevdefense.com/"
+SITE_URL = "https://aidevdefense.com"
 AUTHOR_NAME = "Chris"
 
 # Topic clusters for content generation (mix evergreen + trending)

@@ -107,6 +107,10 @@ def run_seed_pipeline(target_count: int = ARTICLES_PER_SEED_RUN):
     print("\n📄 Building site index...")
     static_gen.build_index()
 
+    # Build static pages
+    from pipeline.pages import build_all_pages
+    build_all_pages()
+
     # Update state
     state["last_run"] = datetime.now().isoformat()
     save_state(state)
@@ -185,6 +189,10 @@ def run_daily_pipeline():
         except Exception as e:
             print(f"  ❌ Error: {e}")
 
+    # Build static pages
+    from pipeline.pages import build_all_pages
+    build_all_pages()
+    
     static_gen.build_index()
     state["last_run"] = datetime.now().isoformat()
     save_state(state)
