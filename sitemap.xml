@@ -2,17 +2,82 @@
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
         <url>
-            <loc>https://aidevdefense.com//</loc>
+            <loc>https://aidevdefense.com/</loc>
             <changefreq>daily</changefreq>
             <priority>1.0</priority>
         </url>
         <url>
-            <loc>https://aidevdefense.com//posts/ai-agents-developer-machines-incredibuild.html</loc>
+            <loc>https://aidevdefense.com/posts/implement-ai-test-automation-tools-2025.html</loc>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
-            <loc>https://aidevdefense.com//posts/does-ai-demand-kubernetes-practical-guide.html</loc>
+            <loc>https://aidevdefense.com/posts/best-llm-testing-strategies-tools-review.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/synthetic-test-data-generation-trends-2025.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/ai-driven-bug-detection-tools-compared.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/implement-visual-regression-testing-ai-2025.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/complete-guide-self-healing-test-frameworks.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/best-ai-code-review-tools-2025.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/eliminate-flaky-tests-ai-2025.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/performance-testing-automation-k6-vs-gatling.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/security-testing-ai-tools-trends-2025.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/implement-ai-test-automation-tools-2025.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/best-llm-testing-strategies-tools-review.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/synthetic-test-data-generation-trends.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/ai-driven-bug-detection-tools-compared.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/implement-visual-regression-testing-ai-2025.html</loc>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
