@@ -6,14 +6,4 @@
             <changefreq>daily</changefreq>
             <priority>1.0</priority>
         </url>
-        <url>
-            <loc>https://aidevdefense.com/posts/nanoco-sandboxed-agents-enterprise-ai-trend.html</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.8</priority>
-        </url>
-        <url>
-            <loc>https://aidevdefense.com/posts/ai-labs-same-product-knowledge-workers-testing-security.html</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.8</priority>
-        </url>
     </urlset>
