@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Dev Defense — LinkedIn Approval</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Georgia, serif;
+            background: #0a0f1e;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 48px 40px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            color: #00c896;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+        }
+        h1 { font-size: 26px; color: #f9fafb; margin-bottom: 16px; line-height: 1.3; }
+        .status { font-size: 17px; line-height: 1.7; color: #94a3b8; margin-bottom: 32px; }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 3px solid #1f2937;
+            border-top-color: #00c896;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 24px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .success { color: #00c896; font-size: 48px; margin-bottom: 16px; }
+        .error-icon { color: #ef4444; font-size: 48px; margin-bottom: 16px; }
+        .skip-icon { color: #6b7280; font-size: 48px; margin-bottom: 16px; }
+        .back { margin-top: 24px; }
+        .back a { color: #00c896; text-decoration: none; font-size: 14px; }
+        #debug { font-size:12px; color:#4b5563; margin-top:20px; word-break:break-all; }
+    </style>
+</head>
+<body>
+    <div class="card" id="card">
+        <div class="logo">AI Dev Defense</div>
+        <div class="spinner" id="spinner"></div>
+        <h1 id="heading">Processing your decision...</h1>
+        <p class="status" id="status">Please wait while we update the post queue.</p>
+    </div>
+
+    <script>
+    (function() {
+        const params  = new URLSearchParams(window.location.search);
+        const slug    = params.get('slug')   || '';
+        const action  = params.get('action') || '';
+        const token   = params.get('token')  || '';
+
+        const heading = document.getElementById('heading');
+        const status  = document.getElementById('status');
+        const spinner = document.getElementById('spinner');
+
+        function showSuccess(msg) {
+            spinner.style.display = 'none';
+            document.getElementById('card').insertAdjacentHTML(
+                'afterbegin',
+                '<div class="success">✅</div>'
+            );
+            heading.textContent = 'Done!';
+            status.textContent  = msg;
+        }
+
+        function showSkip(msg) {
+            spinner.style.display = 'none';
+            document.getElementById('card').insertAdjacentHTML(
+                'afterbegin',
+                '<div class="skip-icon">⏭</div>'
+            );
+            heading.textContent = 'Skipped';
+            status.textContent  = msg;
+        }
+
+        function showError(msg) {
+            spinner.style.display = 'none';
+            document.getElementById('card').insertAdjacentHTML(
+                'afterbegin',
+                '<div class="error-icon">❌</div>'
+            );
+            heading.textContent = 'Something went wrong';
+            status.textContent  = msg;
+        }
+
+        if (!slug || !action) {
+            showError('Missing slug or action in URL. Try the link from your email again.');
+            return;
+        }
+
+        // Trigger GitHub Actions workflow_dispatch
+        const repo     = 'DadOpsPro/ai-gen-content';
+        const workflow = 'linkedin-approve.yml';
+        const apiUrl   = `https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`;
+
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept':        'application/vnd.github+json',
+                'Content-Type':  'application/json',
+            },
+            body: JSON.stringify({
+                ref: 'main',
+                inputs: { slug: slug, action: action }
+            })
+        })
+        .then(res => {
+            if (res.status === 204 || res.status === 200) {
+                if (action === 'approve') {
+                    showSuccess(
+                        `The LinkedIn post for "${slug.replaceAll('-', ' ')}" has been approved. ` +
+                        `It will go out next weekday at 8:00 AM Central Time.`
+                    );
+                } else {
+                    showSkip(
+                        `The LinkedIn post for "${slug.replaceAll('-', ' ')}" has been skipped. ` +
+                        `It will not be posted to LinkedIn.`
+                    );
+                }
+            } else {
+                return res.text().then(t => {
+                    showError(`GitHub API returned status ${res.status}. Check that your approval token is valid. Details: ${t.substring(0, 120)}`);
+                });
+            }
+        })
+        .catch(err => {
+            showError(`Network error: ${err.message}. Please try again or approve manually.`);
+        });
+    })();
+    </script>
+</body>
+</html>

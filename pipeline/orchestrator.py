@@ -27,6 +27,8 @@ from config.settings import (
 from pipeline.scraper import gather_trending_topics, TrendingTopic
 from pipeline.generator import generate_article, generate_newsletter, plan_content_calendar
 from pipeline.publisher import WordPressPublisher, StaticSiteGenerator, MailchimpPublisher
+from pipeline.linkedin import queue_article, load_queue
+from pipeline.approval_email import send_review_email
 
 
 STATE_FILE = Path(__file__).parent.parent / "state.json"
@@ -192,10 +194,25 @@ def run_daily_pipeline():
     # Build static pages
     from pipeline.pages import build_all_pages
     build_all_pages()
-    
+
     static_gen.build_index()
     state["last_run"] = datetime.now().isoformat()
     save_state(state)
+
+    # Queue articles for LinkedIn and send review email
+    if published:
+        print("\n📬 Queuing articles for LinkedIn review...")
+        queued = []
+        for article in published:
+            try:
+                entry = queue_article(article)
+                queued.append(entry)
+            except Exception as e:
+                print(f"  ⚠️  Could not queue {article.slug} for LinkedIn: {e}")
+
+        if queued:
+            print(f"\n📧 Sending LinkedIn review email ({len(queued)} article(s))...")
+            send_review_email(queued)
 
     print(f"\n✅ Daily run complete: {len(published)} articles published")
     return published
