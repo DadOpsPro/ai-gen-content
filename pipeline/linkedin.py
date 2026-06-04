@@ -198,29 +198,31 @@ def _post_to_linkedin(post_text: str, article_url: str) -> bool:
 
     payload = {
         "author": author_urn,
-        "lifecycleState": "PUBLISHED",
-        "specificContent": {
-            "com.linkedin.ugc.ShareContent": {
-                "shareCommentary": {"text": post_text},
-                "shareMediaCategory": "ARTICLE",
-                "media": [
-                    {
-                        "status": "READY",
-                        "originalUrl": article_url,
-                    }
-                ],
+        "commentary": post_text,
+        "visibility": "PUBLIC",
+        "distribution": {
+            "feedDistribution": "MAIN_FEED",
+            "targetEntities": [],
+            "thirdPartyDistributionChannels": [],
+        },
+        "content": {
+            "article": {
+                "source": article_url,
+                "title": "",
+                "description": "",
             }
         },
-        "visibility": {"com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"},
+        "lifecycleState": "PUBLISHED",
+        "isReshareDisabledByAuthor": False,
     }
 
     try:
         response = httpx.post(
-            "https://api.linkedin.com/v2/ugcPosts",
+            "https://api.linkedin.com/rest/posts",
             headers={
                 "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
                 "Content-Type": "application/json",
-                "X-Restli-Protocol-Version": "2.0.0",
+                "LinkedIn-Version": "202401",
             },
             json=payload,
             timeout=30,
