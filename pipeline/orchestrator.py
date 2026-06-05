@@ -200,15 +200,15 @@ def run_daily_pipeline():
     save_state(state)
 
     # Queue articles for LinkedIn and send review email
+    # Queue first article only for LinkedIn and send review email
     if published:
-        print("\n📬 Queuing articles for LinkedIn review...")
-        queued = []
-        for article in published:
-            try:
-                entry = queue_article(article)
-                queued.append(entry)
-            except Exception as e:
-                print(f"  ⚠️  Could not queue {article.slug} for LinkedIn: {e}")
+        print("\n📬 Queuing article for LinkedIn review...")
+        try:
+            entry = queue_article(published[0])
+            print(f"\n📧 Sending LinkedIn review email...")
+            send_review_email([entry])
+        except Exception as e:
+            print(f"  ⚠️  Could not queue {published[0].slug} for LinkedIn: {e}")
 
         if queued:
             print(f"\n📧 Sending LinkedIn review email ({len(queued)} article(s))...")
