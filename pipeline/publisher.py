@@ -355,8 +355,14 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
     code {{ background: #f4f4f4; padding: 0.15rem 0.4rem;
             border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }}
     pre {{ background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
-           border-radius: 8px; overflow-x: auto; margin: 1.5rem 0; }}
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }}
+    pre .filename {{ display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }}
     pre code {{ background: none; padding: 0; color: inherit; }}
+    pre .code-filename {{ display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }}
     .affiliate-link {{ color: var(--color-accent); font-weight: 600; }}
     table {{ width: 100%; border-collapse: collapse; margin: 1.5rem 0; }}
     th, td {{ padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }}

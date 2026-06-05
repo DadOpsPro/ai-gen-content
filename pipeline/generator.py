@@ -286,7 +286,25 @@ def convert_and_inject(markdown_content: str) -> tuple:
     # Simple markdown → HTML conversion
     html = markdown_content
 
-    # Headers
+    # Code blocks FIRST — before headers so filenames don't get converted to <h1>
+    def render_code_block(m):
+        lang = m.group(1) or ''
+        content = m.group(2)
+        # Pull out a filename if the first line is a comment or # header
+        filename_match = re.match(r'^#+ ?(\S+\.\w+)\n', content)
+        if filename_match:
+            filename = filename_match.group(1)
+            content = content[filename_match.end():]
+            return f'<pre><span class="code-filename">{filename}</span><code class="language-{lang}">{content}</code></pre>'
+        return f'<pre><code class="language-{lang}">{content}</code></pre>'
+
+    html = re.sub(r'```(\w+)?\n(.*?)```', render_code_block, html, flags=re.DOTALL)
+    html = re.sub(r'`(.+?)`', r'<code>\1</code>', html)
+
+    # Images
+    html = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', r'<img src="\2" alt="\1" style="max-width:100%;height:auto;border-radius:8px;margin:16px 0;">', html)
+
+    # Headers — after code blocks so filenames inside fences aren't converted
     html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
     html = re.sub(r'^# (.+)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
@@ -294,11 +312,6 @@ def convert_and_inject(markdown_content: str) -> tuple:
     # Bold / italic
     html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html)
     html = re.sub(r'\*(.+?)\*', r'<em>\1</em>', html)
-
-    # Code blocks
-    html = re.sub(r'```(\w+)?\n(.*?)```', r'<pre><code class="language-\1">\2</code></pre>',
-                  html, flags=re.DOTALL)
-    html = re.sub(r'`(.+?)`', r'<code>\1</code>', html)
 
     # Bullet lists
     html = re.sub(r'^\s*[-*] (.+)$', r'<li>\1</li>', html, flags=re.MULTILINE)
