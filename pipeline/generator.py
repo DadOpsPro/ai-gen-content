@@ -283,28 +283,33 @@ def convert_and_inject(markdown_content: str) -> tuple:
     Convert markdown to HTML and inject affiliate links.
     Returns (html_content, list_of_injected_tool_names)
     """
-    # Simple markdown → HTML conversion
     html = markdown_content
 
-    # Code blocks FIRST — before headers so filenames don't get converted to <h1>
-    def render_code_block(m):
+    # Step 1: Extract code blocks and replace with placeholders
+    # This prevents header/bold regexes from corrupting code content
+    code_blocks = []
+
+    def extract_code_block(m):
         lang = m.group(1) or ''
         content = m.group(2)
-        # Pull out a filename if the first line is a comment or # header
         filename_match = re.match(r'^#+ ?(\S+\.\w+)\n', content)
         if filename_match:
             filename = filename_match.group(1)
             content = content[filename_match.end():]
-            return f'<pre><span class="code-filename">{filename}</span><code class="language-{lang}">{content}</code></pre>'
-        return f'<pre><code class="language-{lang}">{content}</code></pre>'
+            block = f'<pre><span class="code-filename">{filename}</span><code class="language-{lang}">{content}</code></pre>'
+        else:
+            block = f'<pre><code class="language-{lang}">{content}</code></pre>'
+        code_blocks.append(block)
+        return f'%%CODEBLOCK_{len(code_blocks)-1}%%'
 
-    html = re.sub(r'```(\w+)?\n(.*?)```', render_code_block, html, flags=re.DOTALL)
+    html = re.sub(r'```(\w+)?\n(.*?)```', extract_code_block, html, flags=re.DOTALL)
     html = re.sub(r'`(.+?)`', r'<code>\1</code>', html)
 
+    # Step 2: Process everything else safely (no code block content at risk)
     # Images
     html = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', r'<img src="\2" alt="\1" style="max-width:100%;height:auto;border-radius:8px;margin:16px 0;">', html)
 
-    # Headers — after code blocks so filenames inside fences aren't converted
+    # Headers
     html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
     html = re.sub(r'^# (.+)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
@@ -324,8 +329,13 @@ def convert_and_inject(markdown_content: str) -> tuple:
     html = re.sub(r'\n\n(?!<)', '\n</p>\n<p>', html)
     html = f'<p>{html}</p>'
 
+    # Step 3: Restore code blocks
+    for i, block in enumerate(code_blocks):
+        html = html.replace(f'%%CODEBLOCK_{i}%%', block)
+
     # Inject affiliate links for [[TOOL:ToolName]] placeholders
     injected = []
+
     def replace_tool(match):
         tool_name = match.group(1)
         url = AFFILIATE_LINKS.get(tool_name)
@@ -340,7 +350,6 @@ def convert_and_inject(markdown_content: str) -> tuple:
     # Also auto-link tool names mentioned naturally (only first occurrence)
     for tool_name, url in AFFILIATE_LINKS.items():
         if tool_name not in injected:
-            # Only link the first mention of each tool
             pattern = rf'\b({re.escape(tool_name)})\b'
             replacement = (f'<a href="{url}" target="_blank" rel="noopener nofollow" '
                           f'class="affiliate-link">\\1</a>')
@@ -350,7 +359,6 @@ def convert_and_inject(markdown_content: str) -> tuple:
                 html = new_html
 
     return html, injected
-
 
 def generate_newsletter(articles: List[GeneratedArticle], week_number: int) -> str:
     """Generate a weekly newsletter digest from recent articles."""
