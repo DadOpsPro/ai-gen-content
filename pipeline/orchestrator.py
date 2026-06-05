@@ -210,10 +210,6 @@ def run_daily_pipeline():
         except Exception as e:
             print(f"  ⚠️  Could not queue {published[0].slug} for LinkedIn: {e}")
 
-        if queued:
-            print(f"\n📧 Sending LinkedIn review email ({len(queued)} article(s))...")
-            send_review_email(queued)
-
     print(f"\n✅ Daily run complete: {len(published)} articles published")
     return published
 
