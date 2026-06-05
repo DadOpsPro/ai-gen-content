@@ -63,7 +63,7 @@ def _approval_url(slug: str, action: str) -> str:
     params = urllib.parse.urlencode({
         "slug":   slug,
         "action": action,
-        "token":  APPROVE_TOKEN[:8] + "..." if APPROVE_TOKEN else "NOT_SET",
+        "token":  APPROVE_TOKEN if APPROVE_TOKEN else "NOT_SET",
     })
     return f"{SITE_URL}/approve.html?{params}"
 
