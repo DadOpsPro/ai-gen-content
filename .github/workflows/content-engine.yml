@@ -90,6 +90,14 @@ jobs:
             site/output
           key: site-state-${{ github.run_number }}
 
+      - name: Commit LinkedIn queue
+        run: |
+          git config user.name "AI Dev Defense Bot"
+          git config user.email "chris@aidevdefense.com"
+          git add linkedin_queue/
+          git diff --staged --quiet || git commit -m "LinkedIn: update queue [skip ci]"
+          git push origin master
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: success()
