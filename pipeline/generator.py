@@ -306,9 +306,9 @@ def convert_and_inject(markdown_content: str) -> tuple:
     html = re.sub(r'`(.+?)`', r'<code>\1</code>', html)
 
     # Step 2: Process everything else safely (no code block content at risk)
-    # Images
-    html = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', r'<img src="\2" alt="\1" style="max-width:100%;height:auto;border-radius:8px;margin:16px 0;">', html)
-
+    # Strip external images — we don't control their availability
+    html = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', '', html)
+    
     # Headers
     html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
