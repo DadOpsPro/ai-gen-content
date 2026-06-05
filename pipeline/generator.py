@@ -302,13 +302,17 @@ def convert_and_inject(markdown_content: str) -> tuple:
         code_blocks.append(block)
         return f'%%CODEBLOCK_{len(code_blocks)-1}%%'
 
-    html = re.sub(r'```(\w+)?\n(.*?)```', extract_code_block, html, flags=re.DOTALL)
+    # Normalize code fences — remove any spaces between ``` and language name
+    html = re.sub(r'```\s*(\w+)\s*\n', r'```\1\n', html)
+    html = re.sub(r'```(\w+)?\s*\n(.*?)```', extract_code_block, html, flags=re.DOTALL)
+
+    html = re.sub(r'```[ \t]*(\w+)?[ \t]*\n(.*?)```', extract_code_block, html, flags=re.DOTALL)
     html = re.sub(r'`(.+?)`', r'<code>\1</code>', html)
 
     # Step 2: Process everything else safely (no code block content at risk)
     # Strip external images — we don't control their availability
     html = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', '', html)
-    
+
     # Headers
     html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
