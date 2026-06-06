@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Windows Sandbox for AI Code Agents | AI Dev Defense</title>
+  <meta name="description" content="Learn how OpenAI built a secure Windows sandbox for Codex agents using SIDs, ACLs, and restricted tokens to isolate AI code execution safely.">
+  <meta property="og:title" content="Secure Windows Sandbox for AI Code Agents">
+  <meta property="og:description" content="Learn how OpenAI built a secure Windows sandbox for Codex agents using SIDs, ACLs, and restricted tokens to isolate AI code execution safely.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/openai-windows-sandbox-codex-agents.html">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={adsense_pub}" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/">AI Dev Defense</a>
+    <span style="opacity:.5">|</span>
+    <span style="font-size:.9rem;opacity:.7">Security</span>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>Security</span> &middot;
+      <span>7 min read</span> &middot;
+      <span>1,501 words</span>
+    </div>
+    <h1>Secure Windows Sandbox for AI Code Agents</h1>
+    <div class="article-content">
+      
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>How OpenAI Built a Secure Windows Sandbox for Codex Agents</h1>
+</p>
+<p>
+</p>
+<p>When OpenAI deployed their Codex autonomous coding agents, they faced a critical challenge: how do you let an AI execute arbitrary code on Windows while preventing it from compromising the host system? Their solution combines Windows security primitives—Security Identifiers (SIDs), Access Control Lists (ACLs), restricted tokens, and dedicated sandbox accounts—into a defense-in-depth architecture that balances isolation with real developer workflows.
+</p>
+<p>This guide walks you through implementing similar sandbox techniques for your own AI agent systems or automated code execution environments.
+
+<h2>Why This Matters</h2>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+</p>
+<p>Autonomous coding agents represent both tremendous productivity gains and significant security risks. When you allow an AI to write and execute code, you're essentially giving it the keys to your system. Consider these scenarios:
+<ul>
+<li><strong>Malicious code injection</strong>: An AI could be manipulated through prompt injection to execute harmful commands</li>
+<li><strong>Accidental destruction</strong>: Even well-intentioned code might delete critical files or modify system configurations</li>
+<li><strong>Data exfiltration</strong>: An unrestricted agent could access and transmit sensitive information</li>
+<li><strong>Privilege escalation</strong>: Without proper containment, agent processes could gain elevated system access</li>
+</p>
+<p>OpenAI's Codex sandbox architecture addresses these risks by treating the AI agent as an untrusted entity from the operating system's perspective, regardless of the trust placed in the AI model itself. This principle—never trust, always verify—is fundamental to building secure AI agent systems.
+
+<h2>Prerequisites</h2>
+</p>
+<p>Before implementing a Windows sandbox similar to OpenAI's approach, ensure you have:
+<li><strong>Windows 10/11 Pro or Enterprise</strong> (Server 2019+ for production environments)</li>
+<li><strong>Administrator access</strong> for creating sandbox accounts and configuring security policies</li>
+<li><strong>Visual Studio 2022</strong> with C++ desktop development workload</li>
+<li><strong>Windows SDK</strong> (version 10.0.19041.0 or later)</li>
+<li><strong>PowerShell 7+</strong> for automation scripts</li>
+<li>Basic understanding of Windows security concepts (tokens, SIDs, ACLs)</li>
+</p>
+<p>Process Monitor and Process Explorer from Sysinternals are invaluable for debugging sandbox behavior.
+
+<h2>Step-by-Step Instructions</h2>
+
+<h3>Step 1: Create a Dedicated Sandbox User Account</h3>
+</p>
+<p>The foundation of OpenAI's approach starts with isolated user accounts. Each agent session runs under a dedicated, heavily restricted account rather than the host user's context.
+</p>
+<p><pre><code class="language-powershell"># Create a sandbox user with minimal privileges
+$sandboxPassword = ConvertTo-SecureString "$(New-Guid)" -AsPlainText -Force
+$sandboxUser = "CodexSandbox_$(Get-Random -Maximum 9999)"
+
+New-LocalUser -Name $sandboxUser `
+    -Password $sandboxPassword `
+    -Description "Isolated sandbox account for AI agent execution" `
+    -AccountNeverExpires `
+    -PasswordNeverExpires `
+    -UserMayNotChangePassword
+
+# Remove from all default groups
+Get-LocalGroup | ForEach-Object {
+    Remove-LocalGroupMember -Group $_.Name -Member $sandboxUser -ErrorAction SilentlyContinue
+}
+
+# Add to a custom restricted group
+New-LocalGroup -Name "AIAgentSandbox" -Description "Restricted group for AI agents" -ErrorAction SilentlyContinue
+Add-LocalGroupMember -Group "AIAgentSandbox" -Member $sandboxUser
+</code></pre>
+</p>
+<p>This script creates a user account with a random GUID password, ensuring the account cannot be accessed interactively. The account is stripped of all default group memberships, eliminating inherited permissions.
+
+<h3>Step 2: Configure Restricted Token Generation</h3>
+</p>
+<p>Windows restricted tokens allow you to create process tokens with reduced privileges. OpenAI's design uses this to strip dangerous privileges even from the sandbox account.
+</p>
+<p><pre><code class="language-cpp">#include <windows.h>
+#include <sddl.h>
+#include <vector>
+
+HANDLE CreateRestrictedSandboxToken(HANDLE hBaseToken) {
+    // Define SIDs to disable in the token
+    std::vector<SID_AND_ATTRIBUTES> disableSids;
+    
+    // Disable the Administrators group SID
+    PSID pAdminSid = nullptr;
+    SID_IDENTIFIER_AUTHORITY ntAuthority = SECURITY_NT_AUTHORITY;
+    AllocateAndInitializeSid(&ntAuthority, 2,
+        SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
+        0, 0, 0, 0, 0, 0, &pAdminSid);
+    
+    disableSids.push_back({pAdminSid, 0});
+    
+    // Define privileges to delete
+    LUID_AND_ATTRIBUTES privilegesToDelete[] = {
+        {{SE_DEBUG_NAME}, 0},
+        {{SE_BACKUP_NAME}, 0},
+        {{SE_RESTORE_NAME}, 0},
+        {{SE_SHUTDOWN_NAME}, 0},
+        {{SE_TAKE_OWNERSHIP_NAME}, 0}
+    };
+    
+    // Create restricting SIDs (what the token CAN access)
+    PSID pRestrictedSid = nullptr;
+    ConvertStringSidToSidA("S-1-5-12", &pRestrictedSid); // Restricted Code SID
+    
+    SID_AND_ATTRIBUTES restrictingSids[] = {
+        {pRestrictedSid, 0}
+    };
+    
+    HANDLE hRestrictedToken = nullptr;
+    BOOL success = CreateRestrictedToken(
+        hBaseToken,
+        DISABLE_MAX_PRIVILEGE,  // Remove all privileges not explicitly needed
+        static_cast<DWORD>(disableSids.size()),
+        disableSids.data(),
+        0,                      // No privileges to delete explicitly
+        nullptr,
+        1,                      // One restricting SID
+        restrictingSids,
+        &hRestrictedToken
+    );
+    
+    // Cleanup allocated SIDs
+    FreeSid(pAdminSid);
+    LocalFree(pRestrictedSid);
+    
+    return success ? hRestrictedToken : nullptr;
+}
+</code></pre>
+</p>
+<p>This function creates a token that cannot exercise administrative privileges, even if the base account somehow acquires them. The <code>DISABLE_MAX_PRIVILEGE</code> flag is crucial—it strips all privileges except those absolutely necessary for basic process execution.
+
+<h3>Step 3: Set Up File System ACLs for the Sandbox Directory</h3>
+</p>
+<p>The sandbox needs a workspace, but access must be tightly controlled. OpenAI's approach creates an isolated directory hierarchy with explicit deny rules preventing escape.
+</p>
+<p><pre><code class="language-powershell"># Create sandbox workspace
+$sandboxRoot = "C:\AgentSandbox\$sandboxUser"
+New-Item -Path $sandboxRoot -ItemType Directory -Force
+
+# Create SDDL string for restrictive permissions
+# Owner: SYSTEM, Full control for sandbox user only within this tree
+$sddl = "O:SYG:SYD:PAI(A;OICI;FA;;;$((Get-LocalUser $sandboxUser).SID))(A;OICI;FA;;;SY)"
+
+# Apply the security descriptor
+$acl = Get-Acl $sandboxRoot
+$acl.SetSecurityDescriptorSddlForm($sddl)
+Set-Acl -Path $sandboxRoot -AclObject $acl
+
+# Explicitly deny access to sensitive system locations
+$denyPaths = @(
+    "C:\Windows\System32",
+    "C:\Program Files",
+    "C:\Users",
+    "$env:USERPROFILE"
+)
+
+foreach ($path in $denyPaths) {
+    $rule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+        $sandboxUser,
+        "FullControl",
+        "ContainerInherit,ObjectInherit",
+        "None",
+        "Deny"
+    )
+    
+    $acl = Get-Acl $path
+    $acl.AddAccessRule($rule)
+    Set-Acl -Path $path -AclObject $acl
+}
+</code></pre>
+
+<h3>Step 4: Implement Job Object Restrictions</h3>
+</p>
+<p>Windows Job Objects provide process-level containment. OpenAI uses these to limit resource consumption and prevent the agent from spawning unrestricted child processes.
+</p>
+<p><pre><code class="language-cpp">HANDLE CreateSandboxJobObject() {
+    HANDLE hJob = CreateJobObjectW(nullptr, L"CodexAgentSandbox");
+    if (!hJob) return nullptr;
+    
+    // Configure basic limits
+    JOBOBJECT_BASIC_LIMIT_INFORMATION basicLimits = {};
+    basicLimits.LimitFlags = 
+        JOB_OBJECT_LIMIT_ACTIVE_PROCESS |      // Limit number of processes
+        JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE |   // Kill all processes when job closes
+        JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION;
+    basicLimits.ActiveProcessLimit = 10;       // Max 10 concurrent processes
+    
+    SetInformationJobObject(hJob, JobObjectBasicLimitInformation,
+        &basicLimits, sizeof(basicLimits));
+    
+    // Configure UI restrictions
+    JOBOBJECT_BASIC_UI_RESTRICTIONS uiLimits = {};
+    uiLimits.UIRestrictionsClass = 
+        JOB_OBJECT_UILIMIT_DESKTOP |           // Cannot switch desktops
+        JOB_OBJECT_UILIMIT_EXITWINDOWS |       // Cannot shutdown
+        JOB_OBJECT_UILIMIT_GLOBALATOMS |       // Cannot access global atoms
+        JOB_OBJECT_UILIMIT_HANDLES |           // Cannot use USER handles
+        JOB_OBJECT_UILIMIT_SYSTEMPARAMETERS;   // Cannot change system params
+    
+    SetInformationJobObject(hJob, JobObjectBasicUIRestrictions,
+        &uiLimits, sizeof(uiLimits));
+    
+    // Configure network restrictions (Windows 10+)
+    JOBOBJECT_NET_RATE_CONTROL_INFORMATION netLimits = {};
+    netLimits.ControlFlags = JOB_OBJECT_NET_RATE_CONTROL_ENABLE;
+    netLimits.MaxBandwidth = 1024 * 1024;  // 1 MB/s max
+    
+    SetInformationJobObject(hJob, JobObjectNetRateControlInformation,
+        &netLimits, sizeof(netLimits));
+    
+    return hJob;
+}
+</code></pre>
+
+<h3>Step 5: Launch the Sandboxed Agent Process</h3>
+</p>
+<p>Bringing all components together, here's how to launch a process within the complete sandbox:
+</p>
+<p><pre><code class="language-cpp">bool LaunchSandboxedAgent(const wchar_t* commandLine, const wchar_t* workingDir) {
+    // Create the sandbox user token
+    HANDLE hUserToken = LogonUserW(
+        L"CodexSandbox_1234",  // Sandbox username
+        L".",                   // Local machine
+        L"<generated-guid>",    // Generated password
+        LOGON32_LOGON_BATCH,
+        LOGON32_PROVIDER_DEFAULT,
+        &hUserToken
+    );
+    
+    // Create restricted token
+    HANDLE hRestrictedToken = CreateRestrictedSandboxToken(hUserToken);
+    
+    // Create job object
+    HANDLE hJob = CreateSandboxJobObject();
+    
+    // Prepare process creation
+    STARTUPINFOW si = {sizeof(si)};
+    PROCESS_INFORMATION pi = {};
+    
+    // Create process suspended so we can assign to job
+    BOOL created = CreateProcessAsUserW(
+        hRestrictedToken,
+        nullptr,
+        const_cast<LPWSTR>(commandLine),
+        nullptr,
+        nullptr,
+        FALSE,
+        CREATE_SUSPENDED | CREATE_NEW_CONSOLE,
+        nullptr,
+        workingDir,
+        &si,
+        &pi
+    );
+    
+    if (created) {
+        // Assign to job object before resuming
+        AssignProcessToJobObject(hJob, pi.hProcess);
+        
+        // Now resume the process
+        ResumeThread(pi.hThread);
+        
+        CloseHandle(pi.hThread);
+    }
+    
+    // Store handles for later cleanup
+    // hJob, pi.hProcess, hRestrictedToken, hUserToken
+    
+    return created != FALSE;
+}
+</code></pre>
+
+<h2>Common Pitfalls & How to Avoid Them</h2>
+
+<h3>Pitfall 1: Inherited Handle Leakage</h3>
+Child processes can inherit handles from the parent, potentially bypassing sandbox restrictions.
+
+<strong>Solution</strong>: Always set <code>bInheritHandles</code> to <code>FALSE</code> in <code>CreateProcessAsUser</code>, and use <code>PROC_THREAD_ATTRIBUTE_HANDLE_LIST</code> to explicitly control handle inheritance when needed.
+
+<h3>Pitfall 2: Token Group Membership Caching</h3>
+Windows caches group membership in tokens. Changes to group membership don't affect existing sessions.
+
+<strong>Solution</strong>: Generate fresh tokens for each agent session rather than reusing tokens across multiple executions.
+
+<h3>Pitfall 3: Symlink and Junction Escapes</h3>
+Agents might create symbolic links or junctions pointing outside the sandbox.
+
+<strong>Solution</strong>: Disable symlink creation privileges and use Windows Defender Application Control policies to block junction creation for sandbox accounts.
+
+<h3>Pitfall 4: Named Object Namespace Pollution</h3>
+Agents can create named objects (mutexes, events) that persist beyond their session.
+
+<strong>Solution</strong>: Use <code>CreatePrivateNamespace</code> to isolate the agent's named objects:
+</p>
+<p><pre><code class="language-cpp">HANDLE CreateIsolatedNamespace() {
+    SECURITY_ATTRIBUTES sa = {sizeof(sa)};
+    HANDLE hBoundary = CreateBoundaryDescriptorW(L"AgentBoundary", 0);
+    
+    PSID pSid;
+    // Add sandbox user SID to boundary
+    AddSIDToBoundaryDescriptor(&hBoundary, pSid);
+    
+    return CreatePrivateNamespaceW(&sa, hBoundary, L"AgentNamespace");
+}
+</code></pre>
+
+<h2>Real-World Example: Secure Python Execution</h2>
+</p>
+<p>Here's a complete example demonstrating the sandbox executing a Python script from a Codex agent:
+</p>
+<p><pre><code class="language-powershell"># Agent orchestrator script
+function Invoke-SandboxedPythonAgent {
+    param(
+        [string]$PythonCode,
+        [int]$TimeoutSeconds = 30
+    )
+    
+    # Write code to sandbox directory
+    $sandboxUser = Get-SandboxAccount
+    $workDir = "C:\AgentSandbox\$($sandboxUser.Name)"
+    $scriptPath = Join-Path $workDir "agent_task.py"
+    
+    Set-Content -Path $scriptPath -Value $PythonCode
+    
+    # Launch sandboxed Python
+    $process = Start-SandboxedProcess `
+        -Executable "python.exe" `
+        -Arguments $scriptPath `
+        -WorkingDirectory $workDir `
+        -SandboxUser $sandboxUser `
+        -JobLimits @{
+            MemoryLimitMB = 512
+            CpuRatePercent = 25
+            MaxProcesses = 5
+        }
+    
+    # Wait with timeout
+    $completed = $process.WaitForExit($TimeoutSeconds * 1000)
+    
+    if (-not $completed) {
+        Stop-Process -Id $process.Id -Force
+        throw "Agent execution timed out"
+    }
+    
+    # Return results from sandbox output file
+    return Get-Content (Join-Path $workDir "output.json")
+}
+</code></pre>
+
+<h2>Summary & Next Steps</h2>
+</p>
+<p>OpenAI's Codex sandbox architecture demonstrates that secure AI agent execution on Windows requires multiple overlapping security layers:
+
+<li><strong>Dedicated accounts</strong> eliminate ambient authority</li>
+<li><strong>Restricted tokens</strong> strip dangerous privileges</li>
+<li><strong>ACLs</strong> constrain file system access</li>
+<li><strong>Job objects</strong> limit resources and process spawning</li>
+<li><strong>Namespace isolation</strong> prevents cross-session interference</li>
+</p>
+<p>To advance your implementation:
+<li>Integrate Windows Sandbox for even stronger isolation in development environments</li>
+<li>Implement audit logging using Windows ETW for forensic analysis</li>
+<li>Consider Microsoft Defender for Endpoint integration for runtime threat</li></ul>
+</p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+    </div>
+    <div class="tags">Tags: Windows Sandbox · AI Security · Codex Agents · Code Isolation · Defense-in-Depth</div>
+  </main>
+  <footer>
+    <p>&copy; AI Dev Defense · <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>
