@@ -86,6 +86,15 @@ Return only the post text. No preamble, no commentary."""
 
 def queue_article(article) -> LinkedInQueueEntry:
     """Generate a LinkedIn post draft and add it to the pending queue."""
+    queue_file = QUEUE_DIR / f"{article.slug}.json"
+    
+    # Don't overwrite if already exists — it may be approved or posted
+    if queue_file.exists():
+        existing = json.loads(queue_file.read_text())
+        if existing.get("status") in ("approved", "posted", "rejected"):
+            print(f"  ⏭ Skipping queue — already {existing['status']}: {article.slug}")
+            return LinkedInQueueEntry(**existing)
+    
     print(f"  📝 Generating LinkedIn post draft for: {article.title}")
     post_draft = generate_linkedin_post(article)
 
@@ -100,7 +109,6 @@ def queue_article(article) -> LinkedInQueueEntry:
         created_at=datetime.utcnow().isoformat(),
     )
 
-    queue_file = QUEUE_DIR / f"{article.slug}.json"
     queue_file.write_text(json.dumps(asdict(entry), indent=2))
     print(f"  ✅ Queued: {queue_file.name}")
     return entry
