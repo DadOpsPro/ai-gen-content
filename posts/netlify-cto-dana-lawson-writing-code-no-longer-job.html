@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing Code Is No Longer the Job: Modern Developer Workflow | AI Dev Defense</title>
+  <meta name="description" content="Learn why Netlify CTO Dana Lawson says writing code isn't the job anymore. Discover how developers must evolve to orchestrate AI systems and validate outputs.">
+  <meta property="og:title" content="Writing Code Is No Longer the Job: Modern Developer Workflow">
+  <meta property="og:description" content="Learn why Netlify CTO Dana Lawson says writing code isn't the job anymore. Discover how developers must evolve to orchestrate AI systems and validate outputs.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/netlify-cto-dana-lawson-writing-code-no-longer-job.html">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={adsense_pub}" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/">AI Dev Defense</a>
+    <span style="opacity:.5">|</span>
+    <span style="font-size:.9rem;opacity:.7">how_to_guide</span>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>how_to_guide</span> &middot;
+      <span>7 min read</span> &middot;
+      <span>1,580 words</span>
+    </div>
+    <h1>Writing Code Is No Longer the Job: Modern Developer Workflow</h1>
+    <div class="article-content">
+      
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>Netlify CTO Dana Lawson: Writing Code Is No Longer the Job — A Practical Guide to the New Developer Workflow</h1>
+</p>
+<p>alt="code-as-abstract-art: the evolving landscape of software development demands a fundamental shift in how we approach our craft"
+
+<h2>Why This Matters</h2>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+</p>
+<p>Dana Lawson, CTO of Netlify, recently articulated what many developers have been sensing: <strong>writing code is no longer the job</strong>. The role has evolved from manually crafting every line to orchestrating AI systems, validating outputs, and ensuring security at scale.
+</p>
+<p>This shift presents both opportunity and risk. Developers who adapt become force multipliers—shipping faster, with fewer bugs, and more robust security. Those who resist face obsolescence as AI-augmented peers outpace them dramatically.
+</p>
+<p>But here's the critical insight Lawson emphasizes: as AI generates more code, the attack surface expands exponentially. Every AI-generated function is a potential vulnerability. Every automated deployment is a security decision. The developer's job has transformed from <em>writing</em> code to <em>defending</em> it.
+</p>
+<p>This guide provides a concrete, step-by-step workflow for embracing this new reality while maintaining security and quality standards.
+
+<h2>Prerequisites</h2>
+</p>
+<p>Before implementing this modern development workflow, ensure you have:
+
+<strong>Technical Requirements:</strong>
+<ul>
+<li>Node.js 18+ installed</li>
+<li>Git configured with SSH keys</li>
+<li>A Netlify account (free tier works)</li>
+<li>Access to an AI coding assistant (<a href="https://github.com/features/copilot?ref=testaiweekly" target="_blank" rel="noopener nofollow" class="affiliate-link">GitHub Copilot</a>, Claude, or similar)</li>
+
+<strong>Knowledge Requirements:</strong>
+<li>Basic understanding of JavaScript/TypeScript</li>
+<li>Familiarity with CI/CD concepts</li>
+<li>Understanding of common web vulnerabilities (OWASP Top 10)</li>
+
+<strong>Tools You'll Need:</strong>
+<li>Netlify CLI for deployment and local development</li>
+<li>Snyk or npm audit for dependency scanning</li>
+<li>ESLint with security plugins</li>
+<li>OWASP ZAP for dynamic security testing</li>
+</ul>
+
+<h2>Step-by-Step Instructions</h2>
+
+<h3>Step 1: Set Up Your AI-Augmented Development Environment</h3>
+</p>
+<p>First, configure your workspace to support the new workflow where AI generates code and you validate, secure, and orchestrate.
+</p>
+<p><pre><code class="language-bash"># Install Netlify CLI globally
+npm install -g netlify-cli
+
+# Create a new project directory
+mkdir ai-defended-app && cd ai-defended-app
+
+# Initialize the project
+npm init -y
+
+# Install core dependencies
+npm install express helmet cors
+npm install -D eslint @typescript-eslint/parser eslint-plugin-security
+</code></pre>
+</p>
+<p>Create your ESLint configuration with security rules enabled:
+</p>
+<p><pre><code class="language-javascript">// .eslintrc.js
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  plugins: ['security'],
+  extends: [
+    'eslint:recommended',
+    'plugin:security/recommended'
+  ],
+  rules: {
+    'security/detect-object-injection': 'error',
+    'security/detect-non-literal-regexp': 'error',
+    'security/detect-unsafe-regex': 'error',
+    'security/detect-buffer-noassert': 'error',
+    'security/detect-eval-with-expression': 'error',
+    'security/detect-no-csrf-before-method-override': 'error',
+    'security/detect-possible-timing-attacks': 'warn'
+  },
+  env: {
+    node: true,
+    es2022: true
+  }
+};
+</code></pre>
+
+<strong>Why this matters:</strong> When AI generates code, it often produces functional but insecure patterns. This configuration catches common vulnerabilities automatically.
+
+<h3>Step 2: Implement the AI-to-Validation Pipeline</h3>
+</p>
+<p>Create a structured workflow where AI-generated code passes through security gates before reaching production.
+</p>
+<p><pre><code class="language-javascript">// scripts/validate-ai-code.js
+const { execSync } = require('child_process');
+const fs = require('fs');
+
+class AICodeValidator {
+  constructor(options = {}) {
+    this.securityChecks = options.securityChecks ?? true;
+    this.testCoverage = options.minCoverage ?? 80;
+    this.results = [];
+  }
+
+  async validate(filePath) {
+    console.log(`Validating AI-generated code: ${filePath}`);
+    
+    // Step 2a: Static security analysis
+    if (this.securityChecks) {
+      await this.runSecurityScan(filePath);
+    }
+    
+    // Step 2b: Lint for common AI mistakes
+    await this.runLinter(filePath);
+    
+    // Step 2c: Check for hardcoded secrets
+    await this.scanForSecrets(filePath);
+    
+    return this.generateReport();
+  }
+
+  async runSecurityScan(filePath) {
+    try {
+      execSync(`npx eslint --plugin security ${filePath}`, { 
+        stdio: 'pipe' 
+      });
+      this.results.push({ check: 'security-scan', status: 'passed' });
+    } catch (error) {
+      this.results.push({ 
+        check: 'security-scan', 
+        status: 'failed',
+        details: error.stdout?.toString()
+      });
+    }
+  }
+
+  async runLinter(filePath) {
+    try {
+      execSync(`npx eslint ${filePath}`, { stdio: 'pipe' });
+      this.results.push({ check: 'lint', status: 'passed' });
+    } catch (error) {
+      this.results.push({ 
+        check: 'lint', 
+        status: 'failed',
+        details: error.stdout?.toString()
+      });
+    }
+  }
+
+  async scanForSecrets(filePath) {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const secretPatterns = [
+      /api[_-]?key\s*[:=]\s*['"][^'"]+['"]/gi,
+      /password\s*[:=]\s*['"][^'"]+['"]/gi,
+      /secret\s*[:=]\s*['"][^'"]+['"]/gi,
+      /-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----/g
+    ];
+
+    const foundSecrets = secretPatterns.some(pattern => pattern.test(content));
+    
+    this.results.push({
+      check: 'secrets-scan',
+      status: foundSecrets ? 'failed' : 'passed',
+      details: foundSecrets ? 'Potential hardcoded secrets detected' : null
+    });
+  }
+
+  generateReport() {
+    const failed = this.results.filter(r => r.status === 'failed');
+    return {
+      passed: failed.length === 0,
+      total: this.results.length,
+      failures: failed,
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
+module.exports = { AICodeValidator };
+</code></pre>
+
+<h3>Step 3: Configure Netlify for Secure Deployments</h3>
+</p>
+<p>Create a <code>netlify.toml</code> that enforces security checks before any deployment:
+</p>
+<p><pre><span class="code-filename">netlify.toml</span><code class="language-toml">[build]
+  command = "npm run build:secure"
+  publish = "dist"
+  
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--ignore-scripts"  # Prevent malicious postinstall scripts
+
+# Security headers for all responses
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Pre-build plugin for security validation
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+[[plugins]]
+  package = "netlify-plugin-checklinks"
+</code></pre>
+</p>
+<p>Add the secure build script to your <code>package.json</code>:
+</p>
+<p><pre><code class="language-json">{
+  "scripts": {
+    "validate": "node scripts/validate-ai-code.js",
+    "audit": "npm audit --audit-level=moderate",
+    "security-check": "npm run validate && npm run audit",
+    "build:secure": "npm run security-check && npm run build",
+    "build": "node build.js"
+  }
+}
+</code></pre>
+
+<h3>Step 4: Create the AI Code Review Workflow</h3>
+</p>
+<p>Lawson's vision requires a structured approach to reviewing AI output. Here's a practical implementation:
+</p>
+<p><pre><code class="language-javascript">// src/ai-review-workflow.js
+const { AICodeValidator } = require('../scripts/validate-ai-code');
+
+/**
+ * Workflow for reviewing AI-generated code
+ * Implements the "AI generates, human validates" pattern
+ */
+class AIReviewWorkflow {
+  constructor() {
+    this.validator = new AICodeValidator();
+    this.reviewChecklist = [
+      'Does this code do what was requested?',
+      'Are there obvious security vulnerabilities?',
+      'Is the code handling errors appropriately?',
+      'Are inputs validated and sanitized?',
+      'Is sensitive data properly protected?'
+    ];
+  }
+
+  /**
+   * Process AI-generated code through the validation pipeline
+   * @param {string} code - The AI-generated code
+   * @param {string} intent - What the code should accomplish
+   */
+  async processAICode(code, intent) {
+    const results = {
+      automated: {},
+      requiresHumanReview: [],
+      approved: false
+    };
+
+    // Automated checks
+    const tempFile = this.writeTempFile(code);
+    results.automated = await this.validator.validate(tempFile);
+    
+    // Determine what needs human attention
+    if (!results.automated.passed) {
+      results.requiresHumanReview.push({
+        reason: 'Automated security checks failed',
+        details: results.automated.failures
+      });
+    }
+
+    // Flag patterns that AI commonly gets wrong
+    const aiPatternIssues = this.checkAIPatterns(code);
+    if (aiPatternIssues.length > 0) {
+      results.requiresHumanReview.push({
+        reason: 'Common AI code patterns detected',
+        details: aiPatternIssues
+      });
+    }
+
+    return results;
+  }
+
+  checkAIPatterns(code) {
+    const issues = [];
+    
+    // AI often generates overly permissive CORS
+    if (code.includes("cors({ origin: '*' })")) {
+      issues.push('Overly permissive CORS configuration');
+    }
+    
+    // AI sometimes uses deprecated crypto methods
+    if (code.includes('crypto.createCipher')) {
+      issues.push('Deprecated crypto method - use createCipheriv instead');
+    }
+    
+    // AI may not properly sanitize SQL
+    if (code.match(/`SELECT.*\$\{.*\}`/)) {
+      issues.push('Potential SQL injection - use parameterized queries');
+    }
+
+    // AI often forgets rate limiting
+    if (code.includes('app.post') && !code.includes('rateLimit')) {
+      issues.push('POST endpoint without rate limiting');
+    }
+
+    return issues;
+  }
+
+  writeTempFile(code) {
+    const fs = require('fs');
+    const path = require('path');
+    const tempPath = path.join(__dirname, '../temp', `ai-code-${Date.now()}.js`);
+    fs.mkdirSync(path.dirname(tempPath), { recursive: true });
+    fs.writeFileSync(tempPath, code);
+    return tempPath;
+  }
+}
+
+module.exports = { AIReviewWorkflow };
+</code></pre>
+
+<h3>Step 5: Deploy with Continuous Security Validation</h3>
+</p>
+<p>Set up your GitHub Actions workflow to enforce the pipeline:
+</p>
+<p><pre><span class="code-filename">.github/workflows/secure-deploy.yml</span><code class="language-yaml">name: Secure Deploy to Netlify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  security-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+      
+      - name: Run AI code validation
+        run: npm run validate
+      
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      
+      - name: Deploy to Netlify
+        if: github.ref == 'refs/heads/main'
+        run: netlify deploy --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+</code></pre>
+
+<h2>Common Pitfalls & How to Avoid Them</h2>
+
+<h3>Pitfall 1: Trusting AI Output Without Validation</h3>
+<strong>Problem:</strong> Developers accept AI-generated code at face value.
+<strong>Solution:</strong> Always run AI code through the validation pipeline before committing. Make it a habit, not an exception.
+
+<h3>Pitfall 2: Outdated Security Patterns</h3>
+<strong>Problem:</strong> AI models train on historical data, including outdated security practices.
+<strong>Solution:</strong> Maintain a blocklist of deprecated patterns and scan for them automatically. Update regularly.
+
+<h3>Pitfall 3: Missing Context in AI Prompts</h3>
+<strong>Problem:</strong> AI generates generic solutions without security context.
+<strong>Solution:</strong> Include security requirements in your prompts: "Generate a login function with rate limiting, input sanitization, and secure password comparison."
+
+<h3>Pitfall 4: Over-Reliance on Automated Checks</h3>
+<strong>Problem:</strong> Automated tools catch common issues but miss business logic flaws.
+<strong>Solution:</strong> The workflow requires human review for anything touching authentication, authorization, or sensitive data.
+
+<h2>Real-World Example / Code Walkthrough</h2>
+</p>
+<p>Let's walk through a complete example: an AI generates an API endpoint, and we validate it.
+
+<strong>AI-Generated Code (potentially insecure):</strong>
+<pre><code class="language-javascript">// AI generated this endpoint
+app.post('/api/users', (req, res) => {
+  const { username, email, password } = req.body;
+  const query = `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${password}')`;
+  db.query(query);
+  res.json({ success: true });
+});
+</code></pre>
+
+<strong>After Running Through Our Validation Pipeline:</strong>
+<pre><code class="language-javascript">// Human-reviewed and secured version
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+
+const createUserLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5 // limit each IP to 5 requests per windowMs
+});
+
+app.post('/api/users', 
+  createUserLimiter,
+  [
+    body('username').isAlphanumeric().isLength({ min: 3, max: 30 }),
+    body('email').isEmail().normalizeEmail(),
+    body('password').isLength({ min: 12 })
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { username, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+    
+    // Parameterized query prevents SQL injection
+    const query = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)';
+    await db.query(query, [username, email, hashedPassword]);
+    
+    res.status(201).json({ success: true });
+  }
+);
+</code></pre>
+
+<h2>Summary & Next Steps</h2>
+</p>
+<p>Dana Lawson's insight that "writing code is no longer the job" reflects a fundamental shift in software development. The new role centers on:
+
+<li><strong>Orchestrating</strong> AI code generation</li></p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+    </div>
+    <div class="tags">Tags: developer workflow · AI in development · modern programming · developer skills · software development trends</div>
+  </main>
+  <footer>
+    <p>&copy; AI Dev Defense · <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>
