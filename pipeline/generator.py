@@ -313,6 +313,9 @@ def convert_and_inject(markdown_content: str) -> tuple:
     # Strip external images — we don't control their availability
     html = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', '', html)
 
+    # Horizontal rules
+    html = re.sub(r'^\s*---\s*$', '<hr>', html, flags=re.MULTILINE)
+
     # Headers
     html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
