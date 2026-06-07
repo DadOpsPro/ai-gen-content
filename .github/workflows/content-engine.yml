@@ -48,6 +48,19 @@ jobs:
           key: site-state-${{ github.run_number }}
           restore-keys: site-state-
 
+      - name: Restore article registry from gh-pages
+        run: |
+          mkdir -p site/output/posts
+          # Fetch articles.json from the live gh-pages branch so the registry
+          # is always current even if the Actions cache was evicted.
+          git fetch origin gh-pages --depth=1 2>/dev/null || true
+          if git show origin/gh-pages:articles.json > site/output/articles.json 2>/dev/null; then
+            COUNT=$(python3 -c "import json; d=json.load(open('site/output/articles.json')); print(len(d))")
+            echo "Restored registry: $COUNT articles"
+          else
+            echo "No registry found on gh-pages, starting fresh"
+          fi
+
       - name: Determine run mode
         id: mode
         run: |

@@ -127,76 +127,132 @@ class WordPressPublisher:
 
 # ── STATIC SITE GENERATOR ─────────────────────────────────────────────────────
 
+REGISTRY_FILE = "articles.json"
+
+
 class StaticSiteGenerator:
     def __init__(self, output_dir: str = OUTPUT_DIR):
         self.output_dir = Path(output_dir)
         self.posts_dir = self.output_dir / "posts"
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.posts_dir.mkdir(parents=True, exist_ok=True)
+        # In-memory list for articles published this run
         self.published_articles: List[GeneratedArticle] = []
+        # Persistent registry loaded from disk (all articles ever published)
+        self._registry: List[dict] = self._load_registry()
+
+    # ── Registry helpers ──────────────────────────────────────────────────────
+
+    def _load_registry(self) -> List[dict]:
+        """Load the persistent article registry from disk (if it exists)."""
+        registry_path = self.output_dir / REGISTRY_FILE
+        if registry_path.exists():
+            try:
+                data = json.loads(registry_path.read_text(encoding="utf-8"))
+                print(f"  📚 Registry loaded: {len(data)} existing articles")
+                return data
+            except Exception as e:
+                print(f"  ⚠️  Could not read registry, starting fresh: {e}")
+        return []
+
+    def _save_registry(self):
+        """Persist the article registry to disk."""
+        registry_path = self.output_dir / REGISTRY_FILE
+        registry_path.write_text(
+            json.dumps(self._registry, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+    def _article_to_record(self, article: GeneratedArticle) -> dict:
+        """Serialize an article's metadata to a registry record."""
+        return {
+            "slug":             article.slug,
+            "title":            article.title,
+            "excerpt":          article.excerpt,
+            "category":         article.category,
+            "tags":             article.tags[:5],
+            "word_count":       article.word_count,
+            "published_at":     datetime.utcnow().isoformat() + "Z",
+        }
+
+    def _upsert_registry(self, article: GeneratedArticle):
+        """Add article to registry if not already present (keyed on slug)."""
+        existing_slugs = {r["slug"] for r in self._registry}
+        if article.slug not in existing_slugs:
+            self._registry.append(self._article_to_record(article))
+
+    # ── Public API ────────────────────────────────────────────────────────────
 
     def publish(self, article: GeneratedArticle) -> dict:
-        """Write article to static HTML file."""
+        """Write article to static HTML file and register it."""
         content = self._render_article_page(article)
         filepath = self.posts_dir / f"{article.slug}.html"
         filepath.write_text(content, encoding="utf-8")
         self.published_articles.append(article)
+        self._upsert_registry(article)
+        self._save_registry()
         url = f"{SITE_URL}/posts/{article.slug}.html"
         print(f"  ✅ Static: Written → {filepath.name}")
         return {"success": True, "url": url, "path": str(filepath)}
 
     def build_index(self) -> str:
-        """Build the main index.html listing all articles."""
+        """Build the main index.html from the full persistent registry."""
+        # Most-recent articles first
+        all_articles = list(reversed(self._registry))
         cards_html = ""
-        for article in reversed(self.published_articles):
+        for record in all_articles:
+            slug      = record["slug"]
+            title     = record["title"]
+            excerpt   = record["excerpt"]
+            category  = record["category"]
+            tags      = record.get("tags", [])
+            wc        = record.get("word_count", 0)
+            read_time = max(1, wc // 200)
+            tag_html  = "".join(f'<span class="tag">{t}</span>' for t in tags[:3])
             cards_html += f"""
             <article class="post-card">
                 <div class="post-meta">
-                    <span class="category">{article.category}</span>
-                    <span class="read-time">~{article.word_count // 200} min read</span>
+                    <span class="category">{category}</span>
+                    <span class="read-time">~{read_time} min read</span>
                 </div>
-                <h2><a href="posts/{article.slug}.html">{article.title}</a></h2>
-                <p class="excerpt">{article.excerpt}</p>
-                <div class="tags">
-                    {''.join(f'<span class="tag">{t}</span>' for t in article.tags[:3])}
-                </div>
-                <a href="posts/{article.slug}.html" class="read-more">Read article →</a>
+                <h2><a href="posts/{slug}.html">{title}</a></h2>
+                <p class="excerpt">{excerpt}</p>
+                <div class="tags">{tag_html}</div>
+                <a href="posts/{slug}.html" class="read-more">Read article →</a>
             </article>"""
 
         index = INDEX_TEMPLATE.replace("{{POSTS}}", cards_html)
         index_path = self.output_dir / "index.html"
         index_path.write_text(index, encoding="utf-8")
-        print(f"  ✅ Index built: {len(self.published_articles)} articles")
+        print(f"  ✅ Index built: {len(all_articles)} articles (all-time)")
         self.build_sitemap()
-      
         return str(index_path)
-      
+
     def build_sitemap(self) -> str:
-        """Generate sitemap.xml for SEO."""
-        urls = []
-        
-        # Homepage
-        urls.append(f"""
+        """Generate sitemap.xml from the full persistent registry."""
+        urls = [f"""
         <url>
             <loc>{SITE_URL}/</loc>
             <changefreq>daily</changefreq>
             <priority>1.0</priority>
-        </url>""")
-        
-        # All articles
-        for article in self.published_articles:
+        </url>"""]
+
+        for record in self._registry:
+            slug = record["slug"]
+            lastmod = record.get("published_at", "")[:10]  # YYYY-MM-DD
+            lastmod_tag = f"\n            <lastmod>{lastmod}</lastmod>" if lastmod else ""
             urls.append(f"""
         <url>
-            <loc>{SITE_URL}/posts/{article.slug}.html</loc>
+            <loc>{SITE_URL}/posts/{slug}.html</loc>{lastmod_tag}
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>""")
-        
+
         sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     {''.join(urls)}
     </urlset>"""
-        
+
         path = self.output_dir / "sitemap.xml"
         path.write_text(sitemap, encoding="utf-8")
         print(f"  ✅ Sitemap: {len(urls)} URLs written")
