@@ -28,5 +28,35 @@
     ],
     "word_count": 1796,
     "published_at": "2026-06-07T11:58:16.541298Z"
+  },
+  {
+    "slug": "ai-solving-memory-crunch-trend-roundup",
+    "title": "How AI is Solving the Memory Crunch It Created",
+    "excerpt": "The AI revolution has created an unprecedented memory crisis, but the industry is now solving it with innovative efficiency solutions. This week's trends reveal a maturing ecosystem where memory optimization is becoming essential to AI-powered testing and security pipelines.",
+    "category": "AI & Machine Learning",
+    "tags": [
+      "AI memory optimization",
+      "quantization",
+      "model efficiency",
+      "AI infrastructure",
+      "developer tools"
+    ],
+    "word_count": 1835,
+    "published_at": "2026-06-09T08:12:36.088226Z"
+  },
+  {
+    "slug": "microsoft-azure-repos-github-migration-guide",
+    "title": "Evaluate Microsoft's Azure Repos to GitHub Migration",
+    "excerpt": "Microsoft is actively pushing enterprises to migrate from Azure Repos to GitHub, despite GitHub's recent reliability issues and outages. This guide helps organizations evaluate the migration decision and manage the transition effectively.",
+    "category": "DevOps",
+    "tags": [
+      "github",
+      "azure-repos",
+      "migration",
+      "enterprise",
+      "devops"
+    ],
+    "word_count": 1543,
+    "published_at": "2026-06-09T08:13:41.977832Z"
   }
 ]
