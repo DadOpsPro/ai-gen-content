@@ -58,5 +58,35 @@
     ],
     "word_count": 1543,
     "published_at": "2026-06-09T08:13:41.977832Z"
+  },
+  {
+    "slug": "ai-agents-break-free-solo-dev-mode",
+    "title": "AI Agents Break Free from Solo Dev Mode",
+    "excerpt": "AI coding assistants are moving beyond individual developer use cases into collaborative team environments. This shift has significant implications for software testing, security practices, and enterprise development workflows.",
+    "category": "AI & Development",
+    "tags": [
+      "AI agents",
+      "software testing",
+      "developer tools",
+      "AI orchestration",
+      "code security"
+    ],
+    "word_count": 2171,
+    "published_at": "2026-06-10T08:21:56.143198Z"
+  },
+  {
+    "slug": "claude-mythos-fable-5-testing-guide",
+    "title": "Claude Mythos/Fable 5: Test Before Access Ends",
+    "excerpt": "Anthropic launched Fable 5, a Mythos-class AI model with enhanced reasoning and code analysis capabilities, but unrestricted access ends soon. This guide helps you evaluate whether Claude Mythos/Fable 5 is right for your security and testing needs before enterprise pricing takes effect.",
+    "category": "how_to_guide",
+    "tags": [
+      "Claude",
+      "AI Models",
+      "Testing",
+      "Security Analysis",
+      "Code Generation"
+    ],
+    "word_count": 1617,
+    "published_at": "2026-06-10T08:22:59.914242Z"
   }
 ]

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Mythos/Fable 5: Test Before Access Ends | AI Dev Defense</title>
+  <meta name="description" content="Learn how to test Anthropic's new Claude Mythos/Fable 5 AI model before limited access ends. A practical guide for developers and security professionals.">
+  <meta property="og:title" content="Claude Mythos/Fable 5: Test Before Access Ends">
+  <meta property="og:description" content="Learn how to test Anthropic's new Claude Mythos/Fable 5 AI model before limited access ends. A practical guide for developers and security professionals.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/claude-mythos-fable-5-testing-guide.html">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={adsense_pub}" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/">AI Dev Defense</a>
+    <span style="opacity:.5">|</span>
+    <span style="font-size:.9rem;opacity:.7">how_to_guide</span>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>how_to_guide</span> &middot;
+      <span>8 min read</span> &middot;
+      <span>1,617 words</span>
+    </div>
+    <h1>Claude Mythos/Fable 5: Test Before Access Ends</h1>
+    <div class="article-content">
+      
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>Anthropic Launches Claude Mythos/Fable 5: A Practical Guide to Testing It Before Limited Access Ends</h1>
+</p>
+<p>On Tuesday, Anthropic launched Fable 5, its first generally available Mythos-class model. Fable 5 is essentially a paradigm shift in how AI models approach complex reasoning, code generation, and security analysis—but there's a catch. Anthropic has announced that unrestricted access will only last through the end of the evaluation period, after which usage caps and enterprise pricing will take effect.
+</p>
+<p>For software testing and security professionals, this window represents a critical opportunity to evaluate whether Claude Mythos/Fable 5 delivers on its promises of enhanced vulnerability detection, intelligent test case generation, and deeper code comprehension. This guide walks you through everything you need to get started immediately.
+
+<h2>Why This Matters: The Problem Statement</h2>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+</p>
+<p>The software testing and security landscape faces persistent challenges that traditional AI models have struggled to address comprehensively:
+
+<strong>Contextual Understanding Gaps</strong>: Previous models often miss subtle security vulnerabilities because they lack the ability to maintain context across large codebases. A buffer overflow in one module might only become exploitable due to an input validation flaw three files away.
+
+<strong>Test Coverage Limitations</strong>: Generating meaningful test cases requires understanding not just code syntax, but business logic, edge cases, and potential attack vectors. Current tools generate tests that achieve high line coverage but miss critical logical paths.
+
+<strong>False Positive Fatigue</strong>: Security teams waste countless hours investigating alerts that turn out to be benign, eroding trust in automated tools.
+</p>
+<p>Claude Mythos/Fable 5 addresses these issues through what Anthropic calls "deep contextual reasoning"—the ability to maintain coherent understanding across 500,000+ tokens while performing multi-step logical analysis. For security testing, this translates to fewer false positives, better vulnerability chaining detection, and more intelligent test generation.
+</p>
+<p>The urgency is clear: Anthropic's announcement indicates that after the evaluation period, access will require enterprise agreements with significant pricing changes. Testing professionals need to evaluate this technology now while unrestricted API access remains available.
+
+<h2>Prerequisites</h2>
+</p>
+<p>Before diving into implementation, ensure you have the following:
+
+<h3>Technical Requirements</h3>
+<ul>
+<li><strong>Python 3.9+</strong> installed on your system</li>
+<li><strong>Anthropic API key</strong> (sign up at console.anthropic.com if you haven't already)</li>
+<li><strong>Git</strong> for cloning example repositories</li>
+<li>At least <strong>8GB RAM</strong> for processing larger code analysis tasks locally</li>
+
+<h3>Knowledge Requirements</h3>
+<li>Basic familiarity with REST APIs and Python</li>
+<li>Understanding of common security vulnerabilities (OWASP Top 10)</li>
+<li>Experience with at least one testing framework (pytest, Jest, JUnit)</li>
+
+<h3>Account Setup</h3>
+<li>Navigate to console.anthropic.com</li>
+<li>Create an account or sign in</li>
+<li>Generate an API key under Settings > API Keys</li>
+<li>Note your current usage tier—Fable 5 access requires the "Mythos Preview" tier (currently free during evaluation)</li>
+
+<h3>Environment Setup</h3>
+</p>
+<p><pre><code class="language-bash"># Create a virtual environment
+python -m venv fable5-testing
+source fable5-testing/bin/activate  # On Windows: fable5-testing\Scripts\activate
+
+# Install required packages
+pip install anthropic requests python-dotenv pytest
+</code></pre>
+</p>
+<p>Create a <code>.env</code> file in your project root:
+</p>
+<p><pre><code class="language-">ANTHROPIC_API_KEY=your_api_key_here
+</code></pre>
+
+<h2>Step-by-Step Instructions</h2>
+
+<h3>Step 1: Initialize the Anthropic Client for Fable 5</h3>
+</p>
+<p>The Fable 5 model uses a new model identifier and supports extended context windows. Here's how to set up your client correctly:
+</p>
+<p><pre><span class="code-filename">fable5_client.py</span><code class="language-python">import anthropic
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def create_fable5_client():
+    """Initialize Anthropic client configured for Fable 5."""
+    client = anthropic.Anthropic(
+        api_key=os.getenv("ANTHROPIC_API_KEY")
+    )
+    return client
+
+def analyze_with_fable5(client, prompt, max_tokens=4096):
+    """Send analysis request to Claude Mythos/Fable 5."""
+    message = client.messages.create(
+        model="claude-mythos-fable-5-20260610",  # Fable 5 model identifier
+        max_tokens=max_tokens,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        # Enable extended thinking for complex analysis
+        thinking={
+            "type": "enabled",
+            "budget_tokens": 10000
+        }
+    )
+    return message
+
+# Quick verification
+if __name__ == "__main__":
+    client = create_fable5_client()
+    response = analyze_with_fable5(
+        client, 
+        "Confirm you are Claude Mythos/Fable 5 and briefly describe your security analysis capabilities."
+    )
+    print(response.content[0].text)
+</code></pre>
+
+<h3>Step 2: Configure Security Analysis Prompts</h3>
+</p>
+<p>Fable 5 excels when given structured prompts that leverage its reasoning capabilities. Create a prompt template system:
+</p>
+<p><pre><span class="code-filename">security_prompts.py</span><code class="language-python">
+VULNERABILITY_ANALYSIS_PROMPT = """
+You are performing a comprehensive security analysis on the following code.
+
+ANALYSIS REQUIREMENTS:
+1. Identify all potential security vulnerabilities
+2. For each vulnerability, provide:
+   - CWE identifier if applicable
+   - Severity rating (Critical/High/Medium/Low)
+   - Exact line numbers affected
+   - Exploitation scenario
+   - Recommended fix with code example
+3. Consider vulnerability chaining—how might multiple issues combine?
+4. Assess the code in context of its likely deployment environment
+
+CODE TO ANALYZE:
+</code></pre>{language}
+{code}
+<pre><code class="language-">ADDITIONAL CONTEXT:
+{context}
+
+Provide your analysis in structured JSON format.
+"""
+
+TEST_GENERATION_PROMPT = """
+Generate comprehensive test cases for the following code, focusing on:
+
+1. Security-relevant edge cases
+2. Input validation boundaries
+3. Authentication/authorization paths
+4. Error handling scenarios
+5. Race conditions and concurrency issues
+
+CODE:
+</code></pre>{language}
+{code}
+<pre><code class="language-">EXISTING TESTS (if any):
+{existing_tests}
+
+Generate tests using {test_framework} that achieve both high coverage and high security relevance.
+Include comments explaining the security rationale for each test.
+"""
+
+def format_vulnerability_prompt(code, language="python", context=""):
+    return VULNERABILITY_ANALYSIS_PROMPT.format(
+        language=language,
+        code=code,
+        context=context or "No additional context provided."
+    )
+
+def format_test_generation_prompt(code, language="python", existing_tests="", test_framework="pytest"):
+    return TEST_GENERATION_PROMPT.format(
+        language=language,
+        code=code,
+        existing_tests=existing_tests or "No existing tests.",
+        test_framework=test_framework
+    )
+</code></pre>
+
+<h3>Step 3: Implement Vulnerability Scanning</h3>
+</p>
+<p>Build a practical vulnerability scanner that leverages Fable 5's extended context window:
+</p>
+<p><pre><span class="code-filename">vulnerability_scanner.py</span><code class="language-python">import json
+import os
+from pathlib import Path
+from fable5_client import create_fable5_client, analyze_with_fable5
+from security_prompts import format_vulnerability_prompt
+
+class Fable5VulnerabilityScanner:
+    def __init__(self):
+        self.client = create_fable5_client()
+        self.results = []
+    
+    def scan_file(self, filepath):
+        """Scan a single file for vulnerabilities."""
+        with open(filepath, 'r') as f:
+            code = f.read()
+        
+        language = self._detect_language(filepath)
+        prompt = format_vulnerability_prompt(
+            code=code,
+            language=language,
+            context=f"File: {filepath}"
+        )
+        
+        response = analyze_with_fable5(self.client, prompt, max_tokens=8192)
+        
+        # Parse the JSON response
+        try:
+            # Extract JSON from response
+            response_text = response.content[0].text
+            json_start = response_text.find('{')
+            json_end = response_text.rfind('}') + 1
+            findings = json.loads(response_text[json_start:json_end])
+        except json.JSONDecodeError:
+            findings = {"raw_response": response_text, "parse_error": True}
+        
+        return {
+            "file": str(filepath),
+            "findings": findings
+        }
+    
+    def scan_directory(self, directory, extensions=['.py', '.js', '.ts', '.java']):
+        """Scan all matching files in a directory."""
+        path = Path(directory)
+        results = []
+        
+        for ext in extensions:
+            for filepath in path.rglob(f'*{ext}'):
+                print(f"Scanning: {filepath}")
+                result = self.scan_file(filepath)
+                results.append(result)
+        
+        self.results = results
+        return results
+    
+    def generate_report(self, output_path="security_report.json"):
+        """Generate a consolidated security report."""
+        report = {
+            "scan_summary": {
+                "files_scanned": len(self.results),
+                "critical_findings": 0,
+                "high_findings": 0,
+                "medium_findings": 0,
+                "low_findings": 0
+            },
+            "detailed_findings": self.results
+        }
+        
+        # Count findings by severity
+        for result in self.results:
+            if "findings" in result and "vulnerabilities" in result.get("findings", {}):
+                for vuln in result["findings"]["vulnerabilities"]:
+                    severity = vuln.get("severity", "").lower()
+                    if severity == "critical":
+                        report["scan_summary"]["critical_findings"] += 1
+                    elif severity == "high":
+                        report["scan_summary"]["high_findings"] += 1
+                    elif severity == "medium":
+                        report["scan_summary"]["medium_findings"] += 1
+                    elif severity == "low":
+                        report["scan_summary"]["low_findings"] += 1
+        
+        with open(output_path, 'w') as f:
+            json.dump(report, f, indent=2)
+        
+        return report
+    
+    def _detect_language(self, filepath):
+        """Detect programming language from file extension."""
+        ext_map = {
+            '.py': 'python',
+            '.js': 'javascript',
+            '.ts': 'typescript',
+            '.java': 'java',
+            '.go': 'go',
+            '.rb': 'ruby',
+            '.php': 'php'
+        }
+        ext = Path(filepath).suffix
+        return ext_map.get(ext, 'unknown')
+
+
+# Usage example
+if __name__ == "__main__":
+    scanner = Fable5VulnerabilityScanner()
+    results = scanner.scan_directory("./src")
+    report = scanner.generate_report()
+    print(f"Scan complete. Found {report['scan_summary']['critical_findings']} critical issues.")
+</code></pre>
+
+<h3>Step 4: Generate Security-Focused Test Cases</h3>
+</p>
+<p><pre><span class="code-filename">test_generator.py</span><code class="language-python">from fable5_client import create_fable5_client, analyze_with_fable5
+from security_prompts import format_test_generation_prompt
+
+class Fable5TestGenerator:
+    def __init__(self):
+        self.client = create_fable5_client()
+    
+    def generate_tests(self, code, language="python", framework="pytest"):
+        """Generate security-focused test cases."""
+        prompt = format_test_generation_prompt(
+            code=code,
+            language=language,
+            test_framework=framework
+        )
+        
+        response = analyze_with_fable5(self.client, prompt, max_tokens=8192)
+        return response.content[0].text
+    
+    def generate_and_save(self, source_file, output_file):
+        """Generate tests and save to file."""
+        with open(source_file, 'r') as f:
+            code = f.read()
+        
+        tests = self.generate_tests(code)
+        
+        # Extract code blocks from response
+        lines = tests.split('\n')
+        in_code_block = False
+        code_lines = []
+        
+        for line in lines:
+            if line.startswith('</code></pre>python'):
+                in_code_block = True
+                continue
+            elif line.startswith('<code>`</code>') and in_code_block:
+                in_code_block = False
+                continue
+            elif in_code_block:
+                code_lines.append(line)
+        
+        with open(output_file, 'w') as f:
+            f.write('\n'.join(code_lines))
+        
+        return output_file
+<pre><code class="language-">### Step 5: Integrate with CI/CD Pipeline
+
+Create a GitHub Actions workflow that leverages Fable 5 for security analysis:
+
+</code></pre>yaml
+<h1>.github/workflows/fable5-security-scan.yml</h1>
+name: Fable 5 Security Analysis
+</p>
+<p>on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+</p>
+<p>jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+<li>uses: actions/checkout@v4</li>
+<li>name: Set up Python</li>
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+<li>name: Install dependencies</li>
+        run: |
+          pip install anthropic python-dotenv
+<li>name: Run Fable 5 Security Scan</li>
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python vulnerability_scanner.py --directory ./src --output security_report.json
+<li>name: Upload Security Report</li>
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: security_report.json
+<li>name: Fail on Critical Findings</li>
+</ul>
+        run: |
+          python -c "
+          import json
+          with open('security_report.json') as f:
+              report = json.load(f)
+          critical = report['scan_summary']['critical_findings']
+          if critical > 0:
+              print(f'Found {critical} critical vulnerabilities!')
+              exit(1)
+          "
+<pre><code class="language-">## Common Pitfalls & How to Avoid Them
+
+### Pitfall 1: Token Limit Exhaustion
+**Problem**: Large codebases exceed even Fable 5's generous context window.
+**Solution**: Implement chunking with overlap to maintain context:
+
+</code></pre>python
+def chunk_code(code, max_chars=100000, overlap=5000):
+    """Split code into overlapping chunks for analysis."""
+    chunks = []
+    start = 0
+    while start < len(code):
+        end = min(start + max_chars, len(code))
+        chunks.append(code[start:end])
+        start = end - overlap
+    return chunks
+<pre><code class="language-">### Pitfall 2: Unstructured Responses
+**Problem**: AI responses vary in format, breaking automated parsing.
+**Solution**: Use system prompts to enforce JSON output and implement fallback parsing.
+
+### Pitfall 3: Rate Limiting During Evaluation
+**Problem**: Heavy usage triggers rate limits even during the evaluation period.
+**Solution**: Implement exponential backoff and batch processing with Celery for queue management.
+
+### Pitfall 4: Ignoring Thinking Tokens
+**Problem**: Not utilizing Fable 5's extended thinking capability for complex analysis.
+**Solution**: Always enable thinking for security analysis tasks—the additional reasoning significantly improves accuracy.
+
+## Real-World Example: Analyzing a Vulnerable API Endpoint
+
+Let's analyze a realistic vulnerable Flask application:
+
+</code></pre>python
+<h1>vulnerable_app.py (intentionally vulnerable for demonstration)</h1>
+from flask import Flask, request, jsonify
+import sqlite3
+import os
+</p>
+<p>app = Flask(__name__)
+</p>
+<p>@app.route('/user/<user_id>')
+def get_user(user_id):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    # SQL Injection vulnerability
+    query = f"SELECT * FROM users WHERE id = {user_id}"
+    cursor.execute(query)
+    user = cursor.fetchone()
+    return jsonify({"user": user})
+</p>
+<p>@app.route('/upload', methods=['POST'])
+def upload_file():
+    filename = request.form.get('filename')
+    content = request.form.get('content</p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+    </div>
+    <div class="tags">Tags: Claude · AI Models · Testing · Security Analysis · Code Generation</div>
+  </main>
+  <footer>
+    <p>&copy; AI Dev Defense · <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>

@@ -30,4 +30,16 @@
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/ai-agents-break-free-solo-dev-mode.html</loc>
+            <lastmod>2026-06-10</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/claude-mythos-fable-5-testing-guide.html</loc>
+            <lastmod>2026-06-10</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
     </urlset>
