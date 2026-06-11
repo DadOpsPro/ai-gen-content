@@ -88,5 +88,35 @@
     ],
     "word_count": 1617,
     "published_at": "2026-06-10T08:22:59.914242Z"
+  },
+  {
+    "slug": "observability-overload-drowning-engineers",
+    "title": "Observability Overload Is Drowning Engineers",
+    "excerpt": "The observability systems built to solve problems have become the problem themselves, creating data overload that drowns engineers in noise. This week's trends reveal how the industry is scrambling for solutions as observability paradox reaches a breaking point.",
+    "category": "trends",
+    "tags": [
+      "observability",
+      "monitoring",
+      "data-overload",
+      "engineering-trends",
+      "AI-solutions"
+    ],
+    "word_count": 2250,
+    "published_at": "2026-06-11T08:32:36.552339Z"
+  },
+  {
+    "slug": "optimize-fable-5-guardrails-burn-rate",
+    "title": "Optimize Fable 5: Manage Guardrails & Burn Rate",
+    "excerpt": "Fable 5 delivers superior code quality but frustrates users with restrictive guardrails and high token consumption. This guide reveals practical workarounds to optimize your workflow and ship faster despite the limitations.",
+    "category": "AI Development",
+    "tags": [
+      "Fable 5",
+      "AI development",
+      "token optimization",
+      "guardrails",
+      "Anthropic"
+    ],
+    "word_count": 1685,
+    "published_at": "2026-06-11T08:33:48.891062Z"
   }
 ]
