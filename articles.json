@@ -118,5 +118,35 @@
     ],
     "word_count": 1685,
     "published_at": "2026-06-11T08:33:48.891062Z"
+  },
+  {
+    "slug": "chainguard-open-source-packages-supply-chain-security",
+    "title": "AI Dependencies: Chainguard's 52K Package Security Wake-Up",
+    "excerpt": "Chainguard's analysis of 52,000 open-source packages exposes how AI agents carelessly select dependencies with minimal security discernment, creating widespread supply chain vulnerabilities. The report marks a turning point for enterprise organizations relying on agentic coding tools.",
+    "category": "Security",
+    "tags": [
+      "supply-chain-security",
+      "open-source",
+      "ai-agents",
+      "dependencies",
+      "vulnerability-management"
+    ],
+    "word_count": 1851,
+    "published_at": "2026-06-12T08:30:22.365476Z"
+  },
+  {
+    "slug": "entry-level-tech-jobs-ai-disruption-guide",
+    "title": "Entry-Level Tech Jobs in the Age of AI",
+    "excerpt": "AI automation is shrinking entry-level tech positions while demand for AI-adjacent skills explodes, creating a paradox for newcomers. This practical guide reveals where entry-level tech jobs are going and how to position yourself for success in the AI era.",
+    "category": "Career Development",
+    "tags": [
+      "entry-level jobs",
+      "AI automation",
+      "tech careers",
+      "career transition",
+      "AI skills"
+    ],
+    "word_count": 1694,
+    "published_at": "2026-06-12T08:31:28.085343Z"
   }
 ]
