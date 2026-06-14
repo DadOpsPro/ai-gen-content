@@ -12,7 +12,9 @@
   ],
   "post_draft": "Are your AI coding tools quietly poisoning your supply chain?\n\nChainguard just analyzed 52,000 open-source packages and found something alarming: AI agents pick dependencies with almost zero security consideration.\n\nWe're talking about widespread vulnerabilities buried in the packages your agentic tools automatically pull into your codebase. These aren't edge cases\u2014they're systemic risks that enterprises are already living with.\n\nThe report signals a critical moment. Organizations deploying AI for code generation need to wake up to what's actually happening beneath the surface.\n\nRead the full analysis to understand why dependency selection matters more than ever, what the data reveals about current AI agent behavior, and what your team should do right now to protect your supply chain.\n\nThis is no longer theoretical. It's your production environment.\n\nRead the full article: https://aidevdefense.com/posts/chainguard-open-source-packages-supply-chain-security.html\n\n#SupplyChainSecurity #AISecurityRisks #OpenSourceSecurity #DependencyManagement #AppSec",
   "status": "approved",
+  "status": "approved",
   "created_at": "2026-06-12T08:31:33.243721",
+  "approved_at": "2026-06-14T14:19:41.005958",
   "approved_at": "2026-06-14T14:19:41.005958",
   "posted_at": "",
   "scheduled_for": "2026-06-14T13:20:49.261871"
