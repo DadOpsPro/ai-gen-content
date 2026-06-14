@@ -230,7 +230,7 @@ def _post_to_linkedin(post_text: str, article_url: str) -> bool:
             headers={
                 "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
                 "Content-Type": "application/json",
-                "LinkedIn-Version": "202401",
+                "LinkedIn-Version": "202501",
             },
             json=payload,
             timeout=30,
