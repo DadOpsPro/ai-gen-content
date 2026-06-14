@@ -199,7 +199,8 @@ def post_approved_articles():
 def _post_to_linkedin(post_text: str, article_url: str) -> bool:
     """Make the LinkedIn Share API call."""
     # Use org URN if posting as company page, else personal
-    author_urn = LINKEDIN_PERSON_URN
+    # Prefer company page (ORG_URN); fall back to personal profile
+    author_urn = LINKEDIN_ORG_URN or LINKEDIN_PERSON_URN
     if not author_urn:
         print("  ❌ No LinkedIn URN configured (LINKEDIN_ORG_URN or LINKEDIN_PERSON_URN)")
         return False
