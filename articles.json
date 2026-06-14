@@ -178,5 +178,35 @@
     ],
     "word_count": 1762,
     "published_at": "2026-06-13T08:08:54.497768Z"
+  },
+  {
+    "slug": "ai-testing-security-weekly-fable-mythos-suspended",
+    "title": "AI Models Suspended: Anthropic Faces Regulatory Standoff",
+    "excerpt": "Anthropic's sudden suspension of Fable 5 and Mythos 5 has left development teams scrambling to understand the regulatory standoff and its impact on AI-integrated testing pipelines. This watershed moment signals potential reshaping of how AI providers and developers approach model deployment and security certifications.",
+    "category": "AI Development & Security",
+    "tags": [
+      "anthropic",
+      "ai-models",
+      "regulatory-compliance",
+      "ai-security",
+      "model-suspension"
+    ],
+    "word_count": 2450,
+    "published_at": "2026-06-14T08:24:26.632216Z"
+  },
+  {
+    "slug": "ai-retrieval-ranking-beyond-vector-search",
+    "title": "Beyond Vector Search: Advanced AI Retrieval Ranking",
+    "excerpt": "Vector search revolutionized information retrieval through semantic similarity matching, but it has fundamental limitations that impact real-world AI systems. This guide explores practical strategies for implementing sophisticated retrieval architectures that go beyond basic vector search.",
+    "category": "AI & Machine Learning",
+    "tags": [
+      "AI retrieval",
+      "vector search",
+      "ranking algorithms",
+      "semantic search",
+      "implementation guide"
+    ],
+    "word_count": 1454,
+    "published_at": "2026-06-14T08:25:26.272874Z"
   }
 ]
