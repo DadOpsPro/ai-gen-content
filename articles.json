@@ -208,5 +208,35 @@
     ],
     "word_count": 1454,
     "published_at": "2026-06-14T08:25:26.272874Z"
+  },
+  {
+    "slug": "cohere-developer-pivot-sovereign-ai-enterprise",
+    "title": "Cohere's Developer Pivot and Sovereign AI's Enterprise Moment",
+    "excerpt": "Cohere pivots from enterprise sovereign AI to developers with its first dedicated coding model, signaling a strategic shift in the AI market. The move highlights the bifurcation between compliance-first enterprise buyers and capability-first developer builders.",
+    "category": "AI Trends",
+    "tags": [
+      "cohere",
+      "sovereign-ai",
+      "coding-models",
+      "enterprise-ai",
+      "developer-tools"
+    ],
+    "word_count": 2362,
+    "published_at": "2026-06-15T15:15:49.078839Z"
+  },
+  {
+    "slug": "ai-generated-apps-cloud-dependency-risks",
+    "title": "AI Apps on Their Cloud: Risks & Solutions",
+    "excerpt": "AI app generators like Replit and Lovable make shipping software trivial, but running exclusively on their cloud creates serious risks. This guide shows you how to recognize vendor lock-in and take back control of your application's future.",
+    "category": "development",
+    "tags": [
+      "AI development",
+      "cloud deployment",
+      "vendor lock-in",
+      "code ownership",
+      "application architecture"
+    ],
+    "word_count": 1662,
+    "published_at": "2026-06-15T15:16:48.652348Z"
   }
 ]
