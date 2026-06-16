@@ -238,5 +238,35 @@
     ],
     "word_count": 1662,
     "published_at": "2026-06-15T15:16:48.652348Z"
+  },
+  {
+    "slug": "anthropic-fable-mess-explained",
+    "title": "The Anthropic Fable Mess, Explained",
+    "excerpt": "The Anthropic-Mythos-Fable story has dominated discussions since Friday, revealing critical issues with AI-assisted security testing and supply chain trust. This week's events offer essential lessons for anyone building AI-integrated testing pipelines.",
+    "category": "AI Development",
+    "tags": [
+      "AI security",
+      "supply chain",
+      "Anthropic",
+      "model provenance",
+      "AI testing"
+    ],
+    "word_count": 2097,
+    "published_at": "2026-06-16T08:56:01.699605Z"
+  },
+  {
+    "slug": "cohere-coding-model-enterprise-developers",
+    "title": "Get Started with Cohere's Coding Model",
+    "excerpt": "Cohere pivots from enterprise sovereign AI to target developers directly with its first dedicated coding model. This guide covers everything you need to get started with this powerful new tool.",
+    "category": "AI Development",
+    "tags": [
+      "cohere",
+      "coding-model",
+      "enterprise-ai",
+      "sovereign-ai",
+      "developer-tools"
+    ],
+    "word_count": 1881,
+    "published_at": "2026-06-16T08:57:03.312501Z"
   }
 ]
