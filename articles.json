@@ -268,5 +268,35 @@
     ],
     "word_count": 1881,
     "published_at": "2026-06-16T08:57:03.312501Z"
+  },
+  {
+    "slug": "spacex-cursor-acquisition-ai-coding",
+    "title": "SpaceX's $60B Cursor Acquisition Reshapes AI Coding",
+    "excerpt": "SpaceX's landmark $60 billion acquisition of Cursor marks the largest AI developer tools deal in history, fundamentally reshaping control over AI-assisted software development. For the software testing and security sectors, the implications are substantial and raise important questions about the future landscape.",
+    "category": "Technology & Innovation",
+    "tags": [
+      "SpaceX",
+      "Cursor",
+      "AI Coding Tools",
+      "M&A",
+      "Software Development"
+    ],
+    "word_count": 2243,
+    "published_at": "2026-06-17T08:44:23.420836Z"
+  },
+  {
+    "slug": "aws-bill-spike-cost-agent-guide",
+    "title": "AWS Bill Spike? Use the New Cost Agent",
+    "excerpt": "AWS has introduced a new AI cost intelligence agent that helps DevOps teams detect and prevent billing anomalies. This practical guide shows how to leverage this frontier agent to diagnose unexpected cloud spending spikes.",
+    "category": "Cloud Cost Management",
+    "tags": [
+      "AWS",
+      "cost-management",
+      "cloud-billing",
+      "AI-agents",
+      "DevOps"
+    ],
+    "word_count": 1544,
+    "published_at": "2026-06-17T08:45:26.292952Z"
   }
 ]

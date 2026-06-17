@@ -114,4 +114,16 @@
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/spacex-cursor-acquisition-ai-coding.html</loc>
+            <lastmod>2026-06-17</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/aws-bill-spike-cost-agent-guide.html</loc>
+            <lastmod>2026-06-17</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
     </urlset>
