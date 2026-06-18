@@ -298,5 +298,35 @@
     ],
     "word_count": 1544,
     "published_at": "2026-06-17T08:45:26.292952Z"
+  },
+  {
+    "slug": "aws-context-ai-agent-reasoning-trend",
+    "title": "AWS Context Leads AI Agent Reasoning Revolution",
+    "excerpt": "AWS launches Context service, signaling the end of \"just add more data\" thinking in AI development. The industry recognizes that agentic AI success depends on sophisticated context management and reasoning infrastructure.",
+    "category": "AI Infrastructure",
+    "tags": [
+      "AI agents",
+      "AWS Context",
+      "reasoning infrastructure",
+      "enterprise AI",
+      "agentic systems"
+    ],
+    "word_count": 2464,
+    "published_at": "2026-06-18T08:33:47.003714Z"
+  },
+  {
+    "slug": "kiro-mobile-aws-agentic-coding-iphone",
+    "title": "Kiro Goes Mobile: AWS Agentic Coding on iPhone",
+    "excerpt": "AWS Kiro now brings agentic coding supervision to mobile devices, letting developers monitor and steer AI agents from their iPhone without being desk-bound. This guide covers setting up, managing, and optimizing AI agent oversight from your pocket.",
+    "category": "Cloud & DevOps",
+    "tags": [
+      "AWS",
+      "agentic AI",
+      "mobile development",
+      "AI coding agents",
+      "DevOps"
+    ],
+    "word_count": 1956,
+    "published_at": "2026-06-18T08:35:01.420339Z"
   }
 ]
