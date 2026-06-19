@@ -328,5 +328,35 @@
     ],
     "word_count": 1956,
     "published_at": "2026-06-18T08:35:01.420339Z"
+  },
+  {
+    "slug": "proactive-ai-agents-autonomous-business-operations",
+    "title": "Proactive AI Agents: The New Frontier in Autonomous Business Operations",
+    "excerpt": "Gusto's cofounder unveiled an AI agent that anticipates business needs, flags compliance risks, and manages benefits without waiting for user input. This shift toward proactive AI agents is reshaping how organizations approach software validation and security testing.",
+    "category": "Artificial Intelligence",
+    "tags": [
+      "AI agents",
+      "payroll automation",
+      "HR technology",
+      "software testing",
+      "autonomous systems"
+    ],
+    "word_count": 2351,
+    "published_at": "2026-06-19T08:47:06.662899Z"
+  },
+  {
+    "slug": "mcp-enterprise-authorization-layer-implementation",
+    "title": "MCP Gets Its Missing Enterprise Authorization Layer",
+    "excerpt": "The Model Context Protocol has become the standard for connecting AI agents to enterprise tools, but organizations face a critical security gap. This guide covers implementing the enterprise authorization layer MCP deployments need for secure, scalable adoption.",
+    "category": "how_to_guide",
+    "tags": [
+      "MCP",
+      "enterprise-authorization",
+      "AI-agents",
+      "security",
+      "implementation-guide"
+    ],
+    "word_count": 1488,
+    "published_at": "2026-06-19T08:48:01.190806Z"
   }
 ]
