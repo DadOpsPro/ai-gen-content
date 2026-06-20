@@ -358,5 +358,35 @@
     ],
     "word_count": 1488,
     "published_at": "2026-06-19T08:48:01.190806Z"
+  },
+  {
+    "slug": "ai-code-review-better-than-teammates",
+    "title": "AI Now Reviews Code Better Than Your Teammate",
+    "excerpt": "AI models have matured from code suggestion tools to genuine development partners, exposing how most human-written code reviews are inconsistent and riddled with blind spots. This week's trends show AI doesn't just write code—it reviews with a rigor that makes traditional peer review look negligent.",
+    "category": "AI & Development",
+    "tags": [
+      "AI code review",
+      "software development",
+      "code quality",
+      "AI in engineering",
+      "developer tools"
+    ],
+    "word_count": 2305,
+    "published_at": "2026-06-20T08:09:06.367760Z"
+  },
+  {
+    "slug": "checkmarx-sast-engine-post-scan-intelligence",
+    "title": "Checkmarx SAST Engine: Post-Scan Intelligence",
+    "excerpt": "Checkmarx's new SAST engine focuses on post-scan intelligence rather than just LLM integration. Discover how modern SAST architectures address false positives and deliver actionable security results.",
+    "category": "Application Security",
+    "tags": [
+      "SAST",
+      "application security",
+      "static analysis",
+      "vulnerability detection",
+      "security tools"
+    ],
+    "word_count": 1461,
+    "published_at": "2026-06-20T08:10:01.684280Z"
   }
 ]
