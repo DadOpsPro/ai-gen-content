@@ -388,5 +388,35 @@
     ],
     "word_count": 1461,
     "published_at": "2026-06-20T08:10:01.684280Z"
+  },
+  {
+    "slug": "gemini-cli-vs-antigravity-real-world-performance",
+    "title": "Gemini CLI vs Antigravity: Real-World Performance",
+    "excerpt": "The AI coding tool wars have shifted from spec sheets to real-world testing. This week we examine Gemini CLI and Antigravity's actual performance in production environments, cutting through marketing noise to show security-conscious teams what really works.",
+    "category": "trends",
+    "tags": [
+      "AI tools",
+      "CLI tools",
+      "Gemini",
+      "software security",
+      "developer tools"
+    ],
+    "word_count": 2130,
+    "published_at": "2026-06-21T08:31:16.975242Z"
+  },
+  {
+    "slug": "valkey-ai-automated-backporting-bug-fixes",
+    "title": "Backporting Bug Fixes: AI-Powered Automation Guide",
+    "excerpt": "Project Valkey has transformed open source maintenance by automating backporting of bug fixes across multiple release branches using AI-powered bots. This guide explores how to implement similar automation in your projects to eliminate manual cherry-picking and merge conflict resolution.",
+    "category": "DevOps & Automation",
+    "tags": [
+      "open-source",
+      "automation",
+      "devops",
+      "CI/CD",
+      "backporting"
+    ],
+    "word_count": 1472,
+    "published_at": "2026-06-21T08:32:16.863073Z"
   }
 ]
