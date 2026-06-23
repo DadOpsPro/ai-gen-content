@@ -24,18 +24,15 @@ APPROVE_TOKEN = os.environ.get("APPROVE_TOKEN", "")
 SITE_URL      = os.environ.get("SITE_URL", "https://aidevdefense.com")
 
 
-def _approval_page_url(slug: str, draft_b64: str) -> str:
-    """URL to the article approval page with draft pre-loaded."""
-    params = urllib.parse.urlencode({"slug": slug, "draft": draft_b64})
-    return f"{SITE_URL}/article-approve.html?{params}"
+def _approval_page_url(slug: str) -> str:
+    """URL to the article approval page — draft is fetched by slug from the site."""
+    return f"{SITE_URL}/article-approve.html?slug={urllib.parse.quote(slug)}"
 
 
 def build_review_email_html(topic: str, article_type: str, draft_markdown: str, slug: str) -> str:
     """Build the Speechify-friendly HTML review email."""
 
-    import base64
-    draft_b64 = base64.urlsafe_b64encode(draft_markdown.encode()).decode()
-    approve_url = _approval_page_url(slug, draft_b64)
+    approve_url = _approval_page_url(slug)
 
     date_str = datetime.now().strftime("%A, %B %d, %Y")
 
@@ -163,7 +160,7 @@ def send_draft_review_email(topic: str, article_type: str, draft_markdown: str, 
         f"Type: {article_type}\n\n"
         f"Draft:\n{draft_markdown}\n\n"
         f"To add your take and publish, visit:\n"
-        f"{_approval_page_url(slug, '')}\n"
+        f"{_approval_page_url(slug)}\n"
     )
 
     msg.attach(MIMEText(plain, "plain"))

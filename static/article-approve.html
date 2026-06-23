@@ -86,12 +86,27 @@
   const token  = "APPROVE_TOKEN_PLACEHOLDER";
   const repo   = "DadOpsPro/ai-gen-content";
 
-  // Decode draft from base64 param
+  // Fetch draft JSON from gh-pages by slug
   let draftMarkdown = "";
-  try {
-    const b64 = params.get("draft") || "";
-    if (b64) draftMarkdown = atob(b64.replace(/-/g,"+").replace(/_/g,"/"));
-  } catch(e) { console.warn("Could not decode draft", e); }
+  async function loadDraft() {
+    if (!slug) return;
+    try {
+      const resp = await fetch(`/drafts/${slug}.json`);
+      if (resp.ok) {
+        const data = await resp.json();
+        draftMarkdown = data.draft_markdown || "";
+        document.getElementById("topic-heading").textContent = data.topic || slug.replace(/-/g," ");
+        document.getElementById("draft-preview").innerHTML = renderDraft(draftMarkdown);
+      } else {
+        document.getElementById("draft-preview").innerHTML =
+          "<p style='color:#888'>Draft not found — it may have expired. Check your email for the full text.</p>";
+      }
+    } catch(e) {
+      console.warn("Could not load draft:", e);
+      document.getElementById("draft-preview").innerHTML =
+        "<p style='color:#888'>Could not load draft preview. You can still submit your take below.</p>";
+    }
+  }
 
   function renderDraft(markdown) {
     const lines = markdown.split("\n");
@@ -185,18 +200,13 @@
   }
 
   // Init page
-  window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("topic-heading").textContent =
-      params.get("topic") || slug.replace(/-/g," ") || "Draft Article";
+      slug.replace(/-/g," ") || "Draft Article";
     document.getElementById("meta-line").textContent =
       `Slug: ${slug} · Generated: ${new Date().toLocaleDateString()}`;
 
-    if (draftMarkdown) {
-      document.getElementById("draft-preview").innerHTML = renderDraft(draftMarkdown);
-    } else {
-      document.getElementById("draft-preview").innerHTML =
-        "<p style='color:#888'>Draft not available — check your email for the full text.</p>";
-    }
+    await loadDraft();
 
     // Handle skip action from email link
     if (action === "skip") {
