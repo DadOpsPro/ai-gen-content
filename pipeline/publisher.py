@@ -398,7 +398,10 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
             line-height: 1.7; background: #fff; }}
     .site-header {{ background: #0a0f1e; color: #fff; padding: 1rem 2rem;
                     display: flex; align-items: center; gap: 1rem; }}
-    .site-header a {{ color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }}
+    .site-header a.logo {{ color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }}
+    .site-header nav {{ margin-left: auto; display: flex; gap: 1.5rem; }}
+    .site-header nav a {{ color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }}
+    .site-header nav a:hover {{ color: #fff; }}
     .article-container {{ max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }}
     .article-meta {{ color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }}
     h1 {{ font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
@@ -432,9 +435,12 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
 
 <body>
   <header class="site-header">
-    <a href="/">{site_name}</a>
-    <span style="opacity:.5">|</span>
-    <span style="font-size:.9rem;opacity:.7">{category}</span>
+    <a href="/" class="logo">{site_name}</a>
+    <nav>
+      <a href="/">Articles</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
   </header>
   <main class="article-container">
     <div class="article-meta">
@@ -449,7 +455,8 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
     <div class="tags">Tags: {tags}</div>
   </main>
   <footer>
-    <p>&copy; {site_name} · <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <p>&copy; {site_name} · <a href="/about.html" style="color:#888">About</a> ·
+    <a href="/privacy.html" style="color:#888">Privacy</a> ·
     <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
   </footer>
 </body>
@@ -471,6 +478,11 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
   <style>
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: 'Georgia', serif; color: #1a1a2e; background: #f9f9f9; }}
+    .site-nav {{ background: #0a0a1a; display: flex; align-items: center; padding: 0.85rem 2rem; gap: 1rem; }}
+    .site-nav a.logo {{ color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.1rem; }}
+    .site-nav nav {{ margin-left: auto; display: flex; gap: 1.5rem; }}
+    .site-nav nav a {{ color: #aaa; text-decoration: none; font-size: 0.9rem; }}
+    .site-nav nav a:hover {{ color: #fff; }}
     .hero {{ background: #0a0a1a; color: #fff; padding: 4rem 2rem; text-align: center; }}
     .hero h1 {{ font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }}
     .hero p {{ color: #aaa; font-size: 1.15rem; max-width: 500px; margin: 0 auto 2rem; }}
@@ -498,6 +510,14 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
   </style>
 </head>
 <body>
+  <div class="site-nav">
+    <a href="/" class="logo">{SITE_NAME}</a>
+    <nav>
+      <a href="/">Articles</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </div>
   <header class="hero">
     <h1>{SITE_NAME}</h1>
     <p>AI-powered insights for software testing professionals</p>
@@ -510,7 +530,7 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
     {{{{POSTS}}}}
   </div>
   <footer>
-    <p>&copy; {SITE_NAME} · <a href="/privacy.html">Privacy</a> · 
+    <p>&copy; {SITE_NAME} · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · 
     <a href="/affiliate-disclosure.html">Affiliate Disclosure</a></p>
   </footer>
 </body>
