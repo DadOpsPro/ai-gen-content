@@ -1,0 +1,19 @@
+{
+  "slug": "ai-code-review-better-than-teammates",
+  "title": "AI Now Reviews Code Better Than Your Teammate",
+  "article_url": "https://aidevdefense.com/posts/ai-code-review-better-than-teammates.html",
+  "excerpt": "AI models have matured from code suggestion tools to genuine development partners, exposing how most human-written code reviews are inconsistent and riddled with blind spots. This week's trends show AI doesn't just write code\u2014it reviews with a rigor that makes traditional peer review look negligent.",
+  "tags": [
+    "AI code review",
+    "software development",
+    "code quality",
+    "AI in engineering",
+    "developer tools"
+  ],
+  "post_draft": "What if your best code reviewer isn't human?\n\nAI models have evolved into something we didn't expect: rigorous quality gatekeepers. They're catching inconsistencies, security gaps, and logic errors that slip past traditional peer reviews every single day.\n\nThis week, we're breaking down why AI code review is reshaping how teams think about quality. You'll learn where human reviewers have blind spots, why consistency matters more than you think, and how leading teams are already making the shift.\n\nThe truth? Most code reviews today are leaving money on the table. AI doesn't get tired, distracted, or skip the tedious checks. It doesn't play favorites either.\n\nRead the full story to see how this changes development workflows and what it means for your team's next sprint.\n\nhttps://aidevdefense.com/posts/ai-code-review-better-than-teammates.html\n\n#AICodeReview #SoftwareDevelopment #CodeQuality #DevTools #AppSecurity",
+  "status": "pending",
+  "created_at": "2026-06-20T08:10:07.069804",
+  "approved_at": "",
+  "posted_at": "",
+  "scheduled_for": ""
+}

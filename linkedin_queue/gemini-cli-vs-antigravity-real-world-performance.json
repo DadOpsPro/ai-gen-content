@@ -1,0 +1,19 @@
+{
+  "slug": "gemini-cli-vs-antigravity-real-world-performance",
+  "title": "Gemini CLI vs Antigravity: Real-World Performance",
+  "article_url": "https://aidevdefense.com/posts/gemini-cli-vs-antigravity-real-world-performance.html",
+  "excerpt": "The AI coding tool wars have shifted from spec sheets to real-world testing. This week we examine Gemini CLI and Antigravity's actual performance in production environments, cutting through marketing noise to show security-conscious teams what really works.",
+  "tags": [
+    "AI tools",
+    "CLI tools",
+    "Gemini",
+    "software security",
+    "developer tools"
+  ],
+  "post_draft": "Which AI coding tool actually holds up under real security pressure?\n\nWe just published a head-to-head breakdown of Gemini CLI and Antigravity in actual production environments\u2014not lab conditions, not marketing claims.\n\nYou'll discover which tool catches more security issues without slowing your team down. We tested them against real-world scenarios that matter to security-conscious developers.\n\nYou'll also learn why performance specs don't always translate to what you need on day one. We show you the gaps between what vendors promise and what actually works.\n\nMost importantly, you'll get honest answers about which tool fits your workflow without compromising on safety.\n\nStop guessing. Read the full analysis and see which one your team should actually adopt.\n\nhttps://aidevdefense.com/posts/gemini-cli-vs-antigravity-real-world-performance.html\n\n#AITools #SoftwareSecurity #DeveloperTools #AppSec #Testing",
+  "status": "pending",
+  "created_at": "2026-06-21T08:32:22.084346",
+  "approved_at": "",
+  "posted_at": "",
+  "scheduled_for": ""
+}
