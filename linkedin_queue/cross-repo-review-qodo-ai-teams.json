@@ -1,0 +1,19 @@
+{
+  "slug": "cross-repo-review-qodo-ai-teams",
+  "title": "Cross-Repo Code Review: AI Teams' New Lifeline",
+  "article_url": "https://aidevdefense.com/posts/cross-repo-review-qodo-ai-teams.html",
+  "excerpt": "Qodo shipped cross-repo review capabilities this week, offering relief to teams drowning in AI-generated pull requests. This feature marks a major shift in matching tooling velocity with AI-assisted development.",
+  "tags": [
+    "code-review",
+    "AI-development",
+    "Qodo",
+    "DevOps",
+    "code-quality"
+  ],
+  "post_draft": "How do you review code when AI generates it faster than humans can read it?\n\nThat's the problem Qodo just solved with cross-repo code review capabilities.\n\nAI-assisted development is moving at lightning speed, but your review process is still stuck in neutral. Teams are drowning in pull requests. Quality checks are falling behind. And the tooling gap keeps growing.\n\nThis week's launch changes that. Cross-repo review means your team can finally keep pace with AI-generated code across multiple repositories. It's not about doing more reviews \u2014 it's about doing them smarter.\n\nRead the full story on AI Dev Defense to see how this shifts the game for teams balancing velocity with code quality.\n\n#CodeReview #AIDevelopment #DevOps #CodeQuality #Qodo",
+  "status": "pending",
+  "created_at": "2026-06-23T13:04:09.687533",
+  "approved_at": "",
+  "posted_at": "",
+  "scheduled_for": ""
+}
