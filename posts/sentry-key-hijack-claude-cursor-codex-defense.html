@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hijack Claude Code, Cursor, Codex via Sentry Keys | AI Dev Defense</title>
+  <meta name="description" content="Learn how exposed Sentry keys enable attacks on Claude Code, Cursor, and Codex. Discover detection methods and security defenses to protect your AI coding assistants.">
+  <meta property="og:title" content="Hijack Claude Code, Cursor, Codex via Sentry Keys">
+  <meta property="og:description" content="Learn how exposed Sentry keys enable attacks on Claude Code, Cursor, and Codex. Discover detection methods and security defenses to protect your AI coding assistants.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/sentry-key-hijack-claude-cursor-codex-defense.html">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={adsense_pub}" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/">AI Dev Defense</a>
+    <span style="opacity:.5">|</span>
+    <span style="font-size:.9rem;opacity:.7">Security</span>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>Security</span> &middot;
+      <span>7 min read</span> &middot;
+      <span>1,431 words</span>
+    </div>
+    <h1>Hijack Claude Code, Cursor, Codex via Sentry Keys</h1>
+    <div class="article-content">
+      
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>How a Public Sentry Key Can Hijack Claude Code, <a href="https://cursor.sh?ref=testaiweekly" target="_blank" rel="noopener nofollow" class="affiliate-link">Cursor</a>, and Codex: Detection and Defense Guide</h1>
+
+<h2>Why This Matters</h2>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="5959465348"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+</p>
+<p>A critical vulnerability has emerged in the AI coding assistant ecosystem that security teams cannot ignore. Researchers have discovered that publicly exposed Sentry error-tracking keys embedded in AI coding tools create a direct attack vector that malicious actors can exploit to hijack sessions, exfiltrate sensitive code, and inject malicious instructions into Claude Code, Cursor, and OpenAI's Codex.
+</p>
+<p>The attack is deceptively simple: when developers use AI coding assistants, these tools often include Sentry integration for error monitoring. If the Sentry DSN (Data Source Name) key becomes public—whether through client-side exposure, GitHub commits, or network traffic inspection—attackers can leverage this access to intercept error reports containing sensitive context, inject crafted payloads that manipulate AI behavior, and potentially gain access to proprietary codebases being processed by these assistants.
+</p>
+<p>This vulnerability matters because it affects the three most widely adopted AI coding tools in enterprise environments. The attack requires minimal technical sophistication, and the exposed keys are often discoverable through routine reconnaissance. For organizations using these tools with proprietary code, the risk extends from intellectual property theft to supply chain compromise.
+
+<h2>Prerequisites</h2>
+</p>
+<p>Before implementing the detection and mitigation steps in this guide, ensure you have:
+
+<strong>Technical Requirements:</strong>
+<ul>
+<li>Administrative access to your organization's Sentry account</li>
+<li>Access to network monitoring tools or a SIEM platform</li>
+<li>Permissions to modify environment configurations for development tools</li>
+<li>Basic familiarity with API authentication patterns</li>
+
+<strong>Tools You'll Need:</strong>
+<li>Semgrep for static code analysis</li>
+<li>Gitleaks for secret detection in repositories</li>
+<li>Burp Suite or similar proxy for traffic analysis</li>
+<li>Sentry CLI for audit and key rotation</li>
+<li>A test environment isolated from production systems</li>
+
+<strong>Knowledge Prerequisites:</strong>
+<li>Understanding of DSN structure and Sentry authentication</li>
+<li>Familiarity with AI coding assistant architecture</li>
+<li>Basic knowledge of prompt injection concepts</li>
+</ul>
+
+<h2>Step-by-Step Instructions</h2>
+
+<h3>Step 1: Audit Your Current Sentry Key Exposure</h3>
+</p>
+<p>Begin by identifying all Sentry DSN keys currently in use across your AI development tools.
+
+<strong>1.1 Extract and inventory existing keys:</strong>
+</p>
+<p><pre><code class="language-bash"># Search for Sentry DSN patterns in your codebase
+grep -rn "sentry.io" --include="*.js" --include="*.ts" --include="*.py" --include="*.json" .
+
+# Look for the specific DSN format
+grep -rn "https://[a-f0-9]*@[a-z]*.ingest.sentry.io" .
+</code></pre>
+
+<strong>1.2 Use Gitleaks to scan commit history:</strong>
+</p>
+<p><pre><code class="language-bash"># Install Gitleaks if not present
+brew install gitleaks
+
+# Scan repository including history
+gitleaks detect --source . --verbose --report-path sentry-exposure-report.json
+
+# Custom rule for Sentry DSN detection
+cat << 'EOF' > .gitleaks.toml
+[[rules]]
+id = "sentry-dsn"
+description = "Sentry DSN Key"
+regex = '''https://[a-f0-9]{32}@[a-z0-9]+\.ingest\.sentry\.io/[0-9]+'''
+tags = ["sentry", "api-key"]
+EOF
+
+gitleaks detect --config .gitleaks.toml --source .
+</code></pre>
+
+<strong>1.3 Check browser-accessible configurations:</strong>
+</p>
+<p>For Cursor and similar Electron-based tools, inspect the packaged configuration:
+</p>
+<p><pre><code class="language-javascript">// Script to extract Sentry configuration from Electron apps
+const fs = require('fs');
+const path = require('path');
+
+const appPaths = [
+    '/Applications/Cursor.app/Contents/Resources/app',
+    process.env.LOCALAPPDATA + '\\Programs\\cursor\\resources\\app',
+    '/usr/share/cursor/resources/app'
+];
+
+appPaths.forEach(appPath => {
+    if (fs.existsSync(appPath)) {
+        const files = walkSync(appPath);
+        files.forEach(file => {
+            const content = fs.readFileSync(file, 'utf8');
+            const sentryMatch = content.match(/https:\/\/[a-f0-9]+@[a-z]+\.ingest\.sentry\.io\/\d+/g);
+            if (sentryMatch) {
+                console.log(`Found in ${file}:`, sentryMatch);
+            }
+        });
+    }
+});
+
+function walkSync(dir, filelist = []) {
+    fs.readdirSync(dir).forEach(file => {
+        const filepath = path.join(dir, file);
+        if (fs.statSync(filepath).isDirectory()) {
+            walkSync(filepath, filelist);
+        } else if (filepath.match(/\.(js|json|ts)$/)) {
+            filelist.push(filepath);
+        }
+    });
+    return filelist;
+}
+</code></pre>
+
+<h3>Step 2: Analyze Network Traffic for Key Leakage</h3>
+
+<strong>2.1 Configure proxy interception for AI tools:</strong>
+</p>
+<p><pre><code class="language-bash"># Set up mitmproxy to capture Sentry traffic
+mitmproxy --mode regular --listen-port 8080 \
+    --set block_global=false \
+    -w sentry_traffic.flow \
+    --filter "~d sentry.io"
+</code></pre>
+
+<strong>2.2 Create a traffic analysis script:</strong>
+</p>
+<p><pre><code class="language-python">#!/usr/bin/env python3
+"""
+Sentry Traffic Analyzer for AI Coding Tools
+Identifies exposed keys and sensitive data transmission
+"""
+
+import json
+import re
+from mitmproxy import io as mitmio
+from collections import defaultdict
+
+SENTRY_DSN_PATTERN = re.compile(
+    r'https://([a-f0-9]{32})@([a-z0-9]+)\.ingest\.sentry\.io/(\d+)'
+)
+
+def analyze_sentry_traffic(flow_file):
+    exposed_keys = defaultdict(list)
+    sensitive_payloads = []
+    
+    with open(flow_file, 'rb') as f:
+        reader = mitmio.FlowReader(f)
+        for flow in reader.stream():
+            if 'sentry.io' in flow.request.pretty_host:
+                # Extract DSN from request
+                url = flow.request.pretty_url
+                dsn_match = SENTRY_DSN_PATTERN.search(url)
+                
+                if dsn_match:
+                    key, org, project = dsn_match.groups()
+                    exposed_keys[key].append({
+                        'timestamp': flow.request.timestamp_start,
+                        'org': org,
+                        'project': project
+                    })
+                
+                # Analyze payload for sensitive data
+                if flow.request.content:
+                    try:
+                        payload = json.loads(flow.request.content)
+                        sensitive_data = extract_sensitive_context(payload)
+                        if sensitive_data:
+                            sensitive_payloads.append({
+                                'key': key if dsn_match else 'unknown',
+                                'data': sensitive_data
+                            })
+                    except json.JSONDecodeError:
+                        pass
+    
+    return exposed_keys, sensitive_payloads
+
+def extract_sensitive_context(payload):
+    """Identify sensitive data in Sentry error payloads"""
+    sensitive_patterns = [
+        r'api[_-]?key',
+        r'auth[_-]?token',
+        r'password',
+        r'secret',
+        r'private[_-]?key',
+        r'prompt|instruction|context'  # AI-specific
+    ]
+    
+    findings = []
+    payload_str = json.dumps(payload).lower()
+    
+    for pattern in sensitive_patterns:
+        if re.search(pattern, payload_str):
+            findings.append(pattern)
+    
+    return findings if findings else None
+
+if __name__ == '__main__':
+    keys, payloads = analyze_sentry_traffic('sentry_traffic.flow')
+    print(f"Exposed keys found: {len(keys)}")
+    print(f"Sensitive payloads: {len(payloads)}")
+    
+    for key, occurrences in keys.items():
+        print(f"\nKey: {key[:8]}...")
+        print(f"  Project: {occurrences[0]['project']}")
+        print(f"  Occurrences: {len(occurrences)}")
+</code></pre>
+
+<h3>Step 3: Implement Key Rotation and Access Controls</h3>
+
+<strong>3.1 Rotate compromised Sentry keys:</strong>
+</p>
+<p><pre><code class="language-bash"># Using Sentry CLI to manage keys
+sentry-cli projects list --org your-org
+
+# Generate new DSN (requires project admin)
+# Navigate to: Settings > Projects > [Project] > Client Keys
+# Click "Generate New Key" then disable the old key
+
+# Verify key rotation
+sentry-cli send-event --dsn "NEW_DSN_HERE" -m "Key rotation test"
+</code></pre>
+
+<strong>3.2 Implement environment-based key management:</strong>
+</p>
+<p><pre><span class="code-filename">secure_sentry_config.py</span><code class="language-python">"""
+Secure Sentry configuration for AI development tools
+"""
+
+import os
+import sentry_sdk
+from functools import lru_cache
+
+@lru_cache(maxsize=1)
+def get_sentry_dsn():
+    """
+    Retrieve Sentry DSN from secure source.
+    Priority: Vault > Environment > Fail
+    """
+    # Option 1: HashiCorp Vault (recommended)
+    try:
+        import hvac
+        client = hvac.Client(url=os.environ.get('VAULT_ADDR'))
+        secret = client.secrets.kv.read_secret_version(
+            path='ai-tools/sentry',
+            mount_point='secret'
+        )
+        return secret['data']['data']['dsn']
+    except Exception:
+        pass
+    
+    # Option 2: Environment variable (acceptable)
+    dsn = os.environ.get('SENTRY_DSN_PRIVATE')
+    if dsn:
+        return dsn
+    
+    # Never fall back to hardcoded values
+    raise RuntimeError("Sentry DSN not configured securely")
+
+def initialize_sentry_secure():
+    """Initialize Sentry with security-hardened configuration"""
+    sentry_sdk.init(
+        dsn=get_sentry_dsn(),
+        
+        # Prevent sensitive data leakage
+        send_default_pii=False,
+        
+        # Filter sensitive breadcrumbs
+        before_breadcrumb=filter_sensitive_breadcrumbs,
+        
+        # Scrub sensitive data from events
+        before_send=scrub_sensitive_data,
+        
+        # Limit what gets captured
+        attach_stacktrace=False,
+        include_source_context=False,
+        include_local_variables=False,
+    )
+
+def filter_sensitive_breadcrumbs(breadcrumb, hint):
+    """Remove breadcrumbs containing AI prompts or code context"""
+    sensitive_categories = ['ai.prompt', 'ai.completion', 'code.context']
+    
+    if breadcrumb.get('category') in sensitive_categories:
+        return None
+    
+    message = breadcrumb.get('message', '')
+    if any(term in message.lower() for term in ['prompt', 'instruction', 'api_key']):
+        return None
+    
+    return breadcrumb
+
+def scrub_sensitive_data(event, hint):
+    """Scrub AI-specific sensitive data from Sentry events"""
+    if 'extra' in event:
+        keys_to_remove = [k for k in event['extra'] 
+                         if any(s in k.lower() for s in 
+                               ['prompt', 'context', 'instruction', 'code'])]
+        for key in keys_to_remove:
+            del event['extra'][key]
+    
+    return event
+</code></pre>
+
+<h3>Step 4: Deploy Continuous Monitoring</h3>
+
+<strong>4.1 Set up Semgrep rules for CI/CD:</strong>
+</p>
+<p><pre><span class="code-filename">.semgrep/sentry-security.yaml</span><code class="language-yaml">rules:
+  - id: hardcoded-sentry-dsn
+    patterns:
+      - pattern-regex: 'https://[a-f0-9]{32}@\w+\.ingest\.sentry\.io/\d+'
+    message: "Hardcoded Sentry DSN detected. Use environment variables."
+    severity: ERROR
+    languages: [generic]
+    
+  - id: sentry-pii-enabled
+    patterns:
+      - pattern: sentry_sdk.init(..., send_default_pii=True, ...)
+    message: "PII transmission enabled - risk of code context exposure"
+    severity: WARNING
+    languages: [python]
+    
+  - id: sentry-source-context
+    patterns:
+      - pattern: sentry_sdk.init(..., include_source_context=True, ...)
+    message: "Source context transmission may expose proprietary code"
+    severity: WARNING
+    languages: [python]
+</code></pre>
+
+<strong>4.2 Integrate into CI pipeline:</strong>
+</p>
+<p><pre><span class="code-filename">.github/workflows/sentry-security.yml</span><code class="language-yaml">name: Sentry Security Scan
+
+on: [push, pull_request]
+
+jobs:
+  scan-sentry-exposure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Semgrep Sentry Rules
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: .semgrep/sentry-security.yaml
+          
+      - name: Alert on Findings
+        if: failure()
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+            -H 'Content-type: application/json' \
+            -d '{"text":"⚠️ Sentry key exposure detected in ${{ github.repository }}"}'
+</code></pre>
+
+<h3>Step 5: Implement Runtime Protection</h3>
+
+<strong>5.1 Create a proxy wrapper for AI tools:</strong>
+</p>
+<p><pre><code class="language-python">#!/usr/bin/env python3
+"""
+Sentry Traffic Interceptor
+Prevents sensitive data transmission from AI coding tools
+"""
+
+from mitmproxy import http
+import json
+import re
+
+class SentryProtector:
+    def __init__(self):
+        self.blocked_count = 0
+        self.scrubbed_count = 0
+        
+    def request(self, flow: http.HTTPFlow) -> None:
+        if 'sentry.io' not in flow.request.pretty_host:
+            return
+            
+        if flow.request.content:
+            try:
+                payload = json.loads(flow.request.content)
+                scrubbed = self.scrub_payload(payload)
+                flow.request.content = json.dumps(scrubbed).encode()
+                self.scrubbed_count += 1
+            except json.JSONDecodeError:
+                pass
+    
+    def scrub_payload(self, payload):
+        """Remove AI-specific sensitive context"""
+        sensitive_keys = [
+            'prompt', 'context', 'instruction', 'code_snippet',
+            'file_contents', 'conversation', 'completion'
+        ]
+        
+        def recursive_scrub(obj):
+            if isinstance(obj, dict):
+                return {
+                    k: '[REDACTED]' if any(s in k.lower() for s in sensitive_keys)
+                    else recursive_scrub(v)
+                    for k, v in obj.items()
+                }
+            elif isinstance(obj, list):
+                return [recursive_scrub(item) for item in obj]
+            return obj
+        
+        return recursive_scrub(payload)
+
+addons = [SentryProtector()]
+</code></pre>
+
+<h2>Common Pitfalls & How to Avoid Them</h2>
+
+<strong>Pitfall 1: Rotating keys without updating all instances</strong>
+Multiple AI tools may share the same Sentry project. Document all integration points before rotation and update simultaneously to prevent service disruption.
+
+<strong>Pitfall 2: Blocking Sentry entirely</strong>
+Complete blocking breaks legitimate error monitoring. Instead, implement scrubbing that removes sensitive context while preserving diagnostic value.
+
+<strong>Pitfall 3: Assuming client-side keys are meant to be public</strong>
+While</p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="5959465348"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+    </div>
+    <div class="tags">Tags: security · sentry · ai-coding-assistants · vulnerability · defense</div>
+  </main>
+  <footer>
+    <p>&copy; AI Dev Defense · <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>

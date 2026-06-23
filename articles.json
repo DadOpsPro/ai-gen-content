@@ -418,5 +418,35 @@
     ],
     "word_count": 1472,
     "published_at": "2026-06-21T08:32:16.863073Z"
+  },
+  {
+    "slug": "cross-repo-review-ai-teams-qodo",
+    "title": "Cross-Repo Review: Why AI Teams Need This Now",
+    "excerpt": "Qodo's new cross-repo review feature signals a fundamental shift in code quality management for AI-flooded teams. The move away from siloed repository analysis addresses critical gaps in how modern development teams maintain code standards at scale.",
+    "category": "Development & DevOps",
+    "tags": [
+      "code-review",
+      "AI-development",
+      "cross-repo",
+      "DevOps",
+      "code-quality"
+    ],
+    "word_count": 2049,
+    "published_at": "2026-06-23T00:41:53.720827Z"
+  },
+  {
+    "slug": "sentry-key-hijack-claude-cursor-codex-defense",
+    "title": "Hijack Claude Code, Cursor, Codex via Sentry Keys",
+    "excerpt": "A critical vulnerability in AI coding assistants allows attackers to hijack sessions using publicly exposed Sentry DSN keys. This guide reveals the attack mechanism and provides essential detection and defense strategies.",
+    "category": "Security",
+    "tags": [
+      "security",
+      "sentry",
+      "ai-coding-assistants",
+      "vulnerability",
+      "defense"
+    ],
+    "word_count": 1431,
+    "published_at": "2026-06-23T00:42:55.108171Z"
   }
 ]
