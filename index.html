@@ -13,6 +13,11 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Georgia', serif; color: #1a1a2e; background: #f9f9f9; }
+    .site-nav { background: #0a0a1a; display: flex; align-items: center; padding: 0.85rem 2rem; gap: 1rem; }
+    .site-nav a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+    .site-nav nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-nav nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; }
+    .site-nav nav a:hover { color: #fff; }
     .hero { background: #0a0a1a; color: #fff; padding: 4rem 2rem; text-align: center; }
     .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }
     .hero p { color: #aaa; font-size: 1.15rem; max-width: 500px; margin: 0 auto 2rem; }
@@ -40,6 +45,14 @@
   </style>
 </head>
 <body>
+  <div class="site-nav">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Articles</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </div>
   <header class="hero">
     <h1>AI Dev Defense</h1>
     <p>AI-powered insights for software testing professionals</p>
@@ -50,6 +63,26 @@
   </header>
   <div class="posts-grid">
     
+            <article class="post-card">
+                <div class="post-meta">
+                    <span class="category">security</span>
+                    <span class="read-time">~8 min read</span>
+                </div>
+                <h2><a href="posts/protect-ai-coding-agents-sentry-key-exploitation.html">Protect AI Coding Agents from Sentry Key Exploitation</a></h2>
+                <p class="excerpt">A critical vulnerability affecting popular AI coding assistants allows malicious actors to hijack Claude Code, Cursor, and Codex using exposed public Sentry keys. This security guide provides practical steps to mitigate the risk and protect your AI agents from telemetry interception and payload injection.</p>
+                <div class="tags"><span class="tag">AI security</span><span class="tag">Sentry vulnerability</span><span class="tag">Claude Code</span></div>
+                <a href="posts/protect-ai-coding-agents-sentry-key-exploitation.html" class="read-more">Read article →</a>
+            </article>
+            <article class="post-card">
+                <div class="post-meta">
+                    <span class="category">development-tools</span>
+                    <span class="read-time">~10 min read</span>
+                </div>
+                <h2><a href="posts/cross-repo-review-qodo-ai-teams.html">Cross-Repo Code Review: AI Teams' New Lifeline</a></h2>
+                <p class="excerpt">Qodo shipped cross-repo review capabilities this week, offering relief to teams drowning in AI-generated pull requests. This feature marks a major shift in matching tooling velocity with AI-assisted development.</p>
+                <div class="tags"><span class="tag">code-review</span><span class="tag">AI-development</span><span class="tag">Qodo</span></div>
+                <a href="posts/cross-repo-review-qodo-ai-teams.html" class="read-more">Read article →</a>
+            </article>
             <article class="post-card">
                 <div class="post-meta">
                     <span class="category">Security</span>
@@ -352,7 +385,7 @@
             </article>
   </div>
   <footer>
-    <p>&copy; AI Dev Defense · <a href="/privacy.html">Privacy</a> · 
+    <p>&copy; AI Dev Defense · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · 
     <a href="/affiliate-disclosure.html">Affiliate Disclosure</a></p>
   </footer>
 </body>

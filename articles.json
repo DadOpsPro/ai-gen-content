@@ -448,5 +448,35 @@
     ],
     "word_count": 1431,
     "published_at": "2026-06-23T00:42:55.108171Z"
+  },
+  {
+    "slug": "cross-repo-review-qodo-ai-teams",
+    "title": "Cross-Repo Code Review: AI Teams' New Lifeline",
+    "excerpt": "Qodo shipped cross-repo review capabilities this week, offering relief to teams drowning in AI-generated pull requests. This feature marks a major shift in matching tooling velocity with AI-assisted development.",
+    "category": "development-tools",
+    "tags": [
+      "code-review",
+      "AI-development",
+      "Qodo",
+      "DevOps",
+      "code-quality"
+    ],
+    "word_count": 2144,
+    "published_at": "2026-06-23T13:02:54.089041Z"
+  },
+  {
+    "slug": "protect-ai-coding-agents-sentry-key-exploitation",
+    "title": "Protect AI Coding Agents from Sentry Key Exploitation",
+    "excerpt": "A critical vulnerability affecting popular AI coding assistants allows malicious actors to hijack Claude Code, Cursor, and Codex using exposed public Sentry keys. This security guide provides practical steps to mitigate the risk and protect your AI agents from telemetry interception and payload injection.",
+    "category": "security",
+    "tags": [
+      "AI security",
+      "Sentry vulnerability",
+      "Claude Code",
+      "Cursor IDE",
+      "API key security"
+    ],
+    "word_count": 1668,
+    "published_at": "2026-06-23T13:04:04.955734Z"
   }
 ]

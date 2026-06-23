@@ -3,213 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — AI Dev Defense</title>
+  <title>About | AI Dev Defense</title>
+  <meta name="description" content="Learn about AI Dev Defense — independent AI testing and application security research for software engineers.">
+  <link rel="canonical" href="https://aidevdefense.com/about.html">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/site.webmanifest">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg-dark: #0a0f1e;
-      --accent: #00c896;
-      --blue: #0070f3;
-      --text: #1a1a2e;
-      --muted: #666;
-      --light-bg: #f9f9f9;
+      --font-sans: 'Georgia', serif;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
     }
-    body { font-family: 'Georgia', serif; color: var(--text); background: var(--light-bg); line-height: 1.7; }
-
-    .site-header { background: var(--bg-dark); color: #fff; padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; }
-    .site-header a.logo { color: var(--accent); text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a { color: #00c896; text-decoration: none; font-weight: bold;
+                      font-size: 1.2rem; }
     .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
-    .site-header nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-    .site-header nav a:hover, .site-header nav a.active { color: #fff; }
-
-    .about-hero { background: var(--bg-dark); color: #fff; padding: 4rem 2rem 3rem; text-align: center; border-bottom: 2px solid var(--accent); }
-    .about-hero .eyebrow { color: var(--accent); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1rem; }
-    .about-hero h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.2; margin-bottom: 1rem; }
-    .about-hero .tagline { color: #aaa; font-size: 1.1rem; max-width: 580px; margin: 0 auto; }
-
-    .about-container { max-width: 800px; margin: 3rem auto; padding: 0 1.5rem; }
-
-    .profile-card { background: #fff; border-radius: 12px; padding: 2.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.08); margin-bottom: 2.5rem; display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start; }
-    .profile-avatar { width: 110px; height: 110px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 3px solid var(--accent); }
-    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .profile-info h2 { font-size: 1.6rem; margin-bottom: 0.25rem; color: var(--text); }
-    .profile-info .title { color: var(--accent); font-size: 0.85rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
-    .profile-info p { color: #444; font-size: 0.97rem; line-height: 1.7; }
-    .profile-links { margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-    .profile-links a { color: var(--blue); font-size: 0.9rem; text-decoration: none; font-weight: 600; }
-    .profile-links a:hover { text-decoration: underline; }
-
-    .credentials-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .cred-card { background: #fff; border-radius: 10px; padding: 1.25rem 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,.07); border-top: 3px solid var(--accent); }
-    .cred-card .cred-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; font-family: 'Courier New', monospace; }
-    .cred-card .cred-value { font-size: 0.95rem; font-weight: bold; color: var(--text); line-height: 1.3; }
-
-    .section-card { background: #fff; border-radius: 12px; padding: 2rem 2.5rem; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 2rem; }
-    .section-card h3 { font-size: 1.15rem; color: var(--text); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid #f0f0f0; display: flex; align-items: center; gap: 0.6rem; }
-    .accent-bar { display: inline-block; width: 4px; height: 1.1em; background: var(--accent); border-radius: 2px; flex-shrink: 0; }
-    .section-card p { color: #444; font-size: 0.97rem; line-height: 1.75; margin-bottom: 1rem; }
-    .section-card p:last-child { margin-bottom: 0; }
-
-    .expertise-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.75rem; }
-    .pill { padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
-    .pill.blue { background: #e8f0ff; color: #0070f3; }
-    .pill.green { background: #e6faf4; color: #007a59; }
-    .pill.dark { background: #f0f0f0; color: #555; }
-
-    .mission-card { background: var(--bg-dark); color: #fff; border-radius: 12px; padding: 2.5rem; margin-bottom: 2rem; border-left: 4px solid var(--accent); }
-    .mission-card .eyebrow { color: var(--accent); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-    .mission-card blockquote { font-size: 1.15rem; line-height: 1.7; color: #e0e0e0; font-style: italic; }
-
-    .contact-card { background: #fff; border-radius: 12px; padding: 2rem 2.5rem; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-    .contact-card .contact-text h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
-    .contact-card .contact-text p { color: var(--muted); font-size: 0.9rem; }
-    .contact-card a.cta { margin-left: auto; background: var(--accent); color: #fff; padding: 0.7rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem; white-space: nowrap; }
-    .contact-card a.cta:hover { background: #00b07f; }
-
-    footer { background: #0a0a1a; color: #888; text-align: center; padding: 2rem; font-size: 0.85rem; margin-top: 2rem; }
-    footer a { color: #888; text-decoration: none; }
-    footer a:hover { color: #aaa; }
-
-    @media (max-width: 600px) {
-      .profile-card { grid-template-columns: 1fr; text-align: center; }
-      .profile-avatar { margin: 0 auto; }
-      .profile-links { justify-content: center; }
-      .contact-card { flex-direction: column; }
-      .contact-card a.cta { margin-left: 0; width: 100%; text-align: center; }
-    }
+    .site-header nav a { font-size: 0.9rem; font-weight: normal; opacity: 0.8; }
+    .site-header nav a:hover { opacity: 1; }
+    .page-container { max-width: var(--max-width); margin: 0 auto; padding: 3rem 1.5rem; }
+    .page-hero { background: #f4f7ff; border-radius: 12px; padding: 2.5rem;
+                  margin-bottom: 3rem; border-left: 4px solid var(--color-accent); }
+    .page-hero h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); color: #0a0f1e;
+                     margin-bottom: 0.75rem; }
+    .page-hero p { color: var(--color-muted); font-size: 1.05rem; }
+    h2 { font-size: 1.4rem; margin: 2.5rem 0 1rem; color: #0a0f1e;
+          padding-bottom: 0.5rem; border-bottom: 2px solid #f0f0f0; }
+    h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; color: #0a0f1e; }
+    p { margin-bottom: 1.25rem; }
+    ul { margin: 0.75rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.5rem; }
+    a { color: var(--color-accent); }
+    .contact-card { background: #0a0f1e; color: #fff; border-radius: 12px;
+                     padding: 2rem; margin: 2rem 0; text-align: center; }
+    .contact-card h3 { color: #00c896; margin-bottom: 0.75rem; }
+    .contact-card a { color: #00c896; font-weight: bold; }
+    .team-card { display: flex; gap: 1.5rem; align-items: flex-start;
+                  background: #f9f9f9; border-radius: 12px; padding: 1.5rem;
+                  margin: 1.5rem 0; }
+    .team-avatar { width: 72px; height: 72px; border-radius: 50%;
+                    background: #0a0f1e; display: flex; align-items: center;
+                    justify-content: center; flex-shrink: 0; }
+    .team-avatar span { color: #00c896; font-weight: 700; font-size: 1.5rem;
+                         font-family: sans-serif; }
+    .team-info h3 { margin: 0 0 0.4rem; }
+    .team-info p { margin: 0; color: var(--color-muted); font-size: 0.95rem; }
+    .highlight-box { background: #f0fdf8; border: 1px solid #00c896;
+                      border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+    .last-updated { color: var(--color-muted); font-size: 0.85rem;
+                     margin-top: 3rem; padding-top: 1rem;
+                     border-top: 1px solid #eee; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+    footer a { color: #888; }
   </style>
 </head>
 <body>
-
   <header class="site-header">
-    <a href="/" class="logo">AI Dev Defense</a>
-    <span style="opacity:.4">|</span>
-    <span style="font-size:.85rem;opacity:.6;color:#fff">Application Security &amp; AI Testing</span>
+    <a href="/">AI Dev Defense</a>
     <nav>
-      <a href="/">Articles</a>
-      <a href="/about.html" class="active">About</a>
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
       <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
+  <main class="page-container">
+    
+    <div class="page-hero">
+      <h1>About AI Dev Defense</h1>
+      <p>Independent research and analysis on AI-powered software testing
+         and application security — written for engineers, by engineers.</p>
+    </div>
 
-  <div class="about-hero">
-    <p class="eyebrow">About This Publication</p>
-    <h1>AI Dev Defense</h1>
-    <p class="tagline">Practical intelligence on AI in software testing, application security, and DevSecOps — written by a practitioner who has built and secured these systems firsthand.</p>
-  </div>
+    <h2>What We Do</h2>
+    <p>AI Dev Defense covers the rapidly evolving intersection of artificial
+       intelligence with software quality and security. We publish in-depth
+       tool reviews, practical how-to guides, weekly trend roundups, and
+       deep-dive analyses to help software engineers and security professionals
+       navigate an increasingly AI-driven landscape.</p>
 
-  <main class="about-container">
+    <p>Our content focuses on three core areas:</p>
+    <ul>
+      <li><strong>AI Test Automation</strong> — tools, frameworks, and strategies
+          for using AI to write, run, and maintain tests</li>
+      <li><strong>AI Application Security</strong> — how AI is changing threat
+          detection, vulnerability scanning, and secure code review</li>
+      <li><strong>Developer Tooling</strong> — reviews and comparisons of the
+          AI-powered tools reshaping how software gets built and shipped</li>
+    </ul>
 
-    <!-- Profile -->
-    <div class="profile-card">
-      <div class="profile-avatar"><img src="data:image/jpeg;base64,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" alt="Chris Clark — Founder, AI Dev Defense"></div>
-      <div class="profile-info">
-        <h2>Chris Clark</h2>
-        <p class="title">Founder &amp; Editor — AI Dev Defense</p>
-        <p>
-          Software engineer and security practitioner with over 9 years of software engineering and systems experience, backed by a decade of military service as a U.S. Air Force avionics technician and team leader. Designated Application Security Champion, AWS Certified Solutions Architect, and hands-on DevSecOps practitioner focused on the intersection of AI, software quality, and secure development.
-        </p>
-        <div class="profile-links">
-          <a href="https://www.linkedin.com/in/pcclark/" target="_blank" rel="noopener">LinkedIn →</a>
-          <a href="mailto:chris@aidevdefense.com">chris@aidevdefense.com</a>
-        </div>
+    <div class="highlight-box">
+      <strong>Our editorial standard:</strong> Every tool we review is evaluated
+      on real-world criteria. We call out limitations as clearly as we highlight
+      strengths. Our goal is to save you time, not sell you something.
+    </div>
+
+    <h2>Who's Behind This</h2>
+    <div class="team-card">
+      <div class="team-avatar"><span>C</span></div>
+      <div class="team-info">
+        <h3>Chris</h3>
+        <p>Founder & Editor, AI Dev Defense</p>
+        <p style="margin-top:.5rem">Software professional with a focus on
+           development operations, AI tooling, and building systems that scale.
+           Started AI Dev Defense to cut through the noise in an industry moving
+           faster than most teams can track.</p>
       </div>
     </div>
 
-    <!-- Credentials at a glance -->
-    <div class="credentials-row">
-      <div class="cred-card">
-        <div class="cred-label">Experience</div>
-        <div class="cred-value">9+ Years Software Engineering</div>
-      </div>
-      <div class="cred-card">
-        <div class="cred-label">Military Service</div>
-        <div class="cred-value">U.S. Air Force Veteran · 10 Years</div>
-      </div>
-      <div class="cred-card">
-        <div class="cred-label">Certification</div>
-        <div class="cred-value">AWS Solutions Architect Associate</div>
-      </div>
-      <div class="cred-card">
-        <div class="cred-label">Education</div>
-        <div class="cred-value">MBA · Liberty University</div>
-      </div>
-    </div>
+    <h2>Why We Started This</h2>
+    <p>The AI tooling space moves fast — new testing frameworks, security
+       scanners, and code review tools launch every week. Most coverage is
+       either surface-level marketing or buried in academic papers. There
+       wasn't a reliable, independent source covering this intersection
+       practically for working engineers.</p>
+    <p>That's the gap AI Dev Defense fills.</p>
 
-    <!-- Mission -->
-    <div class="mission-card">
-      <p class="eyebrow">Why This Site Exists</p>
-      <blockquote>
-        AI is reshaping how software gets tested, reviewed, and secured. Most practitioners don't have time to track every development. AI Dev Defense cuts through the noise — surfacing what actually matters for engineers and security teams doing the real work.
-      </blockquote>
-    </div>
+    <h2>Editorial Independence</h2>
+    <p>We maintain strict editorial independence. Tool vendors do not pay
+       for reviews or editorial coverage. When we recommend a product, it's
+       because we believe it genuinely helps our readers — not because of a
+       commercial relationship.</p>
+    <p>Some articles contain affiliate links, which means we earn a small
+       commission if you purchase through them, at no extra cost to you.
+       This is disclosed clearly in every article and never influences our
+       editorial judgment. See our full
+       <a href="/affiliate-disclosure.html">Affiliate Disclosure</a>.</p>
 
-    <!-- Background -->
-    <div class="section-card">
-      <h3><span class="accent-bar"></span>Background &amp; Experience</h3>
-      <p>
-        Chris brings a hands-on engineering background that spans both the building and securing of software systems. His career includes developing backend services and CI/CD pipelines, implementing automated test frameworks using Java, Cucumber, and Selenium, and serving as an Application Security Champion — the designated advocate for secure development practices, vulnerability management, and DevSecOps adoption across the software development lifecycle.
-      </p>
-      <p>
-        He has built automated security tooling from the ground up, including a Streamlit-based vulnerability analyzer for AWS Inspector findings and a GitLab CI/CD pipeline for automated database documentation. He has also led migrations from legacy SAST tooling to integrated pipeline-based static analysis, and implemented identity and access management solutions at scale using SailPoint and OAuth 2.0.
-      </p>
-      <p>
-        Before his software career, Chris served 10 years in the United States Air Force as an avionics technician and team leader, maintaining and troubleshooting mission-critical systems on F-15 and B-2 aircraft. He was recognized as the 2011 Avionics Supervisor of the Year by Air Force Global Strike Command. That background in high-stakes systems, disciplined troubleshooting, and technical leadership directly informs how he covers security and quality engineering today.
-      </p>
-    </div>
+    <h2>Stay in the Loop</h2>
+    <p>The best way to follow our work is via the weekly newsletter — a
+       curated digest of the week's most important developments in AI testing
+       and security, delivered every Monday.</p>
 
-    <!-- Areas of Focus -->
-    <div class="section-card">
-      <h3><span class="accent-bar"></span>Areas of Focus</h3>
-      <p>AI Dev Defense covers the intersection of artificial intelligence and the following disciplines — areas where Chris has direct professional experience:</p>
-      <div class="expertise-grid">
-        <span class="pill blue">Application Security (AppSec)</span>
-        <span class="pill blue">Test Automation</span>
-        <span class="pill green">DevSecOps</span>
-        <span class="pill green">CI/CD Pipeline Security</span>
-        <span class="pill green">AI-Assisted Testing</span>
-        <span class="pill dark">Vulnerability Management</span>
-        <span class="pill dark">SAST / DAST</span>
-        <span class="pill dark">IAM &amp; Access Control</span>
-        <span class="pill dark">AWS Cloud Security</span>
-        <span class="pill dark">Secure SDLC</span>
-      </div>
-    </div>
-
-    <!-- About the publication -->
-    <div class="section-card">
-      <h3><span class="accent-bar"></span>About This Publication</h3>
-      <p>
-        AI Dev Defense publishes articles on how artificial intelligence is being applied — and misapplied — in software testing and application security. Coverage includes emerging tools and frameworks, real-world case studies, policy and compliance developments, and practical guidance for teams integrating AI into their security and testing workflows.
-      </p>
-      <p>
-        The audience is software engineers, QA leads, security engineers, and DevSecOps practitioners who want to stay current without wading through hype. Every article is written with the practitioner in mind — the person who has to actually implement, test, and secure these systems.
-      </p>
-    </div>
-
-    <!-- Contact -->
     <div class="contact-card">
-      <div class="contact-text">
-        <h3>Get in Touch</h3>
-        <p>Questions, feedback, or topic suggestions — reach out directly.</p>
-      </div>
-      <a href="mailto:chris@aidevdefense.com" class="cta">Email Chris →</a>
+      <h3>Get in Touch</h3>
+      <p>Questions, feedback, or partnership inquiries:</p>
+      <a href="mailto:chris@aidevdefense.com">chris@aidevdefense.com</a>
+      <p style="margin-top:1rem;opacity:.7;font-size:.85rem">
+        We read every email and respond to most within 2 business days.
+      </p>
     </div>
-
+    
+    <p class="last-updated">Last updated: June 23, 2026</p>
   </main>
-
   <footer>
-    <p>&copy; AI Dev Defense &middot;
-      <a href="/privacy.html">Privacy</a> &middot;
-      <a href="/affiliate-disclosure.html">Affiliate Disclosure</a> &middot;
-      <a href="/about.html">About</a>
-    </p>
+    <p>&copy; 2026 AI Dev Defense &middot;
+    <a href="/privacy.html">Privacy Policy</a> &middot;
+    <a href="/affiliate-disclosure.html">Affiliate Disclosure</a> &middot;
+    <a href="/about.html">About</a></p>
   </footer>
-
 </body>
 </html>

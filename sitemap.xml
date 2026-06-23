@@ -186,4 +186,16 @@
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/cross-repo-review-qodo-ai-teams.html</loc>
+            <lastmod>2026-06-23</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/protect-ai-coding-agents-sentry-key-exploitation.html</loc>
+            <lastmod>2026-06-23</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
     </urlset>
