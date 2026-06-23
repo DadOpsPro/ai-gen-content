@@ -25,10 +25,11 @@ from config.settings import (
     ANTHROPIC_API_KEY, OUTPUT_DIR, ARTICLES_PER_SEED_RUN, SITE_NAME
 )
 from pipeline.scraper import gather_trending_topics, TrendingTopic
-from pipeline.generator import generate_article, generate_newsletter, plan_content_calendar
+from pipeline.generator import generate_article, generate_newsletter, plan_content_calendar, generate_draft_for_review
 from pipeline.publisher import WordPressPublisher, StaticSiteGenerator, MailchimpPublisher
 from pipeline.linkedin import queue_article, load_queue
 from pipeline.approval_email import send_review_email
+from pipeline.article_review_email import send_draft_review_email
 
 
 STATE_FILE = Path(__file__).parent.parent / "state.json"
@@ -277,11 +278,78 @@ def print_content_calendar():
     print(f"Total: {len(calendar)} planned articles\n")
 
 
+def run_review_pipeline():
+    """
+    Review mode: scrape one trending topic, generate a draft in Chris's voice
+    with [CHRIS TAKE] placeholder, save the draft, and email it for review.
+    Does NOT publish anything.
+    """
+    import json as _json
+    print(f"\n{'='*60}")
+    print(f"📝 REVIEW PIPELINE — {datetime.now().strftime('%Y-%m-%d')}")
+    print(f"{'='*60}")
+
+    print("\n🔍 Gathering trends...")
+    topics = gather_trending_topics(max_topics=10)
+
+    if topics:
+        t = topics[0]
+        topic        = t.title
+        context      = t.summary
+        keywords     = t.keywords[:5]
+        sources      = [{"name": getattr(t, "source_name", ""), "url": getattr(t, "source_url", "")}]
+        article_type = "trend_roundup"
+    else:
+        calendar = plan_content_calendar(5)
+        item         = calendar[0]
+        topic        = item["topic"]
+        context      = ""
+        keywords     = []
+        sources      = []
+        article_type = item["article_type"]
+
+    draft = generate_draft_for_review(
+        topic=topic,
+        article_type=article_type,
+        context=context,
+        keywords=keywords,
+        sources=sources,
+    )
+
+    drafts_dir = os.path.join(os.path.dirname(__file__), "..", "site", "output", "drafts")
+    os.makedirs(drafts_dir, exist_ok=True)
+    draft_path = os.path.join(drafts_dir, f"{draft.slug_hint}.json")
+    with open(draft_path, "w") as f:
+        _json.dump({
+            "topic":          draft.topic,
+            "article_type":   draft.article_type,
+            "keywords":       draft.keywords,
+            "context":        draft.context,
+            "sources":        draft.sources,
+            "draft_markdown": draft.draft_markdown,
+            "slug_hint":      draft.slug_hint,
+        }, f, indent=2)
+    print(f"  💾 Draft saved: drafts/{draft.slug_hint}.json")
+
+    sent = send_draft_review_email(
+        topic=draft.topic,
+        article_type=draft.article_type,
+        draft_markdown=draft.draft_markdown,
+        slug=draft.slug_hint,
+    )
+
+    if sent:
+        print(f"\n✅ Review pipeline complete — draft emailed for review")
+    else:
+        print(f"\n⚠️  Draft generated but email not sent — check SMTP settings")
+        print(f"   Draft saved at: {draft_path}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=f"{SITE_NAME} Content Engine")
     parser.add_argument(
         "--mode",
-        choices=["seed", "daily", "newsletter", "plan"],
+        choices=["seed", "daily", "newsletter", "plan", "review"],
         default="plan",
         help="Pipeline mode to run"
     )
@@ -297,3 +365,5 @@ if __name__ == "__main__":
         run_newsletter_pipeline()
     elif args.mode == "plan":
         print_content_calendar()
+    elif args.mode == "review":
+        run_review_pipeline()

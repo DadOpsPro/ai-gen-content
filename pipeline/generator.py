@@ -181,6 +181,240 @@ Requirements:
 }
 
 
+ANTI_FABRICATION_RULES = """
+CRITICAL RULES — violations will cause this content to be rejected:
+- Do NOT invent statistics, percentages, or data points. If you reference a number, it must come from the sources provided.
+- Do NOT fabricate company names, product names, or people.
+- Do NOT create fictional quotes or attribute statements to real people unless directly quoting a provided source.
+- Do NOT invent contact information, editorial team members, or bylines.
+- Mark any claim you are uncertain about with [UNVERIFIED] so the editor can check it.
+"""
+
+CHRIS_PERSONA = """
+You are writing as Chris Clark, founder and editor of AI Dev Defense.
+
+Chris's background:
+- Software engineer with 9+ years experience in Java, Python, CI/CD pipelines, and application security
+- Designated Application Security Champion on his team — responsible for vulnerability management, SAST tooling, and DevSecOps adoption
+- Built automated security tooling hands-on: CI/CD pipelines, vulnerability analyzers, IAM integrations using SailPoint and OAuth 2.0
+- U.S. Air Force veteran (10 years), B-2 and F-15 avionics technician and team leader — instilled a mindset of mission readiness, precision, and zero tolerance for silent failure
+- AWS Certified Solutions Architect Associate, MBA
+
+Chris's voice:
+- Direct and plainspoken. Short sentences. Gets to the point fast.
+- Skeptical by default — assumes vendors are overselling, assumes edge cases matter
+- Practical over theoretical — always asks "what does a team actually DO with this"
+- Curious, not breathless — finds interesting things interesting, but does not hype
+- Raises the question others aren't asking rather than restating what the press release said
+- Uses "I" without apology — personal perspective is the point
+- Comfortable saying "I'm not sure" or "I haven't seen this play out yet"
+- Does NOT use: "game-changing", "revolutionary", "unlock the potential of", "the future of"
+- Ends pieces with an open question or "what this means for your team" framing
+
+Writing style:
+- Short paragraphs (2-4 sentences)
+- No filler, no preamble
+- Conversational but not casual — like a senior engineer talking to another engineer
+"""
+
+DRAFT_PROMPT = """
+{chris_persona}
+
+Write a draft article for AI Dev Defense on the following topic. This is a DRAFT for Chris to review — he will add his personal take before it publishes.
+
+Topic: {topic}
+Article type: {article_type}
+Context / source signals: {context}
+Target keywords: {keywords}
+
+Structure:
+1. Opening (2-3 sentences — lead with the real implication, not the announcement)
+2. What's actually happening (background, grounded in the sources provided)
+3. Why practitioners should care (concrete, not abstract)
+4. [CHRIS TAKE] ← Leave this placeholder exactly as written. Chris will fill in his personal experience or opinion here.
+5. What to watch / what to do next
+6. Closing question (one genuine open question for the reader)
+
+Requirements:
+- {min_words}–{max_words} words
+- Use H2/H3 markdown headers
+- Include [CHRIS TAKE] placeholder exactly once — this is where his voice will be inserted
+- Mark any uncertain claims with [UNVERIFIED]
+- Do not fabricate statistics or quotes — use only what the sources support
+- Keywords: {keywords}
+
+Sources available:
+{sources}
+
+{anti_fabrication}
+"""
+
+
+@dataclass
+class ArticleDraft:
+    """A draft article pending Chris's review before final generation."""
+    topic: str
+    article_type: str
+    keywords: List[str]
+    context: str
+    sources: List[Dict]
+    draft_markdown: str
+    slug_hint: str
+
+
+def generate_draft_for_review(
+    topic: str,
+    article_type: str = "how_to_guide",
+    context: str = "",
+    keywords: List[str] = None,
+    sources: List[Dict] = None,
+) -> ArticleDraft:
+    """
+    Generate a draft article in Chris's voice with [CHRIS TAKE] placeholder.
+    Returns an ArticleDraft for email review — does NOT publish.
+    """
+    keywords = keywords or []
+    sources = sources or []
+
+    sources_text = "\n".join(
+        f"- {s.get('name', 'Unknown')}: {s.get('url', '')}"
+        for s in sources[:5]
+    ) if sources else "No specific sources provided — use general knowledge, mark claims [UNVERIFIED]."
+
+    prompt = DRAFT_PROMPT.format(
+        chris_persona=CHRIS_PERSONA,
+        topic=topic,
+        article_type=article_type,
+        context=context[:600],
+        keywords=", ".join(keywords[:8]),
+        min_words=MIN_WORD_COUNT,
+        max_words=MAX_WORD_COUNT,
+        sources=sources_text,
+        anti_fabrication=ANTI_FABRICATION_RULES,
+    )
+
+    print(f"\n📝 Generating draft for review [{article_type}]: {topic[:60]}...")
+
+    response = client.messages.create(
+        model="claude-opus-4-5",
+        max_tokens=4000,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    draft_markdown = response.content[0].text
+
+    slug_hint = topic[:50].lower().replace(" ", "-").replace("/", "-")
+    slug_hint = re.sub(r"[^a-z0-9-]", "", slug_hint)
+
+    return ArticleDraft(
+        topic=topic,
+        article_type=article_type,
+        keywords=keywords,
+        context=context,
+        sources=sources,
+        draft_markdown=draft_markdown,
+        slug_hint=slug_hint,
+    )
+
+
+def generate_final_article(draft: ArticleDraft, chris_take: str) -> GeneratedArticle:
+    """
+    Take an approved draft + Chris's take and generate the final publishable article.
+    Replaces [CHRIS TAKE] with Chris's actual words, then does a final polish pass.
+    """
+    # Inject Chris's take into the draft
+    if "[CHRIS TAKE]" in draft.draft_markdown:
+        filled = draft.draft_markdown.replace(
+            "[CHRIS TAKE]",
+            f"**Chris's take:** {chris_take.strip()}"
+        )
+    else:
+        filled = draft.draft_markdown + f"\n\n**Chris's take:** {chris_take.strip()}"
+
+    # Final polish pass — tighten and ensure voice consistency
+    polish_prompt = f"""
+{CHRIS_PERSONA}
+
+Below is a draft article with Chris's personal take already inserted. 
+Do a final edit pass:
+- Make sure the voice is consistent throughout (Chris's direct, practitioner style)
+- Remove any [UNVERIFIED] claims that conflict with the inserted take, or flag them clearly
+- Tighten any sections that feel padded
+- Keep [CHRIS TAKE] content word-for-word — do not paraphrase his actual words
+- Return the complete polished article in markdown
+
+Draft:
+{filled}
+
+{ANTI_FABRICATION_RULES}
+"""
+
+    print(f"\n✍️  Generating final article from approved draft: {draft.topic[:60]}...")
+
+    response = client.messages.create(
+        model="claude-opus-4-5",
+        max_tokens=4000,
+        messages=[{"role": "user", "content": polish_prompt}],
+    )
+    final_markdown = response.content[0].text
+
+    # Generate metadata
+    meta_prompt = f"""Given this article, return ONLY valid JSON metadata (no markdown fences):
+{{
+  "title": "SEO-optimised H1 title (60 chars max)",
+  "slug": "url-friendly-slug",
+  "meta_description": "155-char meta description",
+  "excerpt": "2-sentence excerpt for previews",
+  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "category": "main category",
+  "seo_keywords": ["kw1", "kw2", "kw3"]
+}}
+
+Article title hint: {draft.topic}
+Article beginning:
+{final_markdown[:800]}"""
+
+    meta_response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=500,
+        messages=[{"role": "user", "content": meta_prompt}],
+    )
+
+    meta = {}
+    try:
+        meta_text = meta_response.content[0].text.strip()
+        meta_text = re.sub(r"^```json\s*|\s*```$", "", meta_text, flags=re.MULTILINE)
+        meta = json.loads(meta_text)
+    except Exception as e:
+        print(f"  [WARN] Meta parsing failed: {e}")
+        meta = {
+            "title": draft.topic[:60],
+            "slug": draft.slug_hint,
+            "meta_description": draft.topic[:155],
+            "excerpt": draft.topic,
+            "tags": draft.keywords[:5],
+            "category": NICHE,
+            "seo_keywords": draft.keywords[:3],
+        }
+
+    from pipeline.generator import convert_and_inject
+    html_content, injected_links = convert_and_inject(final_markdown)
+    word_count = len(final_markdown.split())
+
+    return GeneratedArticle(
+        title=meta.get("title", draft.topic),
+        slug=meta.get("slug", draft.slug_hint),
+        meta_description=meta.get("meta_description", ""),
+        content_html=html_content,
+        excerpt=meta.get("excerpt", ""),
+        tags=meta.get("tags", []),
+        category=meta.get("category", NICHE),
+        seo_keywords=meta.get("seo_keywords", draft.keywords),
+        word_count=word_count,
+        article_type=draft.article_type,
+        affiliate_links_inserted=injected_links,
+    )
+
+
 def generate_article(
     topic: str,
     article_type: str = "how_to_guide",

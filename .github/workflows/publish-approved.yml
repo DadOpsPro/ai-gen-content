@@ -1,0 +1,129 @@
+name: Publish Approved Article
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Article slug (from draft review)"
+        required: true
+        type: string
+      chris_take:
+        description: "Chris's personal take to insert into the article"
+        required: false
+        type: string
+        default: ""
+      action:
+        description: "publish or skip"
+        required: true
+        default: "publish"
+        type: choice
+        options:
+          - publish
+          - skip
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish-article:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.inputs.action == 'publish'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore article registry from gh-pages
+        run: |
+          mkdir -p site/output/posts
+          git fetch origin gh-pages --depth=1 2>/dev/null || true
+          if git show origin/gh-pages:articles.json > site/output/articles.json 2>/dev/null; then
+            COUNT=$(python3 -c "import json; d=json.load(open('site/output/articles.json')); print(len(d))")
+            echo "Restored registry: $COUNT articles"
+          else
+            echo "No registry found — starting fresh"
+          fi
+
+      - name: Restore pending draft
+        run: |
+          git fetch origin gh-pages --depth=1 2>/dev/null || true
+          SLUG="${{ github.event.inputs.slug }}"
+          if git show origin/gh-pages:drafts/${SLUG}.json > /tmp/draft.json 2>/dev/null; then
+            echo "Draft found for slug: $SLUG"
+          else
+            echo "ERROR: No draft found for slug $SLUG on gh-pages"
+            exit 1
+          fi
+
+      - name: Copy static assets
+        run: cp -r static/. site/output/
+
+      - name: Generate and publish final article
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ADSENSE_PUB_ID:    ${{ secrets.ADSENSE_PUB_ID }}
+          ADSENSE_SLOT_ID:   ${{ secrets.ADSENSE_SLOT_ID }}
+          AMAZON_TAG:        ${{ secrets.AMAZON_TAG }}
+          SITE_URL:          ${{ secrets.SITE_URL }}
+        run: |
+          python3 - << 'EOF'
+          import json, sys, os
+          sys.path.insert(0, ".")
+
+          from pipeline.generator import generate_final_article, ArticleDraft
+          from pipeline.publisher import StaticSiteGenerator
+
+          # Load the saved draft
+          with open("/tmp/draft.json") as f:
+              d = json.load(f)
+
+          draft = ArticleDraft(
+              topic=d["topic"],
+              article_type=d["article_type"],
+              keywords=d["keywords"],
+              context=d["context"],
+              sources=d["sources"],
+              draft_markdown=d["draft_markdown"],
+              slug_hint=d["slug_hint"],
+          )
+
+          chris_take = """${{ github.event.inputs.chris_take }}"""
+
+          print(f"Generating final article for: {draft.topic}")
+          print(f"Chris's take: {chris_take[:100]}...")
+
+          article = generate_final_article(draft, chris_take)
+          gen = StaticSiteGenerator()
+          gen.publish(article)
+          gen.build_index()
+
+          print(f"Published: {article.title}")
+          print(f"Slug: {article.slug}")
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site/output
+          cname: aidevdefense.com
+          commit_message: "Publish approved article: ${{ github.event.inputs.slug }}"
+
+  skip-article:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.action == 'skip'
+    steps:
+      - name: Log skip
+        run: echo "Article ${{ github.event.inputs.slug }} skipped by Chris."
