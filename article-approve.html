@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article Review — AI Dev Defense</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Georgia, serif; background: #f1f5f9; color: #1a1a2e; min-height: 100vh; }
+
+    .header { background: #0a0f1e; padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    .header .logo { color: #00c896; font-weight: bold; font-size: 1.1rem; text-decoration: none; }
+
+    .container { max-width: 720px; margin: 2.5rem auto; padding: 0 1.5rem 4rem; }
+
+    .card { background: #fff; border-radius: 12px; padding: 2rem 2.5rem; box-shadow: 0 2px 16px rgba(0,0,0,.08); margin-bottom: 1.5rem; }
+
+    .eyebrow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: #00c896; font-weight: 700; margin-bottom: 0.5rem; }
+    h1 { font-size: 1.5rem; color: #0a0f1e; margin-bottom: 0.5rem; line-height: 1.3; }
+    .meta { font-size: 0.85rem; color: #888; margin-bottom: 1.5rem; }
+
+    .draft-section { background: #f8fafc; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; max-height: 400px; overflow-y: auto; }
+    .draft-section p { font-size: 0.95rem; line-height: 1.75; color: #374151; margin-bottom: 0.85rem; }
+    .draft-section p:last-child { margin-bottom: 0; }
+    .take-placeholder { background: #fff3cd; border-left: 3px solid #f59e0b; padding: 0.6rem 1rem; border-radius: 4px; font-weight: 600; color: #92400e; font-size: 0.9rem; }
+
+    label { display: block; font-size: 0.9rem; font-weight: 700; color: #374151; margin-bottom: 0.5rem; }
+    .hint { font-size: 0.82rem; color: #6b7280; margin-bottom: 0.75rem; line-height: 1.5; }
+    textarea { width: 100%; border: 1.5px solid #d1d5db; border-radius: 8px; padding: 0.85rem 1rem; font-family: Georgia, serif; font-size: 1rem; line-height: 1.7; color: #1a1a2e; resize: vertical; min-height: 140px; transition: border-color 0.2s; }
+    textarea:focus { outline: none; border-color: #00c896; }
+
+    .actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .btn-publish { background: #00c896; color: #fff; border: none; padding: 0.85rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; flex: 1; }
+    .btn-publish:hover { background: #00b07f; }
+    .btn-publish:disabled { background: #9ca3af; cursor: not-allowed; }
+    .btn-skip { background: #fff; color: #6b7280; border: 1.5px solid #d1d5db; padding: 0.85rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .btn-skip:hover { background: #f9fafb; }
+
+    .status { display: none; margin-top: 1.5rem; padding: 1rem 1.25rem; border-radius: 8px; font-size: 0.95rem; line-height: 1.6; }
+    .status.success { background: #e6faf4; border: 1px solid #00c896; color: #065f46; display: block; }
+    .status.error   { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; display: block; }
+    .status.loading { background: #f0f9ff; border: 1px solid #7dd3fc; color: #0c4a6e; display: block; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <a href="/" class="logo">AI Dev Defense</a>
+</div>
+
+<div class="container">
+
+  <div class="card" id="main-card">
+    <p class="eyebrow">Article Draft Review</p>
+    <h1 id="topic-heading">Loading draft…</h1>
+    <p class="meta" id="meta-line"></p>
+
+    <!-- Draft preview -->
+    <div class="draft-section" id="draft-preview"></div>
+
+    <!-- Chris's take input -->
+    <div id="take-section">
+      <label for="chris-take">Your Take</label>
+      <p class="hint">
+        A few sentences from your own experience. This replaces the
+        <strong>YOUR TAKE GOES HERE</strong> section above and will be published
+        word-for-word in your voice.
+      </p>
+      <textarea id="chris-take" placeholder="e.g. I've seen this exact issue come up in our CI pipeline — the tricky part isn't the tooling, it's getting teams to treat failing security scans the same way they treat failing unit tests…"></textarea>
+
+      <div class="actions">
+        <button class="btn-publish" id="publish-btn" onclick="submitTake()">✍️ Add My Take &amp; Publish</button>
+        <button class="btn-skip" onclick="skipArticle()">⏭ Skip This One</button>
+      </div>
+    </div>
+
+    <div class="status" id="status-msg"></div>
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const slug   = params.get("slug")   || "";
+  const action = params.get("action") || "";
+  const token  = "APPROVE_TOKEN_PLACEHOLDER";
+  const repo   = "DadOpsPro/ai-gen-content";
+
+  // Decode draft from base64 param
+  let draftMarkdown = "";
+  try {
+    const b64 = params.get("draft") || "";
+    if (b64) draftMarkdown = atob(b64.replace(/-/g,"+").replace(/_/g,"/"));
+  } catch(e) { console.warn("Could not decode draft", e); }
+
+  function renderDraft(markdown) {
+    const lines = markdown.split("\n");
+    let html = "";
+    for (const line of lines) {
+      const t = line.trim();
+      if (!t) continue;
+      if (t.startsWith("## ") || t.startsWith("### ")) {
+        html += `<p><strong>${t.replace(/^#+\s/,"")}</strong></p>`;
+      } else if (t === "[CHRIS TAKE]") {
+        html += `<p class="take-placeholder">✏️ YOUR TAKE GOES HERE</p>`;
+      } else {
+        const clean = t.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+                       .replace(/\[UNVERIFIED\]/g,"<em>(unverified)</em>");
+        html += `<p>${clean}</p>`;
+      }
+    }
+    return html;
+  }
+
+  function setStatus(msg, type) {
+    const el = document.getElementById("status-msg");
+    el.className = `status ${type}`;
+    el.innerHTML = msg;
+  }
+
+  async function triggerWorkflow(inputs) {
+    const resp = await fetch(
+      `https://api.github.com/repos/${repo}/actions/workflows/publish-approved.yml/dispatches`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ref: "master", inputs }),
+      }
+    );
+    return resp.status === 204;
+  }
+
+  async function submitTake() {
+    const take = document.getElementById("chris-take").value.trim();
+    if (!take) {
+      setStatus("Please add your take before publishing.", "error");
+      return;
+    }
+    if (!slug) {
+      setStatus("Missing article slug — please use the link from your email.", "error");
+      return;
+    }
+
+    document.getElementById("publish-btn").disabled = true;
+    setStatus("Submitting… the article will publish in a few minutes.", "loading");
+
+    try {
+      const ok = await triggerWorkflow({
+        slug,
+        chris_take: take,
+        action: "publish",
+      });
+
+      if (ok) {
+        setStatus(
+          "✅ <strong>Submitted!</strong> Your take has been added and the article is publishing now. " +
+          "It will appear on the site within a few minutes.",
+          "success"
+        );
+        document.getElementById("take-section").style.display = "none";
+      } else {
+        setStatus("Something went wrong triggering the workflow. Check your GitHub Actions.", "error");
+        document.getElementById("publish-btn").disabled = false;
+      }
+    } catch(e) {
+      setStatus(`Error: ${e.message}`, "error");
+      document.getElementById("publish-btn").disabled = false;
+    }
+  }
+
+  async function skipArticle() {
+    if (!confirm("Skip this draft? It won't be published.")) return;
+    setStatus("Skipping…", "loading");
+    try {
+      await triggerWorkflow({ slug, chris_take: "", action: "skip" });
+      setStatus("⏭ Draft skipped. A new one will be generated on the next run.", "success");
+      document.getElementById("take-section").style.display = "none";
+    } catch(e) {
+      setStatus(`Error: ${e.message}`, "error");
+    }
+  }
+
+  // Init page
+  window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("topic-heading").textContent =
+      params.get("topic") || slug.replace(/-/g," ") || "Draft Article";
+    document.getElementById("meta-line").textContent =
+      `Slug: ${slug} · Generated: ${new Date().toLocaleDateString()}`;
+
+    if (draftMarkdown) {
+      document.getElementById("draft-preview").innerHTML = renderDraft(draftMarkdown);
+    } else {
+      document.getElementById("draft-preview").innerHTML =
+        "<p style='color:#888'>Draft not available — check your email for the full text.</p>";
+    }
+
+    // Handle skip action from email link
+    if (action === "skip") {
+      skipArticle();
+    }
+  });
+</script>
+</body>
+</html>
