@@ -7,195 +7,223 @@
             <priority>1.0</priority>
         </url>
         <url>
+            <loc>https://aidevdefense.com/about.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/privacy.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.4</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/affiliate-disclosure.html</loc>
+            <changefreq>monthly</changefreq>
+            <priority>0.3</priority>
+        </url>
+        <url>
             <loc>https://aidevdefense.com/posts/joy-wars-ai-agents-competition-shift.html</loc>
-            <lastmod>2026-06-07</lastmod>
+        <lastmod>2026-06-07</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/netlify-cto-dana-lawson-writing-code-no-longer-job.html</loc>
-            <lastmod>2026-06-07</lastmod>
+        <lastmod>2026-06-07</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/ai-solving-memory-crunch-trend-roundup.html</loc>
-            <lastmod>2026-06-09</lastmod>
+        <lastmod>2026-06-09</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/microsoft-azure-repos-github-migration-guide.html</loc>
-            <lastmod>2026-06-09</lastmod>
+        <lastmod>2026-06-09</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/ai-agents-break-free-solo-dev-mode.html</loc>
-            <lastmod>2026-06-10</lastmod>
+        <lastmod>2026-06-10</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/claude-mythos-fable-5-testing-guide.html</loc>
-            <lastmod>2026-06-10</lastmod>
+        <lastmod>2026-06-10</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/observability-overload-drowning-engineers.html</loc>
-            <lastmod>2026-06-11</lastmod>
+        <lastmod>2026-06-11</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/optimize-fable-5-guardrails-burn-rate.html</loc>
-            <lastmod>2026-06-11</lastmod>
+        <lastmod>2026-06-11</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/chainguard-open-source-packages-supply-chain-security.html</loc>
-            <lastmod>2026-06-12</lastmod>
+        <lastmod>2026-06-12</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/entry-level-tech-jobs-ai-disruption-guide.html</loc>
-            <lastmod>2026-06-12</lastmod>
+        <lastmod>2026-06-12</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/enterprise-agent-wars-neutral-platform.html</loc>
-            <lastmod>2026-06-13</lastmod>
+        <lastmod>2026-06-13</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/ai-coding-agents-stack-overflow-integration.html</loc>
-            <lastmod>2026-06-13</lastmod>
+        <lastmod>2026-06-13</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/ai-testing-security-weekly-fable-mythos-suspended.html</loc>
-            <lastmod>2026-06-14</lastmod>
+        <lastmod>2026-06-14</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/ai-retrieval-ranking-beyond-vector-search.html</loc>
-            <lastmod>2026-06-14</lastmod>
+        <lastmod>2026-06-14</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/cohere-developer-pivot-sovereign-ai-enterprise.html</loc>
-            <lastmod>2026-06-15</lastmod>
+        <lastmod>2026-06-15</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/ai-generated-apps-cloud-dependency-risks.html</loc>
-            <lastmod>2026-06-15</lastmod>
+        <lastmod>2026-06-15</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/anthropic-fable-mess-explained.html</loc>
-            <lastmod>2026-06-16</lastmod>
+        <lastmod>2026-06-16</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/cohere-coding-model-enterprise-developers.html</loc>
-            <lastmod>2026-06-16</lastmod>
+        <lastmod>2026-06-16</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/spacex-cursor-acquisition-ai-coding.html</loc>
-            <lastmod>2026-06-17</lastmod>
+        <lastmod>2026-06-17</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/aws-bill-spike-cost-agent-guide.html</loc>
-            <lastmod>2026-06-17</lastmod>
+        <lastmod>2026-06-17</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/aws-context-ai-agent-reasoning-trend.html</loc>
-            <lastmod>2026-06-18</lastmod>
+        <lastmod>2026-06-18</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/kiro-mobile-aws-agentic-coding-iphone.html</loc>
-            <lastmod>2026-06-18</lastmod>
+        <lastmod>2026-06-18</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/proactive-ai-agents-autonomous-business-operations.html</loc>
-            <lastmod>2026-06-19</lastmod>
+        <lastmod>2026-06-19</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/mcp-enterprise-authorization-layer-implementation.html</loc>
-            <lastmod>2026-06-19</lastmod>
+        <lastmod>2026-06-19</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/ai-code-review-better-than-teammates.html</loc>
-            <lastmod>2026-06-20</lastmod>
+        <lastmod>2026-06-20</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/checkmarx-sast-engine-post-scan-intelligence.html</loc>
-            <lastmod>2026-06-20</lastmod>
+        <lastmod>2026-06-20</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/gemini-cli-vs-antigravity-real-world-performance.html</loc>
-            <lastmod>2026-06-21</lastmod>
+        <lastmod>2026-06-21</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/valkey-ai-automated-backporting-bug-fixes.html</loc>
-            <lastmod>2026-06-21</lastmod>
+        <lastmod>2026-06-21</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/cross-repo-review-ai-teams-qodo.html</loc>
-            <lastmod>2026-06-23</lastmod>
+        <lastmod>2026-06-23</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/sentry-key-hijack-claude-cursor-codex-defense.html</loc>
-            <lastmod>2026-06-23</lastmod>
+        <lastmod>2026-06-23</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/cross-repo-review-qodo-ai-teams.html</loc>
-            <lastmod>2026-06-23</lastmod>
+        <lastmod>2026-06-23</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
         <url>
             <loc>https://aidevdefense.com/posts/protect-ai-coding-agents-sentry-key-exploitation.html</loc>
-            <lastmod>2026-06-23</lastmod>
+        <lastmod>2026-06-23</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/per-developer-environments-ai-agents-trend.html</loc>
+        <lastmod>2026-08-16</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>https://aidevdefense.com/posts/downloadable-ai-models-grok-cost-effective-testing.html</loc>
+        <lastmod>2026-08-16</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
     </urlset>
+    

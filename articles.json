@@ -478,5 +478,35 @@
     ],
     "word_count": 1668,
     "published_at": "2026-06-23T13:04:04.955734Z"
+  },
+  {
+    "slug": "per-developer-environments-ai-agents-trend",
+    "title": "Per-Developer Environments Meet AI Agent Reality",
+    "excerpt": "For years, teams pursued per-developer environments as the ultimate DevOps goal. AI agents have fundamentally changed this landscape, creating a new requirement: per-agent-per-task environments that multiply faster than infrastructure can handle.",
+    "category": "DevOps & Infrastructure",
+    "tags": [
+      "AI agents",
+      "DevOps",
+      "environment management",
+      "infrastructure",
+      "software development"
+    ],
+    "word_count": 2107,
+    "published_at": "2026-08-16T17:54:11.366697Z"
+  },
+  {
+    "slug": "downloadable-ai-models-grok-cost-effective-testing",
+    "title": "Leverage Downloadable AI Models for Cost-Effective Testing",
+    "excerpt": "Discover how downloadable AI models like Grok 4.6 deliver enterprise-grade performance at a fraction of traditional pricing. This practical guide shows development teams how to leverage self-hosted models for cost-effective software testing and security.",
+    "category": "how_to_guide",
+    "tags": [
+      "ai-models",
+      "grok-4.6",
+      "cost-optimization",
+      "software-testing",
+      "self-hosted-ai"
+    ],
+    "word_count": 1404,
+    "published_at": "2026-08-16T17:55:10.231161Z"
   }
 ]
