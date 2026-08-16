@@ -226,10 +226,13 @@ class StaticSiteGenerator:
         index_path.write_text(index, encoding="utf-8")
         print(f"  ✅ Index built: {len(all_articles)} articles (all-time)")
         self.build_sitemap()
+        self.build_sitemap()
+        self.copy_static_assets()
+        return str(index_path)
         return str(index_path)
 
     def build_sitemap(self) -> str:
-        """Generate sitemap.xml from the full persistent registry."""
+        """Generate sitemap.xml from the full persistent registry + static pages."""
         urls = [f"""
         <url>
             <loc>{SITE_URL}/</loc>
@@ -237,10 +240,24 @@ class StaticSiteGenerator:
             <priority>1.0</priority>
         </url>"""]
 
+        # Important static pages
+        static_pages = [
+            ("about.html", "0.7"),
+            ("privacy.html", "0.4"),
+            ("affiliate-disclosure.html", "0.3"),
+        ]
+        for page, priority in static_pages:
+            urls.append(f"""
+        <url>
+            <loc>{SITE_URL}/{page}</loc>
+            <changefreq>monthly</changefreq>
+            <priority>{priority}</priority>
+        </url>""")
+
         for record in self._registry:
             slug = record["slug"]
             lastmod = record.get("published_at", "")[:10]  # YYYY-MM-DD
-            lastmod_tag = f"\n            <lastmod>{lastmod}</lastmod>" if lastmod else ""
+            lastmod_tag = f"\n        <lastmod>{lastmod}</lastmod>" if lastmod else ""
             urls.append(f"""
         <url>
             <loc>{SITE_URL}/posts/{slug}.html</loc>{lastmod_tag}
@@ -251,8 +268,8 @@ class StaticSiteGenerator:
         sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     {''.join(urls)}
-    </urlset>"""
-
+    </urlset>
+    """
         path = self.output_dir / "sitemap.xml"
         path.write_text(sitemap, encoding="utf-8")
         print(f"  ✅ Sitemap: {len(urls)} URLs written")
@@ -275,6 +292,24 @@ class StaticSiteGenerator:
             adsense_pub=ADSENSE_PUBLISHER_ID,
             adsense_slot=ADSENSE_SLOT_ID,
         )
+
+    def copy_static_assets(self) -> None:
+        """Copy everything from static/ into the output directory (robots.txt, about, privacy, favicons, etc.)."""
+        import shutil
+        static_dir = Path(__file__).resolve().parent.parent / "static"
+        if not static_dir.exists():
+            print("  ⚠️  static/ directory not found — skipping asset copy")
+            return
+
+        for item in static_dir.iterdir():
+            dest = self.output_dir / item.name
+            if item.is_file():
+                shutil.copy2(item, dest)
+            elif item.is_dir():
+                if dest.exists():
+                    shutil.rmtree(dest)
+                shutil.copytree(item, dest)
+        print(f"  ✅ Static assets copied from {static_dir}")
 
 # ── MAILCHIMP NEWSLETTER ───────────────────────────────────────────────────────
 
@@ -378,12 +413,15 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="{site_url}/posts/{slug}.html">
+  <!-- Google Analytics / Search Console — replace with your real IDs -->
+  <!-- <meta name="google-site-verification" content="YOUR_SEARCH_CONSOLE_VERIFICATION_CODE" /> -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{adsense_pub}}" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={adsense_pub}" crossorigin="anonymous"></script>
   <style>
     :root {{
       --font-sans: 'Georgia', serif;
@@ -449,9 +487,13 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
       <span>{word_count:,} words</span>
     </div>
     <h1>{title}</h1>
-    <div class="article-content">
-      {content}
-    </div>
+        <p class="author-byline" style="margin-top:-0.75rem;margin-bottom:1.75rem;color:var(--color-muted);font-size:0.95rem;">
+        By <a href="/about.html" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Chris Clark</a>
+        · AppSec practitioner &amp; AWS Solutions Architect
+        </p>
+        <div class="article-content">
+        {content}
+        </div>
     <div class="tags">Tags: {tags}</div>
   </main>
   <footer>
@@ -470,6 +512,9 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{SITE_NAME} — {SITE_URL}</title>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>
+  <!-- Google Analytics / Search Console — replace with your real IDs -->
+  <!-- <meta name="google-site-verification" content="YOUR_SEARCH_CONSOLE_VERIFICATION_CODE" /> -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
