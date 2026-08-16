@@ -413,9 +413,14 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="{site_url}/posts/{slug}.html">
-  <!-- Google Analytics / Search Console — replace with your real IDs -->
-  <!-- <meta name="google-site-verification" content="YOUR_SEARCH_CONSOLE_VERIFICATION_CODE" /> -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -512,9 +517,14 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{SITE_NAME} — {SITE_URL}</title>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>
-  <!-- Google Analytics / Search Console — replace with your real IDs -->
-  <!-- <meta name="google-site-verification" content="YOUR_SEARCH_CONSOLE_VERIFICATION_CODE" /> -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
