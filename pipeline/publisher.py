@@ -232,47 +232,51 @@ class StaticSiteGenerator:
         return str(index_path)
 
     def build_sitemap(self) -> str:
-        """Generate sitemap.xml from the full persistent registry + static pages."""
-        urls = [f"""
-        <url>
-            <loc>{SITE_URL}/</loc>
-            <changefreq>daily</changefreq>
-            <priority>1.0</priority>
-        </url>"""]
+        """Generate a clean, valid sitemap.xml."""
+        lines = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+            '  <url>',
+            f'    <loc>{SITE_URL}/</loc>',
+            '    <changefreq>daily</changefreq>',
+            '    <priority>1.0</priority>',
+            '  </url>',
+        ]
 
-        # Important static pages
+        # Static pages
         static_pages = [
             ("about.html", "0.7"),
             ("privacy.html", "0.4"),
             ("affiliate-disclosure.html", "0.3"),
         ]
         for page, priority in static_pages:
-            urls.append(f"""
-        <url>
-            <loc>{SITE_URL}/{page}</loc>
-            <changefreq>monthly</changefreq>
-            <priority>{priority}</priority>
-        </url>""")
+            lines.extend([
+                '  <url>',
+                f'    <loc>{SITE_URL}/{page}</loc>',
+                '    <changefreq>monthly</changefreq>',
+                f'    <priority>{priority}</priority>',
+                '  </url>',
+            ])
 
+        # Articles
         for record in self._registry:
             slug = record["slug"]
-            lastmod = record.get("published_at", "")[:10]  # YYYY-MM-DD
-            lastmod_tag = f"\n        <lastmod>{lastmod}</lastmod>" if lastmod else ""
-            urls.append(f"""
-        <url>
-            <loc>{SITE_URL}/posts/{slug}.html</loc>{lastmod_tag}
-            <changefreq>monthly</changefreq>
-            <priority>0.8</priority>
-        </url>""")
+            lastmod = record.get("published_at", "")[:10]
+            lines.append('  <url>')
+            lines.append(f'    <loc>{SITE_URL}/posts/{slug}.html</loc>')
+            if lastmod:
+                lines.append(f'    <lastmod>{lastmod}</lastmod>')
+            lines.append('    <changefreq>monthly</changefreq>')
+            lines.append('    <priority>0.8</priority>')
+            lines.append('  </url>')
 
-        sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    {''.join(urls)}
-    </urlset>
-    """
+        lines.append('</urlset>')
+        lines.append('')  # trailing newline
+
+        sitemap = '\n'.join(lines)
         path = self.output_dir / "sitemap.xml"
         path.write_text(sitemap, encoding="utf-8")
-        print(f"  ✅ Sitemap: {len(urls)} URLs written")
+        print(f"  ✅ Sitemap: {len(self._registry) + 1 + len(static_pages)} URLs written")
         return str(path)
       
     def _render_article_page(self, article: GeneratedArticle) -> str:
