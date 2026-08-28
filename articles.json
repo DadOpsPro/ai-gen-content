@@ -362,7 +362,7 @@
   {
     "slug": "ai-code-review-better-than-teammates",
     "title": "AI Now Reviews Code Better Than Your Teammate",
-    "excerpt": "AI models have matured from code suggestion tools to genuine development partners, exposing how most human-written code reviews are inconsistent and riddled with blind spots. This week's trends show AI doesn't just write code—it reviews with a rigor that makes traditional peer review look negligent.",
+    "excerpt": "AI models have matured from code suggestion tools to genuine development partners, exposing how most human-written code reviews are inconsistent and riddled with blind spots. This week's trends show AI doesn't just write code\u2014it reviews with a rigor that makes traditional peer review look negligent.",
     "category": "AI & Development",
     "tags": [
       "AI code review",
@@ -508,21 +508,6 @@
     ],
     "word_count": 1404,
     "published_at": "2026-08-16T17:55:10.231161Z"
-  },
-  {
-    "slug": "replit-auto-mode-ai-model-selection",
-    "title": "Replit Auto Mode: System Picks Best AI Model",
-    "excerpt": "Replit has changed its default to Auto mode, where the system automatically selects which AI model handles each coding task instead of letting developers choose. This architectural shift raises important questions about security, control, and threat modeling for development teams.",
-    "category": "AI Development Tools",
-    "tags": [
-      "Replit",
-      "AI models",
-      "coding assistant",
-      "developer tools",
-      "security"
-    ],
-    "word_count": 1759,
-    "published_at": "2026-08-28T02:59:14.521697Z"
   },
   {
     "slug": "replit-auto-mode-picks-best-model",
