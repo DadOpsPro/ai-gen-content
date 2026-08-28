@@ -245,8 +245,6 @@ class StaticSiteGenerator:
             return len(list(dest.glob("*.json")))
 
         n = extract("origin/gh-pages")
-        if n < 1:
-            n = extract("b64d1671a2d6")
         print(f"  📚 Restored {n} pending draft JSON files")
 
     def publish(self, article: GeneratedArticle) -> dict:
