@@ -278,6 +278,20 @@ def print_content_calendar():
     print(f"Total: {len(calendar)} planned articles\n")
 
 
+def _restore_live_site_into_output() -> None:
+    """Pull published posts and pending drafts from gh-pages so a deploy cannot wipe them."""
+    static_gen = StaticSiteGenerator()
+    static_gen.restore_existing_posts()
+    static_gen.restore_existing_drafts()
+
+
+def _pending_review_drafts():
+    drafts_dir = Path(__file__).resolve().parent.parent / "site" / "output" / "drafts"
+    if not drafts_dir.exists():
+        return []
+    return sorted(p.name for p in drafts_dir.glob("*.json"))
+
+
 def run_review_pipeline():
     """
     Review mode: scrape one trending topic, generate a draft in Chris's voice
@@ -288,6 +302,27 @@ def run_review_pipeline():
     print(f"\n{'='*60}")
     print(f"📝 REVIEW PIPELINE — {datetime.now().strftime('%Y-%m-%d')}")
     print(f"{'='*60}")
+
+    _restore_live_site_into_output()
+
+    # Nightly GitHub cron still fires at 2am CT; skip generating then.
+    # The 8am CT dispatch (workflow_dispatch) is the real review run.
+    if os.getenv("GITHUB_EVENT_NAME") == "schedule":
+        hour = datetime.utcnow().hour
+        if hour < 12 or hour >= 15:
+            print("⏭️  Skipping off-hours scheduled review (drafts run at 8am CT).")
+            StaticSiteGenerator().build_index()
+            return
+
+    pending = _pending_review_drafts()
+    if pending:
+        print(f"⏭️  Skipping new draft — {len(pending)} unpublished review(s) already waiting.")
+        for name in pending[:8]:
+            print(f"   - {name}")
+        if len(pending) > 8:
+            print(f"   - … and {len(pending) - 8} more")
+        StaticSiteGenerator().build_index()
+        return
 
     print("\n🔍 Gathering trends...")
     topics = gather_trending_topics(max_topics=10)
