@@ -280,6 +280,11 @@ def print_content_calendar():
 
 def _restore_live_site_into_output() -> None:
     """Pull published posts and pending drafts from gh-pages so a deploy cannot wipe them."""
+    import shutil
+    # Actions cache can resurrect skipped drafts in site/output/drafts. Only gh-pages counts.
+    drafts_dir = Path(__file__).resolve().parent.parent / "site" / "output" / "drafts"
+    if drafts_dir.exists():
+        shutil.rmtree(drafts_dir)
     static_gen = StaticSiteGenerator()
     static_gen.restore_existing_posts()
     static_gen.restore_existing_drafts()
