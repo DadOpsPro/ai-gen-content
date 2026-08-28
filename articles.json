@@ -362,7 +362,7 @@
   {
     "slug": "ai-code-review-better-than-teammates",
     "title": "AI Now Reviews Code Better Than Your Teammate",
-    "excerpt": "AI models have matured from code suggestion tools to genuine development partners, exposing how most human-written code reviews are inconsistent and riddled with blind spots. This week's trends show AI doesn't just write code\u2014it reviews with a rigor that makes traditional peer review look negligent.",
+    "excerpt": "AI models have matured from code suggestion tools to genuine development partners, exposing how most human-written code reviews are inconsistent and riddled with blind spots. This week's trends show AI doesn't just write code—it reviews with a rigor that makes traditional peer review look negligent.",
     "category": "AI & Development",
     "tags": [
       "AI code review",
@@ -523,5 +523,20 @@
     ],
     "word_count": 1758,
     "published_at": "2026-08-28T03:08:56.021752Z"
+  },
+  {
+    "slug": "google-double-blind-gemini-testing",
+    "title": "Google's Double-Blind Gemini Testing Method",
+    "excerpt": "Google DeepMind implemented a double-blind evaluation process for Gemini to prevent benchmark contamination, where AI models memorize test questions from training data. This method kept Google from seeing test questions and testers from accessing model weights.",
+    "category": "Artificial Intelligence",
+    "tags": [
+      "AI testing",
+      "Gemini",
+      "benchmark contamination",
+      "machine learning evaluation",
+      "Google DeepMind"
+    ],
+    "word_count": 565,
+    "published_at": "2026-08-28T22:35:22.851954Z"
   }
 ]
