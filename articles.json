@@ -508,5 +508,20 @@
     ],
     "word_count": 1404,
     "published_at": "2026-08-16T17:55:10.231161Z"
+  },
+  {
+    "slug": "replit-auto-mode-ai-model-selection",
+    "title": "Replit Auto Mode: System Picks Best AI Model",
+    "excerpt": "Replit has changed its default to Auto mode, where the system automatically selects which AI model handles each coding task instead of letting developers choose. This architectural shift raises important questions about security, control, and threat modeling for development teams.",
+    "category": "AI Development Tools",
+    "tags": [
+      "Replit",
+      "AI models",
+      "coding assistant",
+      "developer tools",
+      "security"
+    ],
+    "word_count": 1759,
+    "published_at": "2026-08-28T02:59:14.521697Z"
   }
 ]
