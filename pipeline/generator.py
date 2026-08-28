@@ -187,7 +187,7 @@ CRITICAL RULES — violations will cause this content to be rejected:
 - Do NOT fabricate company names, product names, or people.
 - Do NOT create fictional quotes or attribute statements to real people unless directly quoting a provided source.
 - Do NOT invent contact information, editorial team members, or bylines.
-- Mark any claim you are uncertain about with [UNVERIFIED] so the editor can check it.
+- If a claim is not in the sources, leave it out. Do not write [UNVERIFIED]. Do not guess.
 """
 
 CHRIS_PERSONA = """
@@ -212,9 +212,12 @@ Chris's voice:
 - Ends pieces with an open question or "what this means for your team" framing
 
 Writing style:
-- Short paragraphs (2-4 sentences)
-- No filler, no preamble
-- Conversational but not casual — like a senior engineer talking to another engineer
+- Short. About 400–700 words. A casual read someone can finish on their phone.
+- Talk like a person, not a white paper. A smart friend who does not work in this field should get every sentence.
+- When a tech term is unavoidable, explain it in the same breath in plain English. Prefer the plain phrase.
+- Short paragraphs (1-3 sentences). No stacked sections that restate the same idea.
+- No filler, no preamble, no "in this article."
+- Direct and urgent. Defaults are dangerous. A vendor score is not the truth unless you controlled the test.
 """
 
 DRAFT_PROMPT = """
@@ -228,19 +231,17 @@ Context / source signals: {context}
 Target keywords: {keywords}
 
 Structure:
-1. Opening (2-3 sentences — lead with the real implication, not the announcement)
-2. What's actually happening (background, grounded in the sources provided)
-3. Why practitioners should care (concrete, not abstract)
-4. [CHRIS TAKE] ← Leave this placeholder exactly as written. Chris will fill in his personal experience or opinion here.
-5. What to watch / what to do next
-6. Closing question (one genuine open question for the reader)
+1. Opening (a simple analogy or the one thing that matters — 2-4 sentences)
+2. What happened, in plain English (grounded in the sources; explain jargon as you go)
+3. What this is not / what to actually do
+4. [CHRIS TAKE] ← Leave this placeholder exactly as written.
+5. Sources (plain links, not a bibliography)
 
 Requirements:
-- {min_words}–{max_words} words
-- Use H2/H3 markdown headers
-- Include [CHRIS TAKE] placeholder exactly once — this is where his voice will be inserted
-- Mark any uncertain claims with [UNVERIFIED]
-- Do not fabricate statistics or quotes — use only what the sources support
+- {min_words}–{max_words} words. Shorter is better. Cut anything a non-expert does not need.
+- Few headers. No formal tone. No academic citations in the body — use a short "Google said X ([link])" style.
+- Include [CHRIS TAKE] placeholder exactly once
+- Do not fabricate statistics or quotes — use only what the sources support. Skip anything you cannot source. Never write [UNVERIFIED].
 - Keywords: {keywords}
 
 Sources available:
@@ -336,9 +337,9 @@ def generate_final_article(draft: ArticleDraft, chris_take: str) -> GeneratedArt
 
 Below is a draft article with Chris's personal take already inserted. 
 Do a final edit pass:
-- Make sure the voice is consistent throughout (Chris's direct, practitioner style)
-- Remove any [UNVERIFIED] claims that conflict with the inserted take, or flag them clearly
-- Tighten any sections that feel padded
+- Keep it casual and short. Cut formality and jargon. Explain remaining tech terms in plain English.
+- Delete any [UNVERIFIED] lines. If it is not sourced, drop it.
+- Tighten anything padded. Target a phone-length read.
 - Keep [CHRIS TAKE] content word-for-word — do not paraphrase his actual words
 - Return the complete polished article in markdown
 
