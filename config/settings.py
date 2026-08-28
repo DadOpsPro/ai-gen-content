@@ -65,8 +65,8 @@ PREMIUM_REPORT_PRICE_USD = 29  # dollars
 # ── CONTENT SETTINGS ───────────────────────────────────────────────────────────
 ARTICLES_PER_SEED_RUN = 15        # Initial SEO seed batch
 NEWSLETTER_FREQUENCY  = "weekly"  # weekly | biweekly | monthly
-MIN_WORD_COUNT        = 1200
-MAX_WORD_COUNT        = 2500
+MIN_WORD_COUNT        = 400
+MAX_WORD_COUNT        = 750
 ARTICLE_TYPES = [
     "tool_review",       # "Top 5 AI testing tools for X"
     "how_to_guide",      # "How to use AI to generate test cases"
