@@ -218,9 +218,41 @@ class StaticSiteGenerator:
             n = extract("8f4aba764f")
         print(f"  📚 Restored {n} existing post HTML files")
 
+    def restore_existing_drafts(self) -> None:
+        """Copy pending draft JSON into the output dir so a deploy does not drop unpublished reviews."""
+        import io, shutil, subprocess, tarfile, tempfile
+
+        repo_root = Path(__file__).resolve().parent.parent
+        dest = self.output_dir / "drafts"
+        dest.mkdir(parents=True, exist_ok=True)
+
+        def extract(ref: str) -> int:
+            proc = subprocess.run(
+                ["git", "archive", "--format=tar", ref, "drafts"],
+                cwd=repo_root, capture_output=True,
+            )
+            if proc.returncode != 0:
+                return len(list(dest.glob("*.json")))
+            with tarfile.open(fileobj=io.BytesIO(proc.stdout), mode="r:") as tar:
+                with tempfile.TemporaryDirectory() as tmp:
+                    tar.extractall(tmp)
+                    src = Path(tmp) / "drafts"
+                    if src.exists():
+                        for f in src.glob("*.json"):
+                            target = dest / f.name
+                            if not target.exists():
+                                shutil.copy2(f, target)
+            return len(list(dest.glob("*.json")))
+
+        n = extract("origin/gh-pages")
+        if n < 1:
+            n = extract("b64d1671a2d6")
+        print(f"  📚 Restored {n} pending draft JSON files")
+
     def publish(self, article: GeneratedArticle) -> dict:
         """Write article to static HTML file and register it."""
         self.restore_existing_posts()
+        self.restore_existing_drafts()
         content = self._render_article_page(article)
         filepath = self.posts_dir / f"{article.slug}.html"
         filepath.write_text(content, encoding="utf-8")
