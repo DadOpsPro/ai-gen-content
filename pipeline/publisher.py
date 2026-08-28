@@ -183,8 +183,44 @@ class StaticSiteGenerator:
 
     # ── Public API ────────────────────────────────────────────────────────────
 
+    def restore_existing_posts(self) -> None:
+        """Copy already-published post HTML into the output dir so a deploy does not drop the archive."""
+        import io, shutil, subprocess, tarfile, tempfile
+
+        repo_root = Path(__file__).resolve().parent.parent
+        dest = self.posts_dir
+        dest.mkdir(parents=True, exist_ok=True)
+
+        def extract(ref: str) -> int:
+            proc = subprocess.run(
+                ["git", "archive", "--format=tar", ref, "posts"],
+                cwd=repo_root, capture_output=True,
+            )
+            if proc.returncode != 0:
+                return len(list(dest.glob("*.html")))
+            with tarfile.open(fileobj=io.BytesIO(proc.stdout), mode="r:") as tar:
+                with tempfile.TemporaryDirectory() as tmp:
+                    tar.extractall(tmp)
+                    src = Path(tmp) / "posts"
+                    if src.exists():
+                        for f in src.glob("*.html"):
+                            target = dest / f.name
+                            if not target.exists():
+                                shutil.copy2(f, target)
+            return len(list(dest.glob("*.html")))
+
+        subprocess.run(
+            ["git", "fetch", "origin", "gh-pages", "--depth=50"],
+            cwd=repo_root, capture_output=True,
+        )
+        n = extract("origin/gh-pages")
+        if n < 10:
+            n = extract("8f4aba764f")
+        print(f"  📚 Restored {n} existing post HTML files")
+
     def publish(self, article: GeneratedArticle) -> dict:
         """Write article to static HTML file and register it."""
+        self.restore_existing_posts()
         content = self._render_article_page(article)
         filepath = self.posts_dir / f"{article.slug}.html"
         filepath.write_text(content, encoding="utf-8")
