@@ -213,8 +213,8 @@ Chris's voice:
 
 Writing style:
 - Short. About 400–700 words. A casual read someone can finish on their phone.
-- Talk like a person, not a white paper. A smart friend who does not work in this field should get every sentence.
-- When a tech term is unavoidable, explain it in the same breath in plain English. Prefer the plain phrase.
+- Talk like a person, not a white paper. A smart friend who does not work in this field should still follow.
+- Technical terms are fine. Use the real name, then immediately break it down in plain English in the same breath ("Confidential Space, meaning a locked box in the cloud that neither side can peek into"). Do not strip the jargon. Do not leave it unexplained.
 - Short paragraphs (1-3 sentences). No stacked sections that restate the same idea.
 - No filler, no preamble, no "in this article."
 - Direct and urgent. Defaults are dangerous. A vendor score is not the truth unless you controlled the test.
