@@ -472,9 +472,8 @@ def wrap_with_ads(content_html: str) -> str:
   We may earn a commission at no extra cost to you if you purchase through them.
 </div>"""
 
-    # Insert ad after first </h2>
-    content_html = content_html.replace("</h2>", "</h2>" + ad_unit, 1)
-    # Append disclaimer and closing ad
+    # Do not inject ads after the first H2. Unfilled AdSense auto-units
+    # reserve a large empty block and blow a hole in short articles.
     return affiliate_disclaimer + content_html + ad_unit
 
 
@@ -552,6 +551,8 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
              color: var(--color-muted); font-size: 0.85rem; }}
     footer {{ background: #0a0f1e; color: #888; text-align: center;
               padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }}
+    ins.adsbygoogle[data-ad-status="unfilled"] {{ display: none !important; height: 0 !important; }}
+    .ad-unit:has(ins[data-ad-status="unfilled"]) {{ display: none; margin: 0 !important; }}
   </style>
 </head>
 
