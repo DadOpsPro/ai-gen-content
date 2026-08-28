@@ -310,9 +310,18 @@ class StaticSiteGenerator:
             if item.is_file():
                 shutil.copy2(item, dest)
             elif item.is_dir():
-                if dest.exists():
-                    shutil.rmtree(dest)
-                shutil.copytree(item, dest)
+                # Merge into dest. Never delete generated article HTML.
+                dest.mkdir(parents=True, exist_ok=True)
+                for child in item.iterdir():
+                    target = dest / child.name
+                    if child.is_file():
+                        if item.name == "posts" and target.exists():
+                            continue
+                        shutil.copy2(child, target)
+                    elif child.is_dir():
+                        if target.exists():
+                            shutil.rmtree(target)
+                        shutil.copytree(child, target)
         print(f"  ✅ Static assets copied from {static_dir}")
 
 # ── MAILCHIMP NEWSLETTER ───────────────────────────────────────────────────────
