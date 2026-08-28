@@ -421,7 +421,7 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){{dataLayer.push(arguments);}}
     gtag('js', new Date());
     gtag('config', 'G-4DZEHG6QFW');
   </script>
