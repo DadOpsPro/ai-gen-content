@@ -1,0 +1,20 @@
+{
+  "topic": "Shai-Hulud: Whoever controls your package registry controls your pipeline",
+  "article_type": "trend_roundup",
+  "keywords": [
+    "shai-hulud:",
+    "whoever",
+    "controls",
+    "package",
+    "registry"
+  ],
+  "context": "<img alt=\"Abstract digital artwork of a constrained data stream on a dark background, representing software pipeline security.\" class=\"webfeedsFeaturedVisual wp-post-image wp-stateless-item\" height=\"576\" src=\"https://cdn.thenewstack.io/media/2026/08/2e1f8f07-mohamed-nohassi-rhjeofe8w4e-unsplash-1024x576.jpg\" style=\"display: block; margin: auto; margin-bottom: 20px;\" width=\"1024\" /><p>On September ",
+  "sources": [
+    {
+      "name": "The New Stack",
+      "url": "https://thenewstack.io/shai-hulud-pipeline-security/"
+    }
+  ],
+  "draft_markdown": "# Shai-Hulud: Whoever Controls Your Package Registry Controls Your Pipeline\n\nYour CI/CD pipeline trusts whatever packages you tell it to pull. And whoever controls that package registry\u2014public or private\u2014controls what gets built, tested, and shipped. That's the uncomfortable truth nobody wants to say out loud.\n\n## The Chokepoint Nobody Talks About\n\nThe name \"Shai-Hulud\" comes from *Dune*\u2014the sandworm that controls the spice, which controls everything. The analogy isn't accidental. Your package registry is that chokepoint. Every `npm install`, every `pip install`, every `mvn dependency:resolve`\u2014they all flow through a single source of truth. Compromise that source, and you own the pipeline.\n\nThis isn't theoretical. We've seen it play out with typosquatting attacks (registering `lodsh` when you meant `lodash`), dependency confusion (tricking builds into pulling malicious internal-named packages from public repos), and outright compromised maintainer accounts. The attack surface isn't your code. It's everyone else's code that your build implicitly trusts.\n\n## What This Actually Means for Teams\n\nMost organizations use a mix of public registries (npm, PyPI, Maven Central) and private mirrors or proxies (Artifactory, Nexus, AWS CodeArtifact). The theory is that private mirrors give you control\u2014you can scan, approve, and cache packages before they reach production builds.\n\nThe reality is messier.\n\nPrivate mirrors still pull from public sources. If your proxy auto-fetches new versions, you're trusting upstream the moment they publish. If your proxy doesn't, you're manually approving every patch\u2014good luck keeping up with a modern microservices stack.\n\nAnd \"scanning\" doesn't mean \"safe.\" Static analysis catches known bad patterns. It doesn't catch a subtle backdoor in a maintainer's legitimate commit. By the time a CVE is assigned, the package has already been running in your pipeline for weeks.\n\n## What This Is Not / What to Actually Do\n\nThis isn't a reason to panic and vendor every dependency. That path leads to stale code, missed patches, and even bigger problems.\n\nInstead, think about chokepoints:\n\n- **Lock your dependencies.** Use lockfiles (`package-lock.json`, `poetry.lock`, `go.sum`). Pin versions. Know exactly what you're pulling.\n- **Audit the audit.** Your registry proxy probably has an \"approved packages\" list. When did someone last review it? Who owns it?\n- **Assume breach.** If a critical package got compromised tomorrow, would your pipeline notice? Would your SAST catch it? Would anyone get paged?\n- **Watch the upstream.** Tools like Dependabot and Renovate flag new versions, but they don't tell you if a maintainer's account got hijacked. Subscribe to security advisories for your top 10 dependencies. Yes, manually.\n\nThe hard truth: there's no silver bullet here. You're trusting other people's code every time you build. The question is whether you're trusting blindly or trusting deliberately.\n\n[CHRIS TAKE]\n\n---\n\n**Sources:**\n- https://thenewstack.io/shai-hulud-pipeline-security/",
+  "slug_hint": "shai-hulud-whoever-controls-your-package-registry"
+}
