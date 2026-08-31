@@ -8,6 +8,7 @@
     "package",
     "registry"
   ],
+  "context": "<img alt=\"Abstract digital artwork of a constrained data stream on a dark background, representing software pipeline security.\" class=\"webfeedsFeaturedVisual wp-post-image wp-stateless-item\" height=\"576\" src=\"https://cdn.thenewstack.io/media/2026/08/2e1f8f07-mohamed-nohassi-rhjeofe8w4e-unsplash-1024x576.jpg\" style=\"display: block; margin: auto; margin-bottom: 20px;\" width=\"1024\" /><p>On September ",
   "chris_take": "Don't let CI grab whatever the registry published this morning. Lock the versions. Auto-fetch feels convenient until a bad package is already in the build and you're the last one to know.",
   "sources": [
     {
