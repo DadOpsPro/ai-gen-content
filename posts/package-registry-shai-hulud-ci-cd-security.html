@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Package Registry Control: Securing Your CI/CD Pipeline | AI Dev Defense</title>
+  <meta name="description" content="Discover how package registries act as critical chokepoints in CI/CD pipelines and learn essential security strategies to protect your software supply chain from compromise.">
+  <meta property="og:title" content="Package Registry Control: Securing Your CI/CD Pipeline">
+  <meta property="og:description" content="Discover how package registries act as critical chokepoints in CI/CD pipelines and learn essential security strategies to protect your software supply chain from compromise.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/package-registry-shai-hulud-ci-cd-security.html">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }
+    .site-header nav a:hover { color: #fff; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+    ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; }
+    .ad-unit:has(ins[data-ad-status="unfilled"]) { display: none; margin: 0 !important; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Articles</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>DevOps & Security</span> &middot;
+      <span>2 min read</span> &middot;
+      <span>458 words</span>
+    </div>
+    <h1>Package Registry Control: Securing Your CI/CD Pipeline</h1>
+        <p class="author-byline" style="margin-top:-0.75rem;margin-bottom:1.75rem;color:var(--color-muted);font-size:0.95rem;">
+        By <a href="/about.html" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Chris Clark</a>
+        · AppSec practitioner &amp; AWS Solutions Architect
+        </p>
+        <div class="article-content">
+        
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>Shai-Hulud: Whoever Controls Your Package Registry Controls Your Pipeline</h1>
+</p>
+<p>Your CI/CD pipeline trusts whatever packages you tell it to pull. Whoever controls that package registry—public or private—controls what gets built, tested, and shipped. That's the uncomfortable truth nobody wants to say out loud.
+
+<h2>The Chokepoint Nobody Talks About</h2>
+</p>
+<p>The name "Shai-Hulud" comes from <em>Dune</em>—the sandworm that controls the spice, which controls everything. The analogy isn't accidental. Your package registry is that chokepoint. Every <code>npm install</code>, every <code>pip install</code>, every <code>mvn dependency:resolve</code>—they all flow through a single source of truth. Compromise that source, and you own the pipeline.
+</p>
+<p>This isn't theoretical. We've seen it with typosquatting attacks (registering <code>lodsh</code> when you meant <code>lodash</code>), dependency confusion (tricking builds into pulling malicious internal-named packages from public repos), and compromised maintainer accounts. The attack surface isn't your code. It's everyone else's code that your build implicitly trusts.
+
+<h2>What This Actually Means for Teams</h2>
+</p>
+<p>Most organizations use a mix of public registries (npm, PyPI, Maven Central) and private mirrors or proxies (Artifactory, Nexus, AWS CodeArtifact). The theory: private mirrors give you control. You can scan, approve, and cache packages before they reach production builds.
+</p>
+<p>The reality is messier.
+</p>
+<p>Private mirrors still pull from public sources. If your proxy auto-fetches new versions, you're trusting upstream the moment they publish. If it doesn't, you're manually approving every patch—good luck keeping up with a modern microservices stack.
+</p>
+<p>And "scanning" doesn't mean "safe." Static analysis catches known bad patterns. It doesn't catch a subtle backdoor in a maintainer's legitimate commit. By the time a CVE gets assigned, the package has already been running in your pipeline for weeks.
+
+<h2>What to Actually Do</h2>
+</p>
+<p>This isn't a reason to panic and vendor every dependency. That path leads to stale code, missed patches, and bigger problems.
+</p>
+<p>Instead, think about chokepoints:
+<ul>
+<li><strong>Lock your dependencies.</strong> Use lockfiles (<code>package-lock.json</code>, <code>poetry.lock</code>, <code>go.sum</code>). Pin versions. Know exactly what you're pulling.</li>
+<li><strong>Audit the audit.</strong> Your registry proxy probably has an "approved packages" list. When did someone last review it? Who owns it?</li>
+<li><strong>Assume breach.</strong> If a critical package got compromised tomorrow, would your pipeline notice? Would your SAST catch it? Would anyone get paged?</li>
+<li><strong>Watch the upstream.</strong> Tools like Dependabot and Renovate flag new versions, but they don't tell you if a maintainer's account got hijacked. Subscribe to security advisories for your top 10 dependencies. Yes, manually.</li>
+</ul>
+</p>
+<p>The hard truth: there's no silver bullet here. You're trusting other people's code every time you build. The question is whether you're trusting blindly or trusting deliberately.
+
+<strong>Chris's take:</strong> Don't let CI grab whatever the registry published this morning. Lock the versions. Auto-fetch feels convenient until a bad package is already in the build and you're the last one to know.</p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="5959465348"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+        </div>
+    <div class="tags">Tags: ci/cd security · package registry · supply chain security · dependency management · software security</div>
+  </main>
+  <footer>
+    <p>&copy; AI Dev Defense · <a href="/about.html" style="color:#888">About</a> ·
+    <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>

@@ -538,5 +538,20 @@
     ],
     "word_count": 565,
     "published_at": "2026-08-28T22:35:22.851954Z"
+  },
+  {
+    "slug": "package-registry-shai-hulud-ci-cd-security",
+    "title": "Package Registry Control: Securing Your CI/CD Pipeline",
+    "excerpt": "Your package registry is the single point of trust that controls everything flowing through your CI/CD pipeline. Whoever controls that registry—whether through typosquatting, compromise, or malicious injection—controls what gets built, tested, and shipped into production.",
+    "category": "DevOps & Security",
+    "tags": [
+      "ci/cd security",
+      "package registry",
+      "supply chain security",
+      "dependency management",
+      "software security"
+    ],
+    "word_count": 458,
+    "published_at": "2026-08-31T19:26:11.904200Z"
   }
 ]
