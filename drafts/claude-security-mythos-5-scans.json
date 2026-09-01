@@ -1,0 +1,28 @@
+{
+  "topic": "Claude Security scans now run on Claude Mythos 5 (Enterprise public beta)",
+  "article_type": "how_to_guide",
+  "keywords": [
+    "Claude Security",
+    "Mythos 5",
+    "vulnerability scanning",
+    "CWE",
+    "Claude Enterprise"
+  ],
+  "context": "Official Anthropic product update dated August 21, 2026: Claude Security scans now run on Claude Mythos 5 for Claude Enterprise customers in public beta. Scans return CWE-categorized findings with confidence/severity and a suggested patch for human review. Mythos itself is not exposed as a general chat/API. GitHub.com and GitHub Enterprise Server only. Chris's team is being impacted by these scans; do not invent product claims.",
+  "sources": [
+    {
+      "name": "Anthropic / Claude blog",
+      "url": "https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders"
+    },
+    {
+      "name": "Anthropic Help Center: Use Claude Security",
+      "url": "https://support.claude.com/en/articles/14661296-use-claude-security"
+    },
+    {
+      "name": "Claude Academy: Getting started with Claude Security",
+      "url": "https://claude.com/resources/tutorials/getting-started-with-claude-security"
+    }
+  ],
+  "draft_markdown": "# Claude Security on Mythos 5: You Get the Findings, Not the Model\n\nAnthropic put its most capable cyber model, Claude Mythos 5, behind a scanner instead of handing you the model. That is the product. Claude Security (a codebase scanner inside Claude) now runs those scans for Enterprise customers in public beta. You get a finding list. You do not get a chat box with Mythos 5.\n\nThat split is the point, not a footnote.\n\n## What it actually does\n\nOn August 21, 2026, Anthropic said Claude Security scans now run on Mythos 5 ([announcement](https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders)). An organization owner turns it on under Organization settings, then Claude Security ([help center](https://support.claude.com/en/articles/14661296-use-claude-security)). From [claude.ai/security](https://claude.ai/security) you pick a GitHub repository. Official docs: GitHub.com or GitHub Enterprise Server only. Other hosts are not supported today.\n\nYou can narrow the scan to a directory or a branch. Anthropic's getting-started guide says to pick a directory on a large repo so the scan is more likely to finish. A run can take minutes or hours depending on the repo ([getting started](https://claude.com/resources/tutorials/getting-started-with-claude-security)).\n\nAnthropic says the scanner traces data across files. In plain English: it follows how a value moves from an input to a database call, instead of grepping one file at a time. Each finding comes back with a CWE category (Common Weakness Enumeration, a shared ID for bug types like SQL injection or XSS), confidence and severity ratings, and a suggested fix. Severity is about exploitability in *your* codebase, not a generic score for the category. Help Center findings also include location, impact, reproduction steps, and a recommended fix.\n\nYou can open the fix in Claude Code on the web. That patching step uses whatever models your org already has in Claude Code. The Mythos scan does not unlock Mythos on any other surface. Every patch still needs a human to review and approve it before it lands. Anthropic is explicit about that.\n\nBilling, in their words: scans are charged at direct token cost only, with no extra platform fee. The getting-started guide also says Extra Usage has to be on, costs scale with scan size and how often you run them, and you should set a spend limit. Users who run scans need a premium seat. Standard seats do not include Claude Code on the web.\n\n## What this is not\n\nThis is not a generally available Mythos 5 API. Anthropic's stated reason is blunt. Direct model access is where someone can steer it toward building exploits. A scanner that only returns a patch or an alert is a smaller door. Treat that as a design choice, not a slogan.\n\nIt is also not a signed-off replacement for the SAST tool you already run (SAST meaning a scanner that looks at source without executing it). Anthropic says scans are stochastic: the agent can take a different path each run, because it is reasoning over context instead of applying a fixed pattern list. They say that is how they catch logic-level issues traditional matchers miss. That is their claim. Treat a first run like a new signal. Dismissed findings, per the getting-started guide, will not come back on later scans.\n\nIf your source of truth is not GitHub.com or GHES, you cannot run this today. You also only scan code you own. Official scope: not third-party or random open-source repos sitting outside your company's codebase.\n\n## What to actually do\n\nIf you are on Claude Enterprise and the repo is on GitHub or GHES: enable it, pick one repo or one directory, run a Standard scan first, and read the findings with the same suspicion you would give any new scanner. There is an Extended effort option for a deeper pass. Export CSV or Markdown if you need a paper trail. Per-project webhooks exist if you want scan-complete events in your own tracker.\n\nThen ask the question the settings page will not ask for you. Who owns the backlog, and what happens when the suggested patch is wrong.\n\n## [CHRIS TAKE]\n\n---\n\n**Sources:**\n- https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders\n- https://support.claude.com/en/articles/14661296-use-claude-security\n- https://claude.com/resources/tutorials/getting-started-with-claude-security\n",
+  "slug_hint": "claude-security-mythos-5-scans"
+}
