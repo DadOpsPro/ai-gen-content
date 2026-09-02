@@ -548,6 +548,9 @@ def convert_and_inject(markdown_content: str) -> tuple:
     # Strip external images — we don't control their availability
     html = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', '', html)
 
+    # Convert markdown links after images so ![alt](url) is not treated as a link
+    html = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', html)
+
     # Horizontal rules
     html = re.sub(r'^\s*---\s*$', '<hr>', html, flags=re.MULTILINE)
 
