@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Security Scans Now Run on Claude Mythos 5 | AI Dev Defense</title>
+  <meta name="description" content="Claude Security scans now available on Claude Mythos 5 for Enterprise customers in public beta. Get security findings without direct model access.">
+  <meta property="og:title" content="Claude Security Scans Now Run on Claude Mythos 5">
+  <meta property="og:description" content="Claude Security scans now available on Claude Mythos 5 for Enterprise customers in public beta. Get security findings without direct model access.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/claude-security-mythos-5-enterprise-beta.html">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }
+    .site-header nav a:hover { color: #fff; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+    ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; }
+    .ad-unit:has(ins[data-ad-status="unfilled"]) { display: none; margin: 0 !important; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Articles</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>AI Security</span> &middot;
+      <span>3 min read</span> &middot;
+      <span>675 words</span>
+    </div>
+    <h1>Claude Security Scans Now Run on Claude Mythos 5</h1>
+        <p class="author-byline" style="margin-top:-0.75rem;margin-bottom:1.75rem;color:var(--color-muted);font-size:0.95rem;">
+        By <a href="/about.html" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Chris Clark</a>
+        · AppSec practitioner &amp; AWS Solutions Architect
+        </p>
+        <div class="article-content">
+        
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>Claude Security on Mythos 5: You Get the Findings, Not the Model</h1>
+</p>
+<p>Anthropic put its most capable cyber model, Claude Mythos 5, behind a scanner instead of handing you the model. That is the product. Claude Security now runs scans for Enterprise customers in public beta. You get a finding list. You do not get a chat box with Mythos 5.
+</p>
+<p>That split is the point, not a footnote.
+
+<h2>What it actually does</h2>
+</p>
+<p>On August 21, 2026, Anthropic announced Claude Security scans now run on Mythos 5 ([announcement](https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders)). An organization owner turns it on under Organization settings, then Claude Security ([help center](https://support.claude.com/en/articles/14661296-use-claude-security)). From [claude.ai/security](https://claude.ai/security) you pick a GitHub repository. Official docs say GitHub.com or GitHub Enterprise Server only. Other hosts are not supported today.
+</p>
+<p>You can narrow the scan to a directory or branch. Anthropic's getting-started guide says to pick a directory on a large repo so the scan is more likely to finish. A run can take minutes or hours depending on the repo ([getting started](https://claude.com/resources/tutorials/getting-started-with-claude-security)).
+</p>
+<p>The scanner traces data across files. In plain English: it follows how a value moves from an input to a database call, instead of grepping one file at a time. Each finding comes back with a CWE category (Common Weakness Enumeration—a shared ID for bug types like SQL injection or XSS), confidence and severity ratings, and a suggested fix. Severity is about exploitability in <em>your</em> codebase, not a generic score for the category.
+</p>
+<p>You can open the fix in Claude Code on the web. That patching step uses whatever models your org already has in Claude Code. The Mythos scan does not unlock Mythos anywhere else. Every patch still needs a human to review and approve it before it lands. Anthropic is explicit about that.
+</p>
+<p>Billing: scans are charged at direct token cost only, no extra platform fee. Extra Usage has to be on, costs scale with scan size and frequency, and you should set a spend limit. Users who run scans need a premium seat.
+
+<h2>What this is not</h2>
+</p>
+<p>This is not a generally available Mythos 5 API. Anthropic's stated reason is blunt. Direct model access is where someone can steer it toward building exploits. A scanner that only returns a patch or an alert is a smaller door. Treat that as a design choice, not a slogan.
+</p>
+<p>It is also not a signed-off replacement for the SAST tool you already run (SAST meaning a scanner that looks at source without executing it). Anthropic says scans are stochastic: the agent can take a different path each run because it is reasoning over context instead of applying a fixed pattern list. They say that is how they catch logic-level issues traditional matchers miss. That is their claim. Treat a first run like a new signal. Dismissed findings will not come back on later scans.
+</p>
+<p>If your source of truth is not GitHub.com or GHES, you cannot run this today. You also only scan code you own—not third-party or random open-source repos outside your company's codebase.
+
+<h2>What to actually do</h2>
+</p>
+<p>If you are on Claude Enterprise and the repo is on GitHub or GHES: enable it, pick one repo or one directory, run a Standard scan first, and read the findings with the same suspicion you would give any new scanner. There is an Extended effort option for a deeper pass. Export CSV or Markdown if you need a paper trail. Per-project webhooks exist if you want scan-complete events in your own tracker.
+</p>
+<p>Then ask the question the settings page will not ask for you. Who owns the backlog, and what happens when the suggested patch is wrong.
+
+<h2>Chris's take</h2>
+</p>
+<p>I've worked with these scan results firsthand. I think this is great, ridiculously informative, and for the most part legit findings. Being able to add context is a big part of what makes it useful, but it's not perfect. Unlike SAST tools, you may not get the same result each time, and that can be frustrating.
+<hr>
+<strong>Sources:</strong>
+<ul>
+<li>https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders</li>
+<li>https://support.claude.com/en/articles/14661296-use-claude-security</li>
+<li>https://claude.com/resources/tutorials/getting-started-with-claude-security</li></ul>
+</p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="5959465348"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+        </div>
+    <div class="tags">Tags: Claude · Security · Mythos 5 · Enterprise · AI Safety</div>
+  </main>
+  <footer>
+    <p>&copy; AI Dev Defense · <a href="/about.html" style="color:#888">About</a> ·
+    <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>

@@ -553,5 +553,20 @@
     ],
     "word_count": 458,
     "published_at": "2026-08-31T19:26:11.904200Z"
+  },
+  {
+    "slug": "claude-security-mythos-5-enterprise-beta",
+    "title": "Claude Security Scans Now Run on Claude Mythos 5",
+    "excerpt": "Anthropic launched Claude Security scans powered by Claude Mythos 5 for Enterprise customers in public beta. The service provides security findings through an automated scanner rather than direct model access.",
+    "category": "AI Security",
+    "tags": [
+      "Claude",
+      "Security",
+      "Mythos 5",
+      "Enterprise",
+      "AI Safety"
+    ],
+    "word_count": 675,
+    "published_at": "2026-09-02T01:02:33.338620Z"
   }
 ]
