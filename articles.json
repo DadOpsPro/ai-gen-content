@@ -568,5 +568,20 @@
     ],
     "word_count": 675,
     "published_at": "2026-09-02T01:02:33.338620Z"
+  },
+  {
+    "slug": "gitlab-sast-jira-automate-tickets",
+    "title": "GitLab SAST to Jira: Automate Security Tickets",
+    "excerpt": "GitLab's SAST-to-Jira integration automates security ticket creation, but it's narrower than \"auto-dump every finding\" sounds. Discover what actually happens, the real settings, and how to avoid ticket spam.",
+    "category": "DevSecOps",
+    "tags": [
+      "gitlab",
+      "sast",
+      "jira",
+      "security",
+      "automation"
+    ],
+    "word_count": 659,
+    "published_at": "2026-09-03T02:14:19.529347Z"
   }
 ]

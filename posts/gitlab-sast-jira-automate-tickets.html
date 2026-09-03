@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitLab SAST to Jira: Automate Security Tickets | AI Dev Defense</title>
+  <meta name="description" content="Learn how to bridge GitLab SAST findings to Jira tickets automatically. Understand the integration settings, limitations, and best practices for security workflows.">
+  <meta property="og:title" content="GitLab SAST to Jira: Automate Security Tickets">
+  <meta property="og:description" content="Learn how to bridge GitLab SAST findings to Jira tickets automatically. Understand the integration settings, limitations, and best practices for security workflows.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/gitlab-sast-jira-automate-tickets.html">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }
+    .site-header nav a:hover { color: #fff; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+    ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; }
+    .ad-unit:has(ins[data-ad-status="unfilled"]) { display: none; margin: 0 !important; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Articles</a>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>DevSecOps</span> &middot;
+      <span>3 min read</span> &middot;
+      <span>659 words</span>
+    </div>
+    <h1>GitLab SAST to Jira: Automate Security Tickets</h1>
+        <p class="author-byline" style="margin-top:-0.75rem;margin-bottom:1.75rem;color:var(--color-muted);font-size:0.95rem;">
+        By <a href="/about.html" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Chris Clark</a>
+        · AppSec practitioner &amp; AWS Solutions Architect
+        </p>
+        <div class="article-content">
+        
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>GitLab SAST → Jira: One Click Is Not "Auto Dump Every Finding"</h1>
+</p>
+<p>Your scanner found something. Your team lives in Jira. The gap between those two tools is where security work dies: someone copy-pastes a finding into a ticket, loses the file path, or never opens a ticket at all.
+</p>
+<p>GitLab's official bridge is real. It's also narrower than "auto-generate tickets from SAST" sounds. Read the settings before you promise your manager unattended ticket spam.
+
+<h2>What actually happens</h2>
+</p>
+<p>SAST—static application security testing—means the pipeline looks at your source without running the app. You enable it with the SAST CI template (or the UI on Ultimate), and jobs land under the <code>test</code> stage. Findings show up on the pipeline Security tab. On Ultimate, confirmed issues on the default branch appear in <strong>Secure → Vulnerability report</strong>. Findings on feature branches become vulnerabilities when they merge to default.
+</p>
+<p>Jira comes second. Under <strong>Settings → Integrations → Jira issues</strong>, you turn the integration on, point it at Cloud or Data Center/Server, and check <strong>Create Jira issues for vulnerabilities</strong>. Set one Jira project key, pick an issue type. That create-for-vulnerabilities path is <strong>Ultimate only</strong>. The base integration is Free/Premium/Ultimate, but the button you care about is not.
+</p>
+<p>Then the workflow: open the vulnerability → <strong>Create Jira issue</strong>. If you enabled <strong>Customize Jira issues</strong>, GitLab sends you to Jira's create form pre-filled so you can edit before save. Otherwise it creates the issue with info from the report.
+</p>
+<p>That's the product. One vulnerability, one deliberate create. Not "every SAST job opens fifty Jira tickets while you sleep."
+
+<h2>What this is not</h2>
+</p>
+<p>It's not a Free-tier feature. If you only have Free SAST JSON artifacts, you can download reports, but you don't get Vulnerability Management or that Create Jira issue button.
+</p>
+<p>It's not a license to skip triage. SAST is noisy. Opening a Jira ticket for every raw finding trains your team to ignore both tools. Triage first. Then create the ticket for what you'll actually fix.
+</p>
+<p>It's not immune to your Jira field scheme. GitLab's troubleshooting guide says create can fail with "field is required" when Jira demands a field GitLab doesn't send. Their workaround: a dedicated Vulnerability issue type with a field scheme that doesn't require the missing field.
+</p>
+<p>You can also link existing Jira issues by putting <code>/-/security/vulnerabilities/<id></code> in the Jira description. Useful when the ticket already exists and you only need the join.
+
+<h2>What to actually do</h2>
+
+<li>Confirm you're on Ultimate if you need Vulnerability Management and Create Jira issue.</li>
+<li>Turn on SAST (<code>include: template: Jobs/SAST.gitlab-ci.yml</code> or the Security configuration UI).</li>
+<li>Configure Jira issues integration with a user/token that can create issues in the target project. Test settings.</li>
+<li>Enable <strong>Create Jira issues for vulnerabilities</strong>, one project key, issue type. Turn on Customize if humans should edit the ticket before it lands.</li>
+<li>After a default-branch scan, open Secure → Vulnerability report, pick a real finding, create the Jira issue, confirm the link back.</li>
+<li>Fix your Jira required-field scheme before you roll this to every squad.</li>
+</p>
+<p>If someone asks for "fully automatic tickets on every finding," say what the docs say: GitLab gives you a sourced create from the report. Anything beyond that is custom automation you own, not a checkbox you invent.
+
+<h2>Chris's take</h2>
+</p>
+<p>I think custom automation you own is ideal, but if the COTS tool works for you and your team, that's great. I built a Jira ticket job that runs after SAST: it creates tickets from the findings if one doesn't exist, and closes them when the vulnerability no longer exists. We're also a large enterprise app with a pile of custom fields and very specific rules for how security items get created and tracked. I use labels and issue types to drive dashboards for those tickets. It works great for us. It may not be for everyone, though.
+<hr>
+<strong>Sources:</strong>
+<ul>
+<li>https://docs.gitlab.com/integration/jira/configure/</li>
+<li>https://docs.gitlab.com/user/application_security/sast/</li>
+<li>https://docs.gitlab.com/user/application_security/vulnerabilities/</li>
+<li>https://docs.gitlab.com/integration/jira/troubleshooting/</li></ul>
+</p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="5959465348"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+        </div>
+    <div class="tags">Tags: gitlab · sast · jira · security · automation</div>
+  </main>
+  <footer>
+    <p>&copy; AI Dev Defense · <a href="/about.html" style="color:#888">About</a> ·
+    <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>
