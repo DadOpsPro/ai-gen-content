@@ -583,5 +583,20 @@
     ],
     "word_count": 659,
     "published_at": "2026-09-03T02:14:19.529347Z"
+  },
+  {
+    "slug": "developer-security-champion-dual-role",
+    "title": "Dev and Security Champ: Managing the Dual Role",
+    "excerpt": "Getting appointed as a security champion while maintaining your dev duties is real—and often becomes an unpaid second job. Understand what the role actually entails and how to set boundaries.",
+    "category": "Security",
+    "tags": [
+      "security champion",
+      "application security",
+      "developer responsibilities",
+      "security culture",
+      "AppSec"
+    ],
+    "word_count": 749,
+    "published_at": "2026-09-04T01:34:18.514610Z"
   }
 ]
