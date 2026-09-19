@@ -68,7 +68,10 @@
            text-decoration: none; font-family: var(--sans); font-weight: 700;
            padding: 0.75rem 1.4rem; border-radius: 999px; }
     .cta:hover { background: #14d6a4; }
-    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px; }
+    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px;
+                      overflow: hidden; aspect-ratio: 3 / 4; }
+    .featured-panel img { display: block; width: 100%; height: 100%;
+                          object-fit: cover; border-radius: 16px; }
     .recent-block { max-width: 1040px; margin: 2.75rem auto 3rem; padding: 0 1.5rem; }
     .recent-header { display: flex; align-items: baseline; justify-content: space-between;
                      margin-bottom: 1.25rem; }
@@ -103,7 +106,7 @@
                    color: var(--muted); font-size: 0.9rem; }
     @media (max-width: 800px) {
       .featured-week, .recent-grid { grid-template-columns: 1fr; }
-      .featured-panel { min-height: 120px; }
+      .featured-panel { aspect-ratio: 1 / 1; min-height: 160px; }
     }
 
   </style>

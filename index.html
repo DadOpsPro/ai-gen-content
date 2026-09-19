@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Dev Defense — Article of the Week</title>
   <meta name="description" content="AI Dev Defense: featured weekly writing on Java, GitLab AppSec, and developer-as-security-champion work.">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -69,7 +69,10 @@
            text-decoration: none; font-family: var(--sans); font-weight: 700;
            padding: 0.75rem 1.4rem; border-radius: 999px; }
     .cta:hover { background: #14d6a4; }
-    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px; }
+    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px;
+                      overflow: hidden; aspect-ratio: 3 / 4; }
+    .featured-panel img { display: block; width: 100%; height: 100%;
+                          object-fit: cover; border-radius: 16px; }
     .recent-block { max-width: 1040px; margin: 2.75rem auto 3rem; padding: 0 1.5rem; }
     .recent-header { display: flex; align-items: baseline; justify-content: space-between;
                      margin-bottom: 1.25rem; }
@@ -104,7 +107,7 @@
                    color: var(--muted); font-size: 0.9rem; }
     @media (max-width: 800px) {
       .featured-week, .recent-grid { grid-template-columns: 1fr; }
-      .featured-panel { min-height: 120px; }
+      .featured-panel { aspect-ratio: 1 / 1; min-height: 160px; }
     }
 
   </style>
@@ -124,7 +127,7 @@
                 <p class="pitch">Getting appointed as a security champion while maintaining your dev duties is real—and often becomes an unpaid second job. Understand what the role actually entails and how to set boundaries.</p>
                 <a href="posts/developer-security-champion-dual-role.html" class="cta">Read article</a>
               </div>
-              <div class="featured-panel" aria-hidden="true"></div>
+              <div class="featured-panel"><img src="images/featured/developer-security-champion-dual-role.webp" alt="Editorial illustration for Dev and Security Champ: Managing the Dual Role (AI-generated)" width="768" height="1024"></div>
             </section>
   
             <section class="recent-block">
