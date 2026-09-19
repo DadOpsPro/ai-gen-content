@@ -215,6 +215,18 @@ Shows: article count, estimated traffic, revenue projections, pipeline health.
 | `seed` | `--mode seed` | First run — generate 15 articles |
 | `daily` | `--mode daily` | Ongoing — 1-2 new articles/day |
 | `newsletter` | `--mode newsletter` | Weekly email digest |
+| `review` | `--mode review` | Draft + email for Chris — does not publish |
+| `pages` | `--mode pages` | Rebuild homepage/archive from the registry |
+
+### Featured Article-of-the-Week image
+
+The homepage right-hand panel shows a brand-locked editorial illustration for the current featured article when `images/featured/{slug}.webp` (or `.png`) exists. Generation is optional:
+
+1. Add repository secret `OPENAI_API_KEY` (Settings → Secrets and variables → Actions).
+2. Re-run **Content Engine** with mode `pages`. A new file is written only if that slug is missing.
+3. If the key is unset or the API fails, the solid teal panel stays — the site never breaks.
+
+Do not delete a cached file unless you want that slug regenerated. Seed art for the live dual-role piece ships in `static/images/featured/`.
 
 ---
 

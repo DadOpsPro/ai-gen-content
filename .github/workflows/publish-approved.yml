@@ -55,6 +55,12 @@ jobs:
           else
             echo "No registry found — starting fresh"
           fi
+          mkdir -p site/output/images/featured
+          if git archive origin/gh-pages images/featured 2>/dev/null | tar -x -C site/output; then
+            echo "Restored featured image cache"
+          else
+            echo "No featured image cache on gh-pages yet"
+          fi
 
       - name: Restore pending draft
         run: |
@@ -73,6 +79,7 @@ jobs:
       - name: Generate and publish final article
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY:    ${{ secrets.OPENAI_API_KEY }}
           ADSENSE_PUB_ID:    ${{ secrets.ADSENSE_PUB_ID }}
           ADSENSE_SLOT_ID:   ${{ secrets.ADSENSE_SLOT_ID }}
           AMAZON_TAG:        ${{ secrets.AMAZON_TAG }}

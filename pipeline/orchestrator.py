@@ -317,6 +317,7 @@ def _restore_live_site_into_output() -> None:
     static_gen = StaticSiteGenerator()
     static_gen.restore_existing_posts()
     static_gen.restore_existing_drafts()
+    static_gen.restore_featured_images()
 
 
 def _pending_review_drafts():

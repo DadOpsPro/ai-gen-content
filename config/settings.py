@@ -43,6 +43,7 @@ TOPIC_CLUSTERS = [
 
 # ── API KEYS (load from environment variables) ─────────────────────────────────
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+OPENAI_API_KEY    = os.getenv("OPENAI_API_KEY", "")      # optional: featured hero images
 SERPER_API_KEY    = os.getenv("SERPER_API_KEY", "")      # Google Search API (serper.dev)
 WORDPRESS_URL     = os.getenv("WORDPRESS_URL", "")
 WORDPRESS_USER    = os.getenv("WORDPRESS_USER", "")
