@@ -17,6 +17,7 @@ on:
           - newsletter
           - plan
           - review
+          - pages
 
 permissions:
   contents: write

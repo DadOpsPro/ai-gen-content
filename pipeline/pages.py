@@ -14,7 +14,21 @@ from pathlib import Path
 from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from config.settings import SITE_NAME, SITE_URL, AUTHOR_NAME, OUTPUT_DIR
+from config.settings import SITE_NAME, SITE_URL, AUTHOR_NAME, OUTPUT_DIR, AI_DISCLOSURE
+
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+
+
+def _write_generated_page(path: Path, html: str, label: str) -> str:
+    """Prefer the checked-in static/ page when one exists."""
+    checked_in = STATIC_DIR / path.name
+    if checked_in.exists():
+        print(f"  ⏭️  {path.name} kept from static/")
+        return str(checked_in)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(html, encoding="utf-8")
+    print(f"  ✅ {label} generated")
+    return str(path)
 
 PAGE_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -81,6 +95,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     footer {{ background: #0a0f1e; color: #888; text-align: center;
               padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }}
     footer a {{ color: #888; }}
+    .ai-disclosure {{ color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem;
+                      font-size: 0.82rem; line-height: 1.5; }}
   </style>
 </head>
 <body>
@@ -88,8 +104,8 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <a href="/">{site_name}</a>
     <nav>
       <a href="/">Home</a>
+      <a href="/archive.html">Archive</a>
       <a href="/about.html">About</a>
-      <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
   <main class="page-container">
@@ -97,7 +113,9 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <p class="last-updated">Last updated: {last_updated}</p>
   </main>
   <footer>
+    <p class="ai-disclosure">{ai_disclosure}</p>
     <p>&copy; {year} {site_name} &middot;
+    <a href="/archive.html">Archive</a> &middot;
     <a href="/privacy.html">Privacy Policy</a> &middot;
     <a href="/affiliate-disclosure.html">Affiliate Disclosure</a> &middot;
     <a href="/about.html">About</a></p>
@@ -170,6 +188,11 @@ def build_about_page(output_dir: str = OUTPUT_DIR) -> str:
        editorial judgment. See our full
        <a href="/affiliate-disclosure.html">Affiliate Disclosure</a>.</p>
 
+    <h2>How articles are written</h2>
+    <p>{AI_DISCLOSURE} Chris reviews drafts and adds firsthand notes
+       before anything is published. The drafts-to-review pipeline is
+       unchanged.</p>
+
     <h2>Stay in the Loop</h2>
     <p>The best way to follow our work is via the weekly newsletter — a
        curated digest of the week's most important developments in AI testing
@@ -194,13 +217,11 @@ def build_about_page(output_dir: str = OUTPUT_DIR) -> str:
         content=content,
         last_updated=datetime.now().strftime("%B %d, %Y"),
         year=datetime.now().year,
+        ai_disclosure=AI_DISCLOSURE,
     )
 
     path = Path(output_dir) / "about.html"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(html, encoding="utf-8")
-    print("  ✅ About page generated")
-    return str(path)
+    return _write_generated_page(path, html, "About page")
 
 
 def build_privacy_page(output_dir: str = OUTPUT_DIR) -> str:
@@ -321,12 +342,11 @@ def build_privacy_page(output_dir: str = OUTPUT_DIR) -> str:
         content=content,
         last_updated=datetime.now().strftime("%B %d, %Y"),
         year=datetime.now().year,
+        ai_disclosure=AI_DISCLOSURE,
     )
 
     path = Path(output_dir) / "privacy.html"
-    path.write_text(html, encoding="utf-8")
-    print("  ✅ Privacy Policy generated")
-    return str(path)
+    return _write_generated_page(path, html, "Privacy Policy")
 
 
 def build_affiliate_disclosure_page(output_dir: str = OUTPUT_DIR) -> str:
@@ -386,12 +406,11 @@ def build_affiliate_disclosure_page(output_dir: str = OUTPUT_DIR) -> str:
         content=content,
         last_updated=datetime.now().strftime("%B %d, %Y"),
         year=datetime.now().year,
+        ai_disclosure=AI_DISCLOSURE,
     )
 
     path = Path(output_dir) / "affiliate-disclosure.html"
-    path.write_text(html, encoding="utf-8")
-    print("  ✅ Affiliate Disclosure generated")
-    return str(path)
+    return _write_generated_page(path, html, "Affiliate Disclosure")
 
 
 def build_404_page(output_dir: str = OUTPUT_DIR) -> str:
@@ -419,6 +438,7 @@ def build_404_page(output_dir: str = OUTPUT_DIR) -> str:
         content=content,
         last_updated=datetime.now().strftime("%B %d, %Y"),
         year=datetime.now().year,
+        ai_disclosure=AI_DISCLOSURE,
     )
 
     path = Path(output_dir) / "404.html"
