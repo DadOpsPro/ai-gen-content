@@ -284,13 +284,36 @@ def print_content_calendar():
     print(f"Total: {len(calendar)} planned articles\n")
 
 
+def _restore_article_registry() -> None:
+    """Copy articles.json from gh-pages so listing rebuilds keep the full catalog."""
+    import subprocess
+
+    repo_root = Path(__file__).resolve().parent.parent
+    dest = repo_root / "site" / "output" / "articles.json"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(
+        ["git", "fetch", "origin", "gh-pages", "--depth=50"],
+        cwd=repo_root, capture_output=True,
+    )
+    proc = subprocess.run(
+        ["git", "show", "origin/gh-pages:articles.json"],
+        cwd=repo_root, capture_output=True,
+    )
+    if proc.returncode == 0 and proc.stdout:
+        dest.write_bytes(proc.stdout)
+        print("  📚 Restored article registry from gh-pages")
+    else:
+        print("  ⚠️  No articles.json on gh-pages — listings may be empty")
+
+
 def _restore_live_site_into_output() -> None:
-    """Pull published posts and pending drafts from gh-pages so a deploy cannot wipe them."""
+    """Pull published posts, drafts, and the article registry from gh-pages."""
     import shutil
     # Actions cache can resurrect skipped drafts in site/output/drafts. Only gh-pages counts.
     drafts_dir = Path(__file__).resolve().parent.parent / "site" / "output" / "drafts"
     if drafts_dir.exists():
         shutil.rmtree(drafts_dir)
+    _restore_article_registry()
     static_gen = StaticSiteGenerator()
     static_gen.restore_existing_posts()
     static_gen.restore_existing_drafts()
