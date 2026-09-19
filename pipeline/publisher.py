@@ -21,9 +21,13 @@ from config.settings import (
     WORDPRESS_URL, WORDPRESS_USER, WORDPRESS_APP_PW,
     MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID,
     SITE_NAME, SITE_URL, ADSENSE_PUBLISHER_ID, ADSENSE_SLOT_ID,
-    OUTPUT_DIR
+    OUTPUT_DIR, AI_DISCLOSURE, LISTING_WINDOW_MONTHS,
 )
 from pipeline.generator import GeneratedArticle
+from pipeline.chrome import SITE_CHROME_CSS, site_footer_html, site_nav_html
+from pipeline.listings import (
+    archive_by_month, featured_and_recent, listed_articles, read_time_minutes,
+)
 
 
 # ── WORDPRESS PUBLISHER ────────────────────────────────────────────────────────
@@ -262,40 +266,105 @@ class StaticSiteGenerator:
         return {"success": True, "url": url, "path": str(filepath)}
 
     def build_index(self) -> str:
-        """Build the main index.html from the full persistent registry."""
-        # Most-recent articles first
-        all_articles = list(reversed(self._registry))
-        cards_html = ""
-        for record in all_articles:
-            slug      = record["slug"]
-            title     = record["title"]
-            excerpt   = record["excerpt"]
-            category  = record["category"]
-            tags      = record.get("tags", [])
-            wc        = record.get("word_count", 0)
-            read_time = max(1, wc // 200)
-            tag_html  = "".join(f'<span class="tag">{t}</span>' for t in tags[:3])
-            cards_html += f"""
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">{category}</span>
-                    <span class="read-time">~{read_time} min read</span>
-                </div>
-                <h2><a href="posts/{slug}.html">{title}</a></h2>
-                <p class="excerpt">{excerpt}</p>
-                <div class="tags">{tag_html}</div>
-                <a href="posts/{slug}.html" class="read-more">Read article →</a>
-            </article>"""
-
-        index = INDEX_TEMPLATE.replace("{{POSTS}}", cards_html)
+        """Build homepage: Article of the Week + a few recent cards."""
+        featured, recent = featured_and_recent(self._registry)
+        listed = listed_articles(self._registry)
+        index = INDEX_TEMPLATE.replace("{{FEATURED}}", self._render_featured(featured))
+        index = index.replace("{{RECENT}}", self._render_recent(recent))
         index_path = self.output_dir / "index.html"
         index_path.write_text(index, encoding="utf-8")
-        print(f"  ✅ Index built: {len(all_articles)} articles (all-time)")
-        self.build_sitemap()
+        print(f"  ✅ Index built: featured week + {len(recent)} recent "
+              f"({len(listed)} listed / {len(self._registry)} all-time)")
+        self.build_archive()
         self.build_sitemap()
         self.copy_static_assets()
         return str(index_path)
-        return str(index_path)
+
+    def _render_featured(self, record: Optional[dict]) -> str:
+        if not record:
+            return """
+            <section class="featured-week">
+              <div class="featured-copy">
+                <span class="badge">Article of the Week</span>
+                <h1>New writing is on the way</h1>
+                <p class="pitch">Hands-on notes on Java, GitLab AppSec, and
+                the developer-as-security-champion dual role.</p>
+                <a href="/archive.html" class="cta">Browse the archive</a>
+              </div>
+              <div class="featured-panel" aria-hidden="true"></div>
+            </section>"""
+        slug = record["slug"]
+        return f"""
+            <section class="featured-week">
+              <div class="featured-copy">
+                <span class="badge">Article of the Week</span>
+                <h1>{record["title"]}</h1>
+                <p class="pitch">{record.get("excerpt", "")}</p>
+                <a href="posts/{slug}.html" class="cta">Read article</a>
+              </div>
+              <div class="featured-panel" aria-hidden="true"></div>
+            </section>"""
+
+    def _render_recent(self, records: List[dict]) -> str:
+        if not records:
+            return """
+            <section class="recent-block">
+              <div class="recent-header">
+                <h2>Recent</h2>
+                <a href="/archive.html">Full archive →</a>
+              </div>
+              <p class="empty-recent">No other recent posts in the last year yet.</p>
+            </section>"""
+        cards = []
+        for record in records:
+            slug = record["slug"]
+            read_time = read_time_minutes(record)
+            cards.append(f"""
+              <article class="recent-card">
+                <span class="category">{record.get("category", "")}</span>
+                <h3><a href="posts/{slug}.html">{record["title"]}</a></h3>
+                <p>{record.get("excerpt", "")}</p>
+                <span class="read-time">~{read_time} min read</span>
+              </article>""")
+        return f"""
+            <section class="recent-block">
+              <div class="recent-header">
+                <h2>Recent</h2>
+                <a href="/archive.html">Full archive →</a>
+              </div>
+              <div class="recent-grid">
+                {''.join(cards)}
+              </div>
+            </section>"""
+
+    def build_archive(self) -> str:
+        """Build archive.html — last ~12 months, grouped by month."""
+        groups = archive_by_month(self._registry)
+        sections = []
+        total = 0
+        for label, articles in groups:
+            items = []
+            for record in articles:
+                slug = record["slug"]
+                read_time = read_time_minutes(record)
+                items.append(
+                    f'<li><a href="posts/{slug}.html">{record["title"]}</a>'
+                    f'<span>~{read_time} min</span></li>'
+                )
+                total += 1
+            sections.append(f"""
+            <section class="month-group">
+              <h2>{label}</h2>
+              <ul class="archive-list">
+                {''.join(items)}
+              </ul>
+            </section>""")
+        body = "".join(sections) or "<p>No posts in the last 12 months.</p>"
+        html = ARCHIVE_TEMPLATE.replace("{{MONTHS}}", body)
+        path = self.output_dir / "archive.html"
+        path.write_text(html, encoding="utf-8")
+        print(f"  ✅ Archive built: {total} posts in {len(groups)} month(s)")
+        return str(path)
 
     def build_sitemap(self) -> str:
         """Generate a clean, valid sitemap.xml."""
@@ -311,6 +380,7 @@ class StaticSiteGenerator:
 
         # Static pages
         static_pages = [
+            ("archive.html", "0.8"),
             ("about.html", "0.7"),
             ("privacy.html", "0.4"),
             ("affiliate-disclosure.html", "0.3"),
@@ -361,6 +431,7 @@ class StaticSiteGenerator:
             slug=article.slug,
             adsense_pub=ADSENSE_PUBLISHER_ID,
             adsense_slot=ADSENSE_SLOT_ID,
+            ai_disclosure=AI_DISCLOSURE,
         )
 
     def copy_static_assets(self) -> None:
@@ -523,6 +594,8 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
     .site-header nav {{ margin-left: auto; display: flex; gap: 1.5rem; }}
     .site-header nav a {{ color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }}
     .site-header nav a:hover {{ color: #fff; }}
+    .ai-disclosure {{ color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem;
+                     font-size: 0.82rem; line-height: 1.5; }}
     .article-container {{ max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }}
     .article-meta {{ color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }}
     h1 {{ font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
@@ -560,9 +633,9 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
   <header class="site-header">
     <a href="/" class="logo">{site_name}</a>
     <nav>
-      <a href="/">Articles</a>
+      <a href="/">Home</a>
+      <a href="/archive.html">Archive</a>
       <a href="/about.html">About</a>
-      <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
   <main class="article-container">
@@ -582,7 +655,9 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
     <div class="tags">Tags: {tags}</div>
   </main>
   <footer>
-    <p>&copy; {site_name} · <a href="/about.html" style="color:#888">About</a> ·
+    <p class="ai-disclosure">{ai_disclosure}</p>
+    <p>&copy; {site_name} · <a href="/archive.html" style="color:#888">Archive</a> ·
+    <a href="/about.html" style="color:#888">About</a> ·
     <a href="/privacy.html" style="color:#888">Privacy</a> ·
     <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
   </footer>
@@ -590,14 +665,68 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
 </html>"""
 
 
+_LISTING_PAGE_CSS = """
+    .featured-week { max-width: 1040px; margin: 2.5rem auto 0; padding: 0 1.5rem;
+                     display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 2rem;
+                     align-items: stretch; }
+    .featured-copy { background: var(--navy); color: #fff; border-radius: 16px;
+                     padding: 2.75rem 2.5rem; }
+    .badge { display: inline-block; font-family: var(--sans); font-size: 0.72rem;
+             letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal);
+             font-weight: 700; margin-bottom: 1rem; }
+    .featured-copy h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.2;
+                        margin-bottom: 1rem; color: #fff; }
+    .pitch { color: #c5cdd6; font-size: 1.05rem; max-width: 36rem;
+             margin-bottom: 1.75rem; }
+    .cta { display: inline-block; background: var(--teal); color: var(--navy);
+           text-decoration: none; font-family: var(--sans); font-weight: 700;
+           padding: 0.75rem 1.4rem; border-radius: 999px; }
+    .cta:hover { background: #14d6a4; }
+    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px; }
+    .recent-block { max-width: 1040px; margin: 2.75rem auto 3rem; padding: 0 1.5rem; }
+    .recent-header { display: flex; align-items: baseline; justify-content: space-between;
+                     margin-bottom: 1.25rem; }
+    .recent-header h2 { font-size: 1.35rem; }
+    .recent-header a { font-family: var(--sans); font-size: 0.9rem; }
+    .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .recent-card { background: var(--card); border-radius: 12px; padding: 1.4rem 1.35rem;
+                   box-shadow: 0 2px 12px rgba(10,15,30,.06); border: 1px solid var(--line); }
+    .recent-card .category { font-family: var(--sans); font-size: 0.72rem; color: var(--teal-dark);
+                             text-transform: uppercase; letter-spacing: 0.06em; }
+    .recent-card h3 { font-size: 1.05rem; line-height: 1.35; margin: 0.55rem 0 0.6rem; }
+    .recent-card h3 a { color: var(--navy); text-decoration: none; }
+    .recent-card h3 a:hover { color: var(--teal-dark); }
+    .recent-card p { color: #555; font-size: 0.9rem; margin-bottom: 0.85rem; }
+    .read-time, .empty-recent { color: var(--muted); font-size: 0.82rem; font-family: var(--sans); }
+    .archive-wrap { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem 1rem; }
+    .archive-wrap h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 0.5rem; }
+    .archive-lede { color: var(--muted); margin-bottom: 2.5rem; }
+    .month-group { margin-bottom: 2.25rem; }
+    .month-group h2 { font-size: 1.1rem; color: var(--navy); padding-bottom: 0.5rem;
+                      border-bottom: 2px solid var(--line); margin-bottom: 0.85rem; }
+    .archive-list { list-style: none; }
+    .archive-list li { display: flex; justify-content: space-between; gap: 1rem;
+                       padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+    .archive-list a { color: var(--navy); text-decoration: none; font-weight: 600; }
+    .archive-list a:hover { color: var(--teal-dark); }
+    .archive-list span { color: var(--muted); font-size: 0.8rem; font-family: var(--sans);
+                         white-space: nowrap; }
+    .retire-note { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+                   color: var(--muted); font-size: 0.9rem; }
+    @media (max-width: 800px) {
+      .featured-week, .recent-grid { grid-template-columns: 1fr; }
+      .featured-panel { min-height: 120px; }
+    }
+"""
+
 INDEX_TEMPLATE = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{SITE_NAME} — {SITE_URL}</title>
+  <title>{SITE_NAME} — Article of the Week</title>
+  <meta name="description" content="{SITE_NAME}: featured weekly writing on Java, GitLab AppSec, and developer-as-security-champion work.">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -611,62 +740,48 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <style>
-    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: 'Georgia', serif; color: #1a1a2e; background: #f9f9f9; }}
-    .site-nav {{ background: #0a0a1a; display: flex; align-items: center; padding: 0.85rem 2rem; gap: 1rem; }}
-    .site-nav a.logo {{ color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.1rem; }}
-    .site-nav nav {{ margin-left: auto; display: flex; gap: 1.5rem; }}
-    .site-nav nav a {{ color: #aaa; text-decoration: none; font-size: 0.9rem; }}
-    .site-nav nav a:hover {{ color: #fff; }}
-    .hero {{ background: #0a0a1a; color: #fff; padding: 4rem 2rem; text-align: center; }}
-    .hero h1 {{ font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }}
-    .hero p {{ color: #aaa; font-size: 1.15rem; max-width: 500px; margin: 0 auto 2rem; }}
-    .newsletter-form {{ display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }}
-    .newsletter-form input {{ padding: .75rem 1rem; border: none; border-radius: 6px;
-                               font-size: 1rem; width: 280px; }}
-    .newsletter-form button {{ background: #0070f3; color: #fff; border: none; padding: .75rem 1.5rem;
-                                border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold; }}
-    .posts-grid {{ max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem;
-                   display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }}
-    .post-card {{ background: #fff; border-radius: 12px; padding: 1.75rem;
-                  box-shadow: 0 2px 12px rgba(0,0,0,.08); transition: transform .2s; }}
-    .post-card:hover {{ transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,.12); }}
-    .post-meta {{ display: flex; gap: .75rem; font-size: .8rem; color: #888; margin-bottom: .75rem; }}
-    .category {{ background: #e8f0ff; color: #0070f3; padding: .2rem .5rem; border-radius: 4px; }}
-    .post-card h2 {{ font-size: 1.15rem; line-height: 1.4; margin-bottom: .75rem; }}
-    .post-card h2 a {{ color: #0a0a1a; text-decoration: none; }}
-    .post-card h2 a:hover {{ color: #0070f3; }}
-    .excerpt {{ color: #555; font-size: .9rem; line-height: 1.6; margin-bottom: 1rem; }}
-    .tags {{ display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }}
-    .tag {{ background: #f0f0f0; color: #555; padding: .15rem .5rem; border-radius: 3px; font-size: .75rem; }}
-    .read-more {{ color: #0070f3; font-weight: bold; font-size: .9rem; text-decoration: none; }}
-    footer {{ background: #0a0a1a; color: #888; text-align: center; padding: 2rem; font-size: .85rem; }}
-    footer a {{ color: #888; }}
+""" + SITE_CHROME_CSS + _LISTING_PAGE_CSS + f"""
   </style>
 </head>
 <body>
-  <div class="site-nav">
-    <a href="/" class="logo">{SITE_NAME}</a>
-    <nav>
-      <a href="/">Articles</a>
-      <a href="/about.html">About</a>
-      <a href="/privacy.html">Privacy</a>
-    </nav>
-  </div>
-  <header class="hero">
-    <h1>{SITE_NAME}</h1>
-    <p>AI-powered insights for software testing professionals</p>
-    <div class="newsletter-form">
-      <input type="email" placeholder="your@email.com">
-      <button>Get Weekly Digest →</button>
-    </div>
-  </header>
-  <div class="posts-grid">
-    {{{{POSTS}}}}
-  </div>
-  <footer>
-    <p>&copy; {SITE_NAME} · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · 
-    <a href="/affiliate-disclosure.html">Affiliate Disclosure</a></p>
-  </footer>
+{site_nav_html("Home")}
+  {{{{FEATURED}}}}
+  {{{{RECENT}}}}
+{site_footer_html()}
+</body>
+</html>"""
+
+ARCHIVE_TEMPLATE = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive | {SITE_NAME}</title>
+  <meta name="description" content="Posts from the last {LISTING_WINDOW_MONTHS} months on {SITE_NAME}.">
+  <link rel="canonical" href="{SITE_URL}/archive.html">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <style>
+""" + SITE_CHROME_CSS + _LISTING_PAGE_CSS + f"""
+  </style>
+</head>
+<body>
+{site_nav_html("Archive")}
+  <main class="archive-wrap">
+    <h1>Archive</h1>
+    <p class="archive-lede">Reverse-chronological posts from the last {LISTING_WINDOW_MONTHS} months, grouped by month.</p>
+    {{{{MONTHS}}}}
+    <p class="retire-note">Articles older than {LISTING_WINDOW_MONTHS} months are quietly retired from home and archive listings. Their permalinks stay live.</p>
+  </main>
+{site_footer_html()}
 </body>
 </html>"""

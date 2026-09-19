@@ -1,0 +1,120 @@
+"""
+pipeline/listings.py
+────────────────────
+Homepage / archive listing helpers.
+
+Posts older than LISTING_WINDOW_MONTHS leave listings (home, archive,
+index) but keep their permalinks. No hard deletes.
+"""
+
+from __future__ import annotations
+
+from collections import OrderedDict
+from datetime import datetime, timedelta, timezone
+from typing import Dict, Iterable, List, Optional, Tuple
+
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+from config.settings import HOME_RECENT_COUNT, LISTING_WINDOW_MONTHS
+
+ArticleRecord = Dict
+
+
+def parse_published_at(value: Optional[str]) -> Optional[datetime]:
+    """Parse a registry published_at string into an aware UTC datetime."""
+    if not value:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        dt = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+
+def listing_cutoff(now: Optional[datetime] = None,
+                   months: int = LISTING_WINDOW_MONTHS) -> datetime:
+    """Approximate N-month cutoff (~30.44 days per month)."""
+    now = now or datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+    return now - timedelta(days=int(months * 30.44))
+
+
+def is_in_listing_window(record: ArticleRecord,
+                         now: Optional[datetime] = None,
+                         months: int = LISTING_WINDOW_MONTHS) -> bool:
+    """
+    True if the article should appear on home/archive.
+
+    Missing dates stay listed so we never hide a live post we cannot date.
+    """
+    published = parse_published_at(record.get("published_at"))
+    if published is None:
+        return True
+    return published >= listing_cutoff(now=now, months=months)
+
+
+def _sort_key(record: ArticleRecord) -> datetime:
+    published = parse_published_at(record.get("published_at"))
+    if published is None:
+        return datetime.min.replace(tzinfo=timezone.utc)
+    return published
+
+
+def listed_articles(registry: Iterable[ArticleRecord],
+                    now: Optional[datetime] = None,
+                    months: int = LISTING_WINDOW_MONTHS) -> List[ArticleRecord]:
+    """Reverse-chron articles still inside the listing window."""
+    visible = [
+        record for record in registry
+        if is_in_listing_window(record, now=now, months=months)
+    ]
+    return sorted(visible, key=_sort_key, reverse=True)
+
+
+def featured_and_recent(
+    registry: Iterable[ArticleRecord],
+    now: Optional[datetime] = None,
+    recent_count: int = HOME_RECENT_COUNT,
+) -> Tuple[Optional[ArticleRecord], List[ArticleRecord]]:
+    """Newest listed post as Article of the Week, then up to N recent cards."""
+    visible = listed_articles(registry, now=now)
+    if not visible:
+        return None, []
+    featured = visible[0]
+    recent = visible[1:1 + recent_count]
+    return featured, recent
+
+
+def archive_by_month(
+    registry: Iterable[ArticleRecord],
+    now: Optional[datetime] = None,
+) -> List[Tuple[str, List[ArticleRecord]]]:
+    """
+    Group listed articles by calendar month, newest month first.
+
+    Returns a list of (label, articles) such as ("September 2026", [...]).
+    """
+    groups: "OrderedDict[str, List[ArticleRecord]]" = OrderedDict()
+    for record in listed_articles(registry, now=now):
+        published = parse_published_at(record.get("published_at"))
+        if published is None:
+            label = "Undated"
+        else:
+            label = published.strftime("%B %Y")
+        groups.setdefault(label, []).append(record)
+    return list(groups.items())
+
+
+def read_time_minutes(record: ArticleRecord) -> int:
+    word_count = int(record.get("word_count") or 0)
+    return max(1, word_count // 200)

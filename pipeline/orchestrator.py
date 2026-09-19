@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from config.settings import (
     ANTHROPIC_API_KEY, OUTPUT_DIR, ARTICLES_PER_SEED_RUN, SITE_NAME
 )
+from pipeline.topics import topic_relevance_score
 from pipeline.scraper import gather_trending_topics, TrendingTopic
 from pipeline.generator import generate_article, generate_newsletter, plan_content_calendar, generate_draft_for_review
 from pipeline.publisher import WordPressPublisher, StaticSiteGenerator, MailchimpPublisher
@@ -163,15 +164,20 @@ def run_daily_pipeline():
             print("All scheduled content already published.")
             return
     else:
-        # Pick top 2 trending topics
+        # Prefer how-to / deep-dive over generic trend roundups.
+        # gather_trending_topics already stack-ranks; skip leftover noise.
+        stack_topics = [
+            t for t in topics
+            if topic_relevance_score(t.title, t.summary) >= 0
+        ] or topics[:2]
         topics_to_write = [
             {
                 "topic":        t.title,
-                "article_type": "trend_roundup" if i == 0 else "how_to_guide",
+                "article_type": "how_to_guide" if i == 0 else "deep_dive",
                 "keywords":     t.keywords[:5],
                 "context":      t.summary,
             }
-            for i, t in enumerate(topics[:2])
+            for i, t in enumerate(stack_topics[:2])
         ]
 
     published = []
@@ -338,7 +344,7 @@ def run_review_pipeline():
         context      = t.summary
         keywords     = t.keywords[:5]
         sources      = [{"name": getattr(t, "source_name", ""), "url": getattr(t, "source_url", "")}]
-        article_type = "trend_roundup"
+        article_type = "how_to_guide"
     else:
         calendar = plan_content_calendar(5)
         item         = calendar[0]
@@ -385,11 +391,28 @@ def run_review_pipeline():
         print(f"   Draft saved at: {draft_path}")
 
 
+def run_pages_pipeline():
+    """
+    Rebuild homepage, archive, and static chrome from the article registry.
+    Does not generate or publish a new article — drafts stay drafts.
+    """
+    print(f"\n{'='*60}")
+    print(f"📄 PAGES PIPELINE — rebuild listings only")
+    print(f"{'='*60}")
+
+    _restore_live_site_into_output()
+    static_gen = StaticSiteGenerator()
+    static_gen.build_index()
+    from pipeline.pages import build_all_pages
+    build_all_pages()
+    print("✅ Homepage, archive, and static pages rebuilt")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=f"{SITE_NAME} Content Engine")
     parser.add_argument(
         "--mode",
-        choices=["seed", "daily", "newsletter", "plan", "review"],
+        choices=["seed", "daily", "newsletter", "plan", "review", "pages"],
         default="plan",
         help="Pipeline mode to run"
     )
@@ -407,3 +430,5 @@ if __name__ == "__main__":
         print_content_calendar()
     elif args.mode == "review":
         run_review_pipeline()
+    elif args.mode == "pages":
+        run_pages_pipeline()

@@ -242,6 +242,7 @@ Requirements:
 - Few headers. No formal tone. No academic citations in the body — use a short "Google said X ([link])" style.
 - Include [CHRIS TAKE] placeholder exactly once
 - Do not fabricate statistics or quotes — use only what the sources support. Skip anything you cannot source. Never write [UNVERIFIED].
+- Write so Chris can add firsthand notes: Java / Java 8, GitLab SAST → Jira, security-champion dual role, Claude Security / Mythos scans, CVE explainers, or package-registry / CI-CD supply chain. Skip generic AI industry roundups and vendor news dumps.
 - Keywords: {keywords}
 
 Sources available:
@@ -650,17 +651,17 @@ def plan_content_calendar(topics_count: int = 20) -> List[Dict]:
     """Generate a content calendar mixing article types strategically."""
     from config.settings import TOPIC_CLUSTERS, ARTICLE_TYPES
 
-    # SEO strategy: mix of types for maximum coverage
+    # Hands-on types first. trend_roundup is rare — not a vendor-news dump.
     type_rotation = [
-        "how_to_guide",   # High search intent
-        "tool_review",    # High commercial intent
-        "trend_roundup",  # Fresh, frequent traffic
-        "comparison",     # High buyer intent
         "how_to_guide",
-        "deep_dive",      # Authoritative, backlink magnet
+        "deep_dive",
+        "how_to_guide",
         "tool_review",
-        "how_to_guide",
         "comparison",
+        "how_to_guide",
+        "deep_dive",
+        "case_study",
+        "how_to_guide",
         "trend_roundup",
     ]
 
@@ -671,11 +672,12 @@ def plan_content_calendar(topics_count: int = 20) -> List[Dict]:
 
         # Generate specific topic angles per type
         angles = {
-            "tool_review":    f"Best {topic_base} tools: In-depth review",
-            "how_to_guide":   f"How to implement {topic_base} in 2025",
-            "trend_roundup":  f"Latest trends in {topic_base}",
-            "comparison":     f"{topic_base}: Top tools compared",
-            "deep_dive":      f"Complete guide to {topic_base}",
+            "tool_review":    f"Hands-on review: {topic_base}",
+            "how_to_guide":   f"How to implement {topic_base}",
+            "trend_roundup":  f"What changed this week in {topic_base}",
+            "comparison":     f"{topic_base}: what actually matters in practice",
+            "deep_dive":      f"Practitioner guide to {topic_base}",
+            "case_study":     f"Lessons from running {topic_base}",
         }
         topic = angles.get(article_type, f"Guide to {topic_base}")
 
@@ -683,7 +685,7 @@ def plan_content_calendar(topics_count: int = 20) -> List[Dict]:
             "index":        i + 1,
             "article_type": article_type,
             "topic":        topic,
-            "keywords":     [topic_base, NICHE, "2025"],
+            "keywords":     [topic_base, NICHE, "2026"],
             "priority":     "high" if i < 5 else "medium",
         })
 

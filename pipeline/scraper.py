@@ -18,6 +18,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from config.settings import SERPER_API_KEY, TOPIC_CLUSTERS, NICHE
+from pipeline.topics import is_stack_relevant, rank_topics, topic_relevance_score
 
 
 @dataclass
@@ -31,14 +32,15 @@ class TrendingTopic:
     keywords: List[str]
 
 
-# ── RSS FEEDS for AI/Testing niche (customize for your niche) ──────────────────
+# RSS feeds biased toward Chris's stack (Java / GitLab / AppSec / CVE),
+# not generic AI industry blogs.
 RSS_FEEDS = [
+    ("InfoQ Java",           "https://feed.infoq.com/Java/"),
+    ("InfoQ Security",       "https://feed.infoq.com/security/"),
     ("The New Stack",        "https://thenewstack.io/feed/"),
-    ("InfoQ",                "https://www.infoq.com/feed/"),
-    ("Dev.to AI tag",        "https://dev.to/feed/tag/ai"),
-    ("Hacker News",          "https://hnrss.org/newest?q=AI+testing&points=50"),
-    ("Google AI Blog",       "https://blog.research.google/feeds/posts/default"),
-    ("Towards Data Science", "https://towardsdatascience.com/feed"),
+    ("GitLab Blog",          "https://about.gitlab.com/atom.xml"),
+    ("Hacker News AppSec",   "https://hnrss.org/newest?q=Java+OR+SAST+OR+CVE+OR+GitLab&points=30"),
+    ("OWASP",                "https://owasp.org/feed.xml"),
 ]
 
 
@@ -88,10 +90,7 @@ def scrape_rss_feeds() -> List[TrendingTopic]:
                 title = entry.get("title", "")
                 summary = entry.get("summary", "")[:400]
 
-                # Only keep relevant items
-                relevance_keywords = ["AI", "test", "automat", "LLM", "machine learning",
-                                      "quality", "QA", "DevOps", "CI/CD"]
-                if not any(k.lower() in (title + summary).lower() for k in relevance_keywords):
+                if not is_stack_relevant(title, summary):
                     continue
 
                 topics.append(TrendingTopic(
@@ -110,20 +109,23 @@ def scrape_rss_feeds() -> List[TrendingTopic]:
 
 
 def scrape_google_trends(topics: List[str]) -> List[TrendingTopic]:
-    """Use Serper to find trending articles for each topic cluster."""
+    """Use Serper to find recent articles for each stack-focused topic cluster."""
     results = []
     for topic in topics:
-        query = f"{topic} 2025 site:*.io OR site:*.com -reddit"
+        query = f"{topic} 2026 (Java OR GitLab OR SAST OR CVE OR Jira) -reddit"
         items = scrape_serper(query, num=5)
         for item in items:
+            title = item["title"]
+            snippet = item["snippet"]
+            volume = 7 + min(3, max(0, topic_relevance_score(title, snippet) // 3))
             results.append(TrendingTopic(
-                title=item["title"],
-                summary=item["snippet"],
+                title=title,
+                summary=snippet,
                 source_url=item["url"],
                 source_name=item["source"],
                 published_date=None,
-                search_volume_signal=7,
-                keywords=extract_keywords(item["title"] + " " + item["snippet"]),
+                search_volume_signal=volume,
+                keywords=extract_keywords(title + " " + snippet),
             ))
     return results
 
@@ -176,12 +178,12 @@ def gather_trending_topics(max_topics: int = 30) -> List[TrendingTopic]:
     all_topics.extend(google_topics)
     print(f"     Found {len(google_topics)} Google topics")
 
-    # 3. Deduplicate and rank
+    # 3. Deduplicate, then rank toward Chris's stack (not generic AI news)
     unique_topics = deduplicate_topics(all_topics)
-    ranked = sorted(unique_topics, key=lambda t: t.search_volume_signal, reverse=True)
+    ranked = rank_topics(unique_topics, max_topics=max_topics)
 
-    print(f"\n✅ Total unique topics found: {len(ranked)}")
-    return ranked[:max_topics]
+    print(f"\n✅ Total unique topics found: {len(ranked)} (stack-ranked)")
+    return ranked
 
 
 if __name__ == "__main__":
