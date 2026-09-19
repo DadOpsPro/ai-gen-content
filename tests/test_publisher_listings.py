@@ -70,3 +70,5 @@ class PublisherListingTests(unittest.TestCase):
         self.assertNotIn("Should not list", archive)
         self.assertIn("AI-drafted", home)
         self.assertIn("/archive.html", home)
+        self.assertIn('<div class="featured-panel" aria-hidden="true"></div>', home)
+        self.assertNotIn("images/featured/", home)

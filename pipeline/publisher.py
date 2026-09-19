@@ -13,6 +13,7 @@ import os
 import sys
 from base64 import b64encode
 from datetime import datetime
+from html import escape
 from pathlib import Path
 from typing import List, Optional
 
@@ -22,6 +23,12 @@ from config.settings import (
     MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID,
     SITE_NAME, SITE_URL, ADSENSE_PUBLISHER_ID, ADSENSE_SLOT_ID,
     OUTPUT_DIR, AI_DISCLOSURE, LISTING_WINDOW_MONTHS,
+)
+from pipeline.featured_image import (
+    EXTENSIONS as FEATURED_IMAGE_EXTS,
+    IMAGE_DIR as FEATURED_IMAGE_DIR,
+    ensure_featured_image,
+    featured_image_alt,
 )
 from pipeline.generator import GeneratedArticle
 from pipeline.chrome import SITE_CHROME_CSS, site_footer_html, site_nav_html
@@ -251,6 +258,36 @@ class StaticSiteGenerator:
         n = extract("origin/gh-pages")
         print(f"  📚 Restored {n} pending draft JSON files")
 
+    def restore_featured_images(self) -> None:
+        """Copy cached featured images from gh-pages so a slug is never regenerated."""
+        import io, shutil, subprocess, tarfile, tempfile
+
+        repo_root = Path(__file__).resolve().parent.parent
+        dest = self.output_dir / FEATURED_IMAGE_DIR
+        dest.mkdir(parents=True, exist_ok=True)
+
+        def extract(ref: str) -> int:
+            proc = subprocess.run(
+                ["git", "archive", "--format=tar", ref, FEATURED_IMAGE_DIR],
+                cwd=repo_root, capture_output=True,
+            )
+            if proc.returncode != 0:
+                return len([p for p in dest.iterdir() if p.is_file()])
+            with tarfile.open(fileobj=io.BytesIO(proc.stdout), mode="r:") as tar:
+                with tempfile.TemporaryDirectory() as tmp:
+                    tar.extractall(tmp)
+                    src = Path(tmp) / FEATURED_IMAGE_DIR
+                    if src.exists():
+                        for f in src.iterdir():
+                            if f.is_file() and f.suffix.lower() in FEATURED_IMAGE_EXTS:
+                                target = dest / f.name
+                                if not target.exists():
+                                    shutil.copy2(f, target)
+            return len([p for p in dest.iterdir() if p.is_file()])
+
+        n = extract("origin/gh-pages")
+        print(f"  📚 Restored {n} featured image cache file(s)")
+
     def publish(self, article: GeneratedArticle) -> dict:
         """Write article to static HTML file and register it."""
         self.restore_existing_posts()
@@ -269,7 +306,11 @@ class StaticSiteGenerator:
         """Build homepage: Article of the Week + a few recent cards."""
         featured, recent = featured_and_recent(self._registry)
         listed = listed_articles(self._registry)
-        index = INDEX_TEMPLATE.replace("{{FEATURED}}", self._render_featured(featured))
+        self.restore_featured_images()
+        image_rel = ensure_featured_image(featured, self.output_dir) if featured else None
+        index = INDEX_TEMPLATE.replace(
+            "{{FEATURED}}", self._render_featured(featured, image_rel)
+        )
         index = index.replace("{{RECENT}}", self._render_recent(recent))
         index_path = self.output_dir / "index.html"
         index_path.write_text(index, encoding="utf-8")
@@ -280,9 +321,25 @@ class StaticSiteGenerator:
         self.copy_static_assets()
         return str(index_path)
 
-    def _render_featured(self, record: Optional[dict]) -> str:
+    def _render_featured_panel(self, record: Optional[dict],
+                               image_rel: Optional[str]) -> str:
+        """Image when cached/generated; otherwise the solid teal box."""
+        if image_rel and record:
+            title = record.get("title") or record.get("slug") or "featured article"
+            alt = escape(featured_image_alt(title), quote=True)
+            src = escape(image_rel, quote=True)
+            return (
+                f'<div class="featured-panel">'
+                f'<img src="{src}" alt="{alt}" width="768" height="1024">'
+                f"</div>"
+            )
+        return '<div class="featured-panel" aria-hidden="true"></div>'
+
+    def _render_featured(self, record: Optional[dict],
+                         image_rel: Optional[str] = None) -> str:
+        panel = self._render_featured_panel(record, image_rel)
         if not record:
-            return """
+            return f"""
             <section class="featured-week">
               <div class="featured-copy">
                 <span class="badge">Article of the Week</span>
@@ -291,7 +348,7 @@ class StaticSiteGenerator:
                 the developer-as-security-champion dual role.</p>
                 <a href="/archive.html" class="cta">Browse the archive</a>
               </div>
-              <div class="featured-panel" aria-hidden="true"></div>
+              {panel}
             </section>"""
         slug = record["slug"]
         return f"""
@@ -302,7 +359,7 @@ class StaticSiteGenerator:
                 <p class="pitch">{record.get("excerpt", "")}</p>
                 <a href="posts/{slug}.html" class="cta">Read article</a>
               </div>
-              <div class="featured-panel" aria-hidden="true"></div>
+              {panel}
             </section>"""
 
     def _render_recent(self, records: List[dict]) -> str:
@@ -456,6 +513,14 @@ class StaticSiteGenerator:
                             continue
                         shutil.copy2(child, target)
                     elif child.is_dir():
+                        # Merge featured-image cache. Never rmtree generated slugs.
+                        if item.name == "images":
+                            dest.mkdir(parents=True, exist_ok=True)
+                            target.mkdir(parents=True, exist_ok=True)
+                            for img in child.iterdir():
+                                if img.is_file() and not (target / img.name).exists():
+                                    shutil.copy2(img, target / img.name)
+                            continue
                         if target.exists():
                             shutil.rmtree(target)
                         shutil.copytree(child, target)
@@ -682,7 +747,10 @@ _LISTING_PAGE_CSS = """
            text-decoration: none; font-family: var(--sans); font-weight: 700;
            padding: 0.75rem 1.4rem; border-radius: 999px; }
     .cta:hover { background: #14d6a4; }
-    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px; }
+    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px;
+                      overflow: hidden; aspect-ratio: 3 / 4; }
+    .featured-panel img { display: block; width: 100%; height: 100%;
+                          object-fit: cover; border-radius: 16px; }
     .recent-block { max-width: 1040px; margin: 2.75rem auto 3rem; padding: 0 1.5rem; }
     .recent-header { display: flex; align-items: baseline; justify-content: space-between;
                      margin-bottom: 1.25rem; }
@@ -715,7 +783,7 @@ _LISTING_PAGE_CSS = """
                    color: var(--muted); font-size: 0.9rem; }
     @media (max-width: 800px) {
       .featured-week, .recent-grid { grid-template-columns: 1fr; }
-      .featured-panel { min-height: 120px; }
+      .featured-panel { aspect-ratio: 1 / 1; min-height: 160px; }
     }
 """
 
