@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Dev Defense — Article of the Week</title>
   <meta name="description" content="AI Dev Defense: featured weekly writing on Java, GitLab AppSec, and developer-as-security-champion work.">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -76,13 +76,15 @@
     .recent-header h2 { font-size: 1.35rem; }
     .recent-header a { font-family: var(--sans); font-size: 0.9rem; }
     .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-    .recent-card { background: var(--card); border-radius: 12px; padding: 1.4rem 1.35rem;
-                   box-shadow: 0 2px 12px rgba(10,15,30,.06); border: 1px solid var(--line); }
+    .recent-card { background: var(--card); border-radius: 12px;
+                   box-shadow: 0 2px 12px rgba(10,15,30,.06); border: 1px solid var(--line);
+                   transition: transform .15s ease, box-shadow .15s ease; }
+    .recent-card-link { display: block; padding: 1.4rem 1.35rem; text-decoration: none; color: inherit; }
+    .recent-card:hover { box-shadow: 0 6px 18px rgba(10,15,30,.10); transform: translateY(-2px); }
     .recent-card .category { font-family: var(--sans); font-size: 0.72rem; color: var(--teal-dark);
                              text-transform: uppercase; letter-spacing: 0.06em; }
-    .recent-card h3 { font-size: 1.05rem; line-height: 1.35; margin: 0.55rem 0 0.6rem; }
-    .recent-card h3 a { color: var(--navy); text-decoration: none; }
-    .recent-card h3 a:hover { color: var(--teal-dark); }
+    .recent-card h3 { font-size: 1.05rem; line-height: 1.35; margin: 0.55rem 0 0.6rem; color: var(--navy); }
+    .recent-card:hover h3 { color: var(--teal-dark); }
     .recent-card p { color: #555; font-size: 0.9rem; margin-bottom: 0.85rem; }
     .read-time, .empty-recent { color: var(--muted); font-size: 0.82rem; font-family: var(--sans); }
     .archive-wrap { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem 1rem; }
@@ -133,22 +135,28 @@
               <div class="recent-grid">
                 
               <article class="recent-card">
-                <span class="category">DevSecOps</span>
-                <h3><a href="posts/gitlab-sast-jira-automate-tickets.html">GitLab SAST to Jira: Automate Security Tickets</a></h3>
-                <p>GitLab's SAST-to-Jira integration automates security ticket creation, but it's narrower than "auto-dump every finding" sounds. Discover what actually happens, the real settings, and how to avoid ticket spam.</p>
-                <span class="read-time">~3 min read</span>
+                <a class="recent-card-link" href="posts/gitlab-sast-jira-automate-tickets.html">
+                  <span class="category">DevSecOps</span>
+                  <h3>GitLab SAST to Jira: Automate Security Tickets</h3>
+                  <p>GitLab's SAST-to-Jira integration automates security ticket creation, but it's narrower than "auto-dump every finding" sounds. Discover what actually happens, the real settings, and how to avoid ticket spam.</p>
+                  <span class="read-time">~3 min read</span>
+                </a>
               </article>
               <article class="recent-card">
-                <span class="category">AI Security</span>
-                <h3><a href="posts/claude-security-mythos-5-enterprise-beta.html">Claude Security Scans Now Run on Claude Mythos 5</a></h3>
-                <p>Anthropic launched Claude Security scans powered by Claude Mythos 5 for Enterprise customers in public beta. The service provides security findings through an automated scanner rather than direct model access.</p>
-                <span class="read-time">~3 min read</span>
+                <a class="recent-card-link" href="posts/claude-security-mythos-5-enterprise-beta.html">
+                  <span class="category">AI Security</span>
+                  <h3>Claude Security Scans Now Run on Claude Mythos 5</h3>
+                  <p>Anthropic launched Claude Security scans powered by Claude Mythos 5 for Enterprise customers in public beta. The service provides security findings through an automated scanner rather than direct model access.</p>
+                  <span class="read-time">~3 min read</span>
+                </a>
               </article>
               <article class="recent-card">
-                <span class="category">DevOps & Security</span>
-                <h3><a href="posts/package-registry-shai-hulud-ci-cd-security.html">Package Registry Control: Securing Your CI/CD Pipeline</a></h3>
-                <p>Your package registry is the single point of trust that controls everything flowing through your CI/CD pipeline. Whoever controls that registry—whether through typosquatting, compromise, or malicious injection—controls what gets built, tested, and shipped into production.</p>
-                <span class="read-time">~2 min read</span>
+                <a class="recent-card-link" href="posts/package-registry-shai-hulud-ci-cd-security.html">
+                  <span class="category">DevOps & Security</span>
+                  <h3>Package Registry Control: Securing Your CI/CD Pipeline</h3>
+                  <p>Your package registry is the single point of trust that controls everything flowing through your CI/CD pipeline. Whoever controls that registry—whether through typosquatting, compromise, or malicious injection—controls what gets built, tested, and shipped into production.</p>
+                  <span class="read-time">~2 min read</span>
+                </a>
               </article>
               </div>
             </section>

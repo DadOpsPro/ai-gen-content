@@ -75,13 +75,15 @@
     .recent-header h2 { font-size: 1.35rem; }
     .recent-header a { font-family: var(--sans); font-size: 0.9rem; }
     .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-    .recent-card { background: var(--card); border-radius: 12px; padding: 1.4rem 1.35rem;
-                   box-shadow: 0 2px 12px rgba(10,15,30,.06); border: 1px solid var(--line); }
+    .recent-card { background: var(--card); border-radius: 12px;
+                   box-shadow: 0 2px 12px rgba(10,15,30,.06); border: 1px solid var(--line);
+                   transition: transform .15s ease, box-shadow .15s ease; }
+    .recent-card-link { display: block; padding: 1.4rem 1.35rem; text-decoration: none; color: inherit; }
+    .recent-card:hover { box-shadow: 0 6px 18px rgba(10,15,30,.10); transform: translateY(-2px); }
     .recent-card .category { font-family: var(--sans); font-size: 0.72rem; color: var(--teal-dark);
                              text-transform: uppercase; letter-spacing: 0.06em; }
-    .recent-card h3 { font-size: 1.05rem; line-height: 1.35; margin: 0.55rem 0 0.6rem; }
-    .recent-card h3 a { color: var(--navy); text-decoration: none; }
-    .recent-card h3 a:hover { color: var(--teal-dark); }
+    .recent-card h3 { font-size: 1.05rem; line-height: 1.35; margin: 0.55rem 0 0.6rem; color: var(--navy); }
+    .recent-card:hover h3 { color: var(--teal-dark); }
     .recent-card p { color: #555; font-size: 0.9rem; margin-bottom: 0.85rem; }
     .read-time, .empty-recent { color: var(--muted); font-size: 0.82rem; font-family: var(--sans); }
     .archive-wrap { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem 1rem; }
