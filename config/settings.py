@@ -36,6 +36,9 @@ TOPIC_CLUSTERS = [
     "GitLab CI security pipeline with Jira",
     "Java application security testing in legacy services",
     "security champion practices in the SDLC",
+    "Using Claude Code for application security",
+    "Using Claude Code to simplify local development",
+    "Security testing in GitLab CI/CD pipelines"
 ]
 
 # ── API KEYS (load from environment variables) ─────────────────────────────────
