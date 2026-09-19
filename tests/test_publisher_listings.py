@@ -66,6 +66,7 @@ class PublisherListingTests(unittest.TestCase):
         self.assertIn("GitLab SAST to Jira", home)
         self.assertNotIn("Should not list", home)
         self.assertEqual(home.count('class="recent-card"'), 3)
+        self.assertEqual(home.count('class="recent-card-link"'), 3)
         self.assertIn("quietly retired", archive)
         self.assertNotIn("Should not list", archive)
         self.assertIn("AI-drafted", home)
