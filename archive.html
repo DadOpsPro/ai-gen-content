@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive | AI Dev Defense</title>
+  <meta name="description" content="Posts from the last 12 months on AI Dev Defense.">
+  <link rel="canonical" href="https://aidevdefense.com/archive.html">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <style>
+
+    :root {
+      --navy: #0a0f1e;
+      --navy-deep: #070b16;
+      --teal: #00c896;
+      --teal-dark: #00a67d;
+      --text: #1a1a2e;
+      --muted: #666;
+      --card: #ffffff;
+      --page: #f4f6f8;
+      --line: #e6e9ee;
+      --font: Georgia, 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); color: var(--text); background: var(--page);
+           line-height: 1.65; }
+    a { color: var(--teal-dark); }
+    .site-header { background: var(--navy); color: #fff; padding: 1rem 2rem;
+                   display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: var(--teal); text-decoration: none;
+                          font-weight: bold; font-size: 1.15rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aab; text-decoration: none; font-size: 0.9rem;
+                         font-family: var(--sans); }
+    .site-header nav a:hover, .site-header nav a.active { color: #fff; }
+    .site-footer { background: var(--navy); color: #889; text-align: center;
+                   padding: 2rem 1.5rem; margin-top: 4rem; font-size: 0.85rem;
+                   font-family: var(--sans); }
+    .site-footer a { color: #889; }
+    .site-footer a:hover { color: #ccc; }
+    .ai-disclosure { color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem;
+                     font-size: 0.82rem; line-height: 1.5; }
+
+    .featured-week { max-width: 1040px; margin: 2.5rem auto 0; padding: 0 1.5rem;
+                     display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 2rem;
+                     align-items: stretch; }
+    .featured-copy { background: var(--navy); color: #fff; border-radius: 16px;
+                     padding: 2.75rem 2.5rem; }
+    .badge { display: inline-block; font-family: var(--sans); font-size: 0.72rem;
+             letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal);
+             font-weight: 700; margin-bottom: 1rem; }
+    .featured-copy h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.2;
+                        margin-bottom: 1rem; color: #fff; }
+    .pitch { color: #c5cdd6; font-size: 1.05rem; max-width: 36rem;
+             margin-bottom: 1.75rem; }
+    .cta { display: inline-block; background: var(--teal); color: var(--navy);
+           text-decoration: none; font-family: var(--sans); font-weight: 700;
+           padding: 0.75rem 1.4rem; border-radius: 999px; }
+    .cta:hover { background: #14d6a4; }
+    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px; }
+    .recent-block { max-width: 1040px; margin: 2.75rem auto 3rem; padding: 0 1.5rem; }
+    .recent-header { display: flex; align-items: baseline; justify-content: space-between;
+                     margin-bottom: 1.25rem; }
+    .recent-header h2 { font-size: 1.35rem; }
+    .recent-header a { font-family: var(--sans); font-size: 0.9rem; }
+    .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .recent-card { background: var(--card); border-radius: 12px; padding: 1.4rem 1.35rem;
+                   box-shadow: 0 2px 12px rgba(10,15,30,.06); border: 1px solid var(--line); }
+    .recent-card .category { font-family: var(--sans); font-size: 0.72rem; color: var(--teal-dark);
+                             text-transform: uppercase; letter-spacing: 0.06em; }
+    .recent-card h3 { font-size: 1.05rem; line-height: 1.35; margin: 0.55rem 0 0.6rem; }
+    .recent-card h3 a { color: var(--navy); text-decoration: none; }
+    .recent-card h3 a:hover { color: var(--teal-dark); }
+    .recent-card p { color: #555; font-size: 0.9rem; margin-bottom: 0.85rem; }
+    .read-time, .empty-recent { color: var(--muted); font-size: 0.82rem; font-family: var(--sans); }
+    .archive-wrap { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem 1rem; }
+    .archive-wrap h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 0.5rem; }
+    .archive-lede { color: var(--muted); margin-bottom: 2.5rem; }
+    .month-group { margin-bottom: 2.25rem; }
+    .month-group h2 { font-size: 1.1rem; color: var(--navy); padding-bottom: 0.5rem;
+                      border-bottom: 2px solid var(--line); margin-bottom: 0.85rem; }
+    .archive-list { list-style: none; }
+    .archive-list li { display: flex; justify-content: space-between; gap: 1rem;
+                       padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+    .archive-list a { color: var(--navy); text-decoration: none; font-weight: 600; }
+    .archive-list a:hover { color: var(--teal-dark); }
+    .archive-list span { color: var(--muted); font-size: 0.8rem; font-family: var(--sans);
+                         white-space: nowrap; }
+    .retire-note { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+                   color: var(--muted); font-size: 0.9rem; }
+    @media (max-width: 800px) {
+      .featured-week, .recent-grid { grid-template-columns: 1fr; }
+      .featured-panel { min-height: 120px; }
+    }
+
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Home</a> <a href="/archive.html" class="active">Archive</a> <a href="/about.html">About</a>
+    </nav>
+  </header>
+  <main class="archive-wrap">
+    <h1>Archive</h1>
+    <p class="archive-lede">Reverse-chronological posts from the last 12 months, grouped by month.</p>
+    
+            <section class="month-group">
+              <h2>September 2026</h2>
+              <ul class="archive-list">
+                <li><a href="posts/developer-security-champion-dual-role.html">Dev and Security Champ: Managing the Dual Role</a><span>~3 min</span></li><li><a href="posts/gitlab-sast-jira-automate-tickets.html">GitLab SAST to Jira: Automate Security Tickets</a><span>~3 min</span></li><li><a href="posts/claude-security-mythos-5-enterprise-beta.html">Claude Security Scans Now Run on Claude Mythos 5</a><span>~3 min</span></li>
+              </ul>
+            </section>
+            <section class="month-group">
+              <h2>August 2026</h2>
+              <ul class="archive-list">
+                <li><a href="posts/package-registry-shai-hulud-ci-cd-security.html">Package Registry Control: Securing Your CI/CD Pipeline</a><span>~2 min</span></li><li><a href="posts/google-double-blind-gemini-testing.html">Google's Double-Blind Gemini Testing Method</a><span>~2 min</span></li><li><a href="posts/replit-auto-mode-picks-best-model.html">Replit's Auto Mode: System Picks Best Model</a><span>~8 min</span></li><li><a href="posts/downloadable-ai-models-grok-cost-effective-testing.html">Leverage Downloadable AI Models for Cost-Effective Testing</a><span>~7 min</span></li><li><a href="posts/per-developer-environments-ai-agents-trend.html">Per-Developer Environments Meet AI Agent Reality</a><span>~10 min</span></li>
+              </ul>
+            </section>
+            <section class="month-group">
+              <h2>June 2026</h2>
+              <ul class="archive-list">
+                <li><a href="posts/protect-ai-coding-agents-sentry-key-exploitation.html">Protect AI Coding Agents from Sentry Key Exploitation</a><span>~8 min</span></li><li><a href="posts/cross-repo-review-qodo-ai-teams.html">Cross-Repo Code Review: AI Teams' New Lifeline</a><span>~10 min</span></li><li><a href="posts/sentry-key-hijack-claude-cursor-codex-defense.html">Hijack Claude Code, Cursor, Codex via Sentry Keys</a><span>~7 min</span></li><li><a href="posts/cross-repo-review-ai-teams-qodo.html">Cross-Repo Review: Why AI Teams Need This Now</a><span>~10 min</span></li><li><a href="posts/valkey-ai-automated-backporting-bug-fixes.html">Backporting Bug Fixes: AI-Powered Automation Guide</a><span>~7 min</span></li><li><a href="posts/gemini-cli-vs-antigravity-real-world-performance.html">Gemini CLI vs Antigravity: Real-World Performance</a><span>~10 min</span></li><li><a href="posts/checkmarx-sast-engine-post-scan-intelligence.html">Checkmarx SAST Engine: Post-Scan Intelligence</a><span>~7 min</span></li><li><a href="posts/ai-code-review-better-than-teammates.html">AI Now Reviews Code Better Than Your Teammate</a><span>~11 min</span></li><li><a href="posts/mcp-enterprise-authorization-layer-implementation.html">MCP Gets Its Missing Enterprise Authorization Layer</a><span>~7 min</span></li><li><a href="posts/proactive-ai-agents-autonomous-business-operations.html">Proactive AI Agents: The New Frontier in Autonomous Business Operations</a><span>~11 min</span></li><li><a href="posts/kiro-mobile-aws-agentic-coding-iphone.html">Kiro Goes Mobile: AWS Agentic Coding on iPhone</a><span>~9 min</span></li><li><a href="posts/aws-context-ai-agent-reasoning-trend.html">AWS Context Leads AI Agent Reasoning Revolution</a><span>~12 min</span></li><li><a href="posts/aws-bill-spike-cost-agent-guide.html">AWS Bill Spike? Use the New Cost Agent</a><span>~7 min</span></li><li><a href="posts/spacex-cursor-acquisition-ai-coding.html">SpaceX's $60B Cursor Acquisition Reshapes AI Coding</a><span>~11 min</span></li><li><a href="posts/cohere-coding-model-enterprise-developers.html">Get Started with Cohere's Coding Model</a><span>~9 min</span></li><li><a href="posts/anthropic-fable-mess-explained.html">The Anthropic Fable Mess, Explained</a><span>~10 min</span></li><li><a href="posts/ai-generated-apps-cloud-dependency-risks.html">AI Apps on Their Cloud: Risks & Solutions</a><span>~8 min</span></li><li><a href="posts/cohere-developer-pivot-sovereign-ai-enterprise.html">Cohere's Developer Pivot and Sovereign AI's Enterprise Moment</a><span>~11 min</span></li><li><a href="posts/ai-retrieval-ranking-beyond-vector-search.html">Beyond Vector Search: Advanced AI Retrieval Ranking</a><span>~7 min</span></li><li><a href="posts/ai-testing-security-weekly-fable-mythos-suspended.html">AI Models Suspended: Anthropic Faces Regulatory Standoff</a><span>~12 min</span></li><li><a href="posts/ai-coding-agents-stack-overflow-integration.html">Guide: Integrating AI Coding Agents with Stack Overflow</a><span>~8 min</span></li><li><a href="posts/enterprise-agent-wars-neutral-platform.html">Enterprise Agent Wars: Who Plays Switzerland?</a><span>~10 min</span></li><li><a href="posts/entry-level-tech-jobs-ai-disruption-guide.html">Entry-Level Tech Jobs in the Age of AI</a><span>~8 min</span></li><li><a href="posts/chainguard-open-source-packages-supply-chain-security.html">AI Dependencies: Chainguard's 52K Package Security Wake-Up</a><span>~9 min</span></li><li><a href="posts/optimize-fable-5-guardrails-burn-rate.html">Optimize Fable 5: Manage Guardrails & Burn Rate</a><span>~8 min</span></li><li><a href="posts/observability-overload-drowning-engineers.html">Observability Overload Is Drowning Engineers</a><span>~11 min</span></li><li><a href="posts/claude-mythos-fable-5-testing-guide.html">Claude Mythos/Fable 5: Test Before Access Ends</a><span>~8 min</span></li><li><a href="posts/ai-agents-break-free-solo-dev-mode.html">AI Agents Break Free from Solo Dev Mode</a><span>~10 min</span></li><li><a href="posts/microsoft-azure-repos-github-migration-guide.html">Evaluate Microsoft's Azure Repos to GitHub Migration</a><span>~7 min</span></li><li><a href="posts/ai-solving-memory-crunch-trend-roundup.html">How AI is Solving the Memory Crunch It Created</a><span>~9 min</span></li><li><a href="posts/netlify-cto-dana-lawson-writing-code-no-longer-job.html">Writing Code Is No Longer the Job</a><span>~8 min</span></li><li><a href="posts/joy-wars-ai-agents-competition-shift.html">The Joy Wars Begin: AI Agent Competition Shifts</a><span>~10 min</span></li>
+              </ul>
+            </section>
+    <p class="retire-note">Articles older than 12 months are quietly retired from home and archive listings. Their permalinks stay live.</p>
+  </main>
+  <footer class="site-footer">
+    <p class="ai-disclosure">Most articles on AI Dev Defense are AI-drafted and then reviewed before publish.</p>
+    <p>&copy; 2026 AI Dev Defense &middot;
+    <a href="/archive.html">Archive</a> &middot;
+    <a href="/about.html">About</a> &middot;
+    <a href="/privacy.html">Privacy</a> &middot;
+    <a href="/affiliate-disclosure.html">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>

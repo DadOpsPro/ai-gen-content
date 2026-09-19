@@ -81,6 +81,7 @@
     footer { background: #0a0a1a; color: #888; text-align: center; padding: 2rem; font-size: 0.85rem; margin-top: 2rem; }
     footer a { color: #888; text-decoration: none; }
     footer a:hover { color: #aaa; }
+    .ai-disclosure { color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem; font-size: 0.82rem; line-height: 1.5; }
 
     @media (max-width: 600px) {
       .profile-card { grid-template-columns: 1fr; text-align: center; }
@@ -98,9 +99,9 @@
     <span style="opacity:.4">|</span>
     <span style="font-size:.85rem;opacity:.6;color:#fff">Application Security &amp; AI Testing</span>
     <nav>
-      <a href="/">Articles</a>
+      <a href="/">Home</a>
+      <a href="/archive.html">Archive</a>
       <a href="/about.html" class="active">About</a>
-      <a href="/privacy.html">Privacy</a>
     </nav>
   </header>
 
@@ -192,10 +193,17 @@
     <div class="section-card">
       <h3><span class="accent-bar"></span>About This Publication</h3>
       <p>
-        AI Dev Defense publishes articles on how artificial intelligence is being applied — and misapplied — in software testing and application security. Coverage includes emerging tools and frameworks, real-world case studies, policy and compliance developments, and practical guidance for teams integrating AI into their security and testing workflows.
+        AI Dev Defense publishes articles on how artificial intelligence is being applied — and misapplied — in software testing and application security. Coverage leans toward work Chris actually does: Java / Java 8 modernization, GitLab SAST to Jira automation, the developer-as-security-champion dual role, Claude Security / Mythos-class scans, plain-English CVE explainers, and package-registry / CI-CD supply chain when it ties to that stack.
       </p>
       <p>
         The audience is software engineers, QA leads, security engineers, and DevSecOps practitioners who want to stay current without wading through hype. Every article is written with the practitioner in mind — the person who has to actually implement, test, and secure these systems.
+      </p>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="accent-bar"></span>How articles are written</h3>
+      <p>
+        Most articles on AI Dev Defense are AI-drafted and then reviewed before publish. Chris reviews each draft and adds firsthand notes. The drafts → review → publish-approved pipeline is unchanged.
       </p>
     </div>
 
@@ -211,7 +219,9 @@
   </main>
 
   <footer>
+    <p class="ai-disclosure">Most articles on AI Dev Defense are AI-drafted and then reviewed before publish.</p>
     <p>&copy; AI Dev Defense &middot;
+      <a href="/archive.html">Archive</a> &middot;
       <a href="/privacy.html">Privacy</a> &middot;
       <a href="/affiliate-disclosure.html">Affiliate Disclosure</a> &middot;
       <a href="/about.html">About</a>

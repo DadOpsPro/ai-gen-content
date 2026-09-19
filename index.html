@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Dev Defense — https://aidevdefense.com</title>
+  <title>AI Dev Defense — Article of the Week</title>
+  <meta name="description" content="AI Dev Defense: featured weekly writing on Java, GitLab AppSec, and developer-as-security-champion work.">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -19,461 +19,145 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <style>
+
+    :root {
+      --navy: #0a0f1e;
+      --navy-deep: #070b16;
+      --teal: #00c896;
+      --teal-dark: #00a67d;
+      --text: #1a1a2e;
+      --muted: #666;
+      --card: #ffffff;
+      --page: #f4f6f8;
+      --line: #e6e9ee;
+      --font: Georgia, 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Georgia', serif; color: #1a1a2e; background: #f9f9f9; }
-    .site-nav { background: #0a0a1a; display: flex; align-items: center; padding: 0.85rem 2rem; gap: 1rem; }
-    .site-nav a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
-    .site-nav nav { margin-left: auto; display: flex; gap: 1.5rem; }
-    .site-nav nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; }
-    .site-nav nav a:hover { color: #fff; }
-    .hero { background: #0a0a1a; color: #fff; padding: 4rem 2rem; text-align: center; }
-    .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }
-    .hero p { color: #aaa; font-size: 1.15rem; max-width: 500px; margin: 0 auto 2rem; }
-    .newsletter-form { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
-    .newsletter-form input { padding: .75rem 1rem; border: none; border-radius: 6px;
-                               font-size: 1rem; width: 280px; }
-    .newsletter-form button { background: #0070f3; color: #fff; border: none; padding: .75rem 1.5rem;
-                                border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold; }
-    .posts-grid { max-width: 1100px; margin: 3rem auto; padding: 0 1.5rem;
-                   display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
-    .post-card { background: #fff; border-radius: 12px; padding: 1.75rem;
-                  box-shadow: 0 2px 12px rgba(0,0,0,.08); transition: transform .2s; }
-    .post-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,.12); }
-    .post-meta { display: flex; gap: .75rem; font-size: .8rem; color: #888; margin-bottom: .75rem; }
-    .category { background: #e8f0ff; color: #0070f3; padding: .2rem .5rem; border-radius: 4px; }
-    .post-card h2 { font-size: 1.15rem; line-height: 1.4; margin-bottom: .75rem; }
-    .post-card h2 a { color: #0a0a1a; text-decoration: none; }
-    .post-card h2 a:hover { color: #0070f3; }
-    .excerpt { color: #555; font-size: .9rem; line-height: 1.6; margin-bottom: 1rem; }
-    .tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .tag { background: #f0f0f0; color: #555; padding: .15rem .5rem; border-radius: 3px; font-size: .75rem; }
-    .read-more { color: #0070f3; font-weight: bold; font-size: .9rem; text-decoration: none; }
-    footer { background: #0a0a1a; color: #888; text-align: center; padding: 2rem; font-size: .85rem; }
-    footer a { color: #888; }
+    body { font-family: var(--font); color: var(--text); background: var(--page);
+           line-height: 1.65; }
+    a { color: var(--teal-dark); }
+    .site-header { background: var(--navy); color: #fff; padding: 1rem 2rem;
+                   display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: var(--teal); text-decoration: none;
+                          font-weight: bold; font-size: 1.15rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aab; text-decoration: none; font-size: 0.9rem;
+                         font-family: var(--sans); }
+    .site-header nav a:hover, .site-header nav a.active { color: #fff; }
+    .site-footer { background: var(--navy); color: #889; text-align: center;
+                   padding: 2rem 1.5rem; margin-top: 4rem; font-size: 0.85rem;
+                   font-family: var(--sans); }
+    .site-footer a { color: #889; }
+    .site-footer a:hover { color: #ccc; }
+    .ai-disclosure { color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem;
+                     font-size: 0.82rem; line-height: 1.5; }
+
+    .featured-week { max-width: 1040px; margin: 2.5rem auto 0; padding: 0 1.5rem;
+                     display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 2rem;
+                     align-items: stretch; }
+    .featured-copy { background: var(--navy); color: #fff; border-radius: 16px;
+                     padding: 2.75rem 2.5rem; }
+    .badge { display: inline-block; font-family: var(--sans); font-size: 0.72rem;
+             letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal);
+             font-weight: 700; margin-bottom: 1rem; }
+    .featured-copy h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.2;
+                        margin-bottom: 1rem; color: #fff; }
+    .pitch { color: #c5cdd6; font-size: 1.05rem; max-width: 36rem;
+             margin-bottom: 1.75rem; }
+    .cta { display: inline-block; background: var(--teal); color: var(--navy);
+           text-decoration: none; font-family: var(--sans); font-weight: 700;
+           padding: 0.75rem 1.4rem; border-radius: 999px; }
+    .cta:hover { background: #14d6a4; }
+    .featured-panel { background: #14d4c8; border-radius: 16px; min-height: 220px; }
+    .recent-block { max-width: 1040px; margin: 2.75rem auto 3rem; padding: 0 1.5rem; }
+    .recent-header { display: flex; align-items: baseline; justify-content: space-between;
+                     margin-bottom: 1.25rem; }
+    .recent-header h2 { font-size: 1.35rem; }
+    .recent-header a { font-family: var(--sans); font-size: 0.9rem; }
+    .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .recent-card { background: var(--card); border-radius: 12px; padding: 1.4rem 1.35rem;
+                   box-shadow: 0 2px 12px rgba(10,15,30,.06); border: 1px solid var(--line); }
+    .recent-card .category { font-family: var(--sans); font-size: 0.72rem; color: var(--teal-dark);
+                             text-transform: uppercase; letter-spacing: 0.06em; }
+    .recent-card h3 { font-size: 1.05rem; line-height: 1.35; margin: 0.55rem 0 0.6rem; }
+    .recent-card h3 a { color: var(--navy); text-decoration: none; }
+    .recent-card h3 a:hover { color: var(--teal-dark); }
+    .recent-card p { color: #555; font-size: 0.9rem; margin-bottom: 0.85rem; }
+    .read-time, .empty-recent { color: var(--muted); font-size: 0.82rem; font-family: var(--sans); }
+    .archive-wrap { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem 1rem; }
+    .archive-wrap h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 0.5rem; }
+    .archive-lede { color: var(--muted); margin-bottom: 2.5rem; }
+    .month-group { margin-bottom: 2.25rem; }
+    .month-group h2 { font-size: 1.1rem; color: var(--navy); padding-bottom: 0.5rem;
+                      border-bottom: 2px solid var(--line); margin-bottom: 0.85rem; }
+    .archive-list { list-style: none; }
+    .archive-list li { display: flex; justify-content: space-between; gap: 1rem;
+                       padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+    .archive-list a { color: var(--navy); text-decoration: none; font-weight: 600; }
+    .archive-list a:hover { color: var(--teal-dark); }
+    .archive-list span { color: var(--muted); font-size: 0.8rem; font-family: var(--sans);
+                         white-space: nowrap; }
+    .retire-note { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+                   color: var(--muted); font-size: 0.9rem; }
+    @media (max-width: 800px) {
+      .featured-week, .recent-grid { grid-template-columns: 1fr; }
+      .featured-panel { min-height: 120px; }
+    }
+
   </style>
 </head>
 <body>
-  <div class="site-nav">
+  <header class="site-header">
     <a href="/" class="logo">AI Dev Defense</a>
     <nav>
-      <a href="/">Articles</a>
-      <a href="/about.html">About</a>
-      <a href="/privacy.html">Privacy</a>
+      <a href="/" class="active">Home</a> <a href="/archive.html">Archive</a> <a href="/about.html">About</a>
     </nav>
-  </div>
-  <header class="hero">
-    <h1>AI Dev Defense</h1>
-    <p>AI-powered insights for software testing professionals</p>
-    <div class="newsletter-form">
-      <input type="email" placeholder="your@email.com">
-      <button>Get Weekly Digest →</button>
-    </div>
   </header>
-  <div class="posts-grid">
-    
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Security</span>
-                    <span class="read-time">~3 min read</span>
-                </div>
-                <h2><a href="posts/developer-security-champion-dual-role.html">Dev and Security Champ: Managing the Dual Role</a></h2>
-                <p class="excerpt">Getting appointed as a security champion while maintaining your dev duties is real—and often becomes an unpaid second job. Understand what the role actually entails and how to set boundaries.</p>
-                <div class="tags"><span class="tag">security champion</span><span class="tag">application security</span><span class="tag">developer responsibilities</span></div>
-                <a href="posts/developer-security-champion-dual-role.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">DevSecOps</span>
-                    <span class="read-time">~3 min read</span>
-                </div>
-                <h2><a href="posts/gitlab-sast-jira-automate-tickets.html">GitLab SAST to Jira: Automate Security Tickets</a></h2>
-                <p class="excerpt">GitLab's SAST-to-Jira integration automates security ticket creation, but it's narrower than "auto-dump every finding" sounds. Discover what actually happens, the real settings, and how to avoid ticket spam.</p>
-                <div class="tags"><span class="tag">gitlab</span><span class="tag">sast</span><span class="tag">jira</span></div>
-                <a href="posts/gitlab-sast-jira-automate-tickets.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Security</span>
-                    <span class="read-time">~3 min read</span>
-                </div>
-                <h2><a href="posts/claude-security-mythos-5-enterprise-beta.html">Claude Security Scans Now Run on Claude Mythos 5</a></h2>
-                <p class="excerpt">Anthropic launched Claude Security scans powered by Claude Mythos 5 for Enterprise customers in public beta. The service provides security findings through an automated scanner rather than direct model access.</p>
-                <div class="tags"><span class="tag">Claude</span><span class="tag">Security</span><span class="tag">Mythos 5</span></div>
-                <a href="posts/claude-security-mythos-5-enterprise-beta.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">DevOps & Security</span>
-                    <span class="read-time">~2 min read</span>
-                </div>
-                <h2><a href="posts/package-registry-shai-hulud-ci-cd-security.html">Package Registry Control: Securing Your CI/CD Pipeline</a></h2>
-                <p class="excerpt">Your package registry is the single point of trust that controls everything flowing through your CI/CD pipeline. Whoever controls that registry—whether through typosquatting, compromise, or malicious injection—controls what gets built, tested, and shipped into production.</p>
-                <div class="tags"><span class="tag">ci/cd security</span><span class="tag">package registry</span><span class="tag">supply chain security</span></div>
-                <a href="posts/package-registry-shai-hulud-ci-cd-security.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Artificial Intelligence</span>
-                    <span class="read-time">~2 min read</span>
-                </div>
-                <h2><a href="posts/google-double-blind-gemini-testing.html">Google's Double-Blind Gemini Testing Method</a></h2>
-                <p class="excerpt">Google DeepMind implemented a double-blind evaluation process for Gemini to prevent benchmark contamination, where AI models memorize test questions from training data. This method kept Google from seeing test questions and testers from accessing model weights.</p>
-                <div class="tags"><span class="tag">AI testing</span><span class="tag">Gemini</span><span class="tag">benchmark contamination</span></div>
-                <a href="posts/google-double-blind-gemini-testing.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Development Tools</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/replit-auto-mode-picks-best-model.html">Replit's Auto Mode: System Picks Best Model</a></h2>
-                <p class="excerpt">Replit has made Auto mode the default for their AI coding assistant, automatically selecting the best model for each task instead of letting developers choose. This architectural shift raises important questions about security, threat modeling, and control in AI-assisted development.</p>
-                <div class="tags"><span class="tag">Replit</span><span class="tag">AI coding</span><span class="tag">machine learning models</span></div>
-                <a href="posts/replit-auto-mode-picks-best-model.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">how_to_guide</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/downloadable-ai-models-grok-cost-effective-testing.html">Leverage Downloadable AI Models for Cost-Effective Testing</a></h2>
-                <p class="excerpt">Discover how downloadable AI models like Grok 4.6 deliver enterprise-grade performance at a fraction of traditional pricing. This practical guide shows development teams how to leverage self-hosted models for cost-effective software testing and security.</p>
-                <div class="tags"><span class="tag">ai-models</span><span class="tag">grok-4.6</span><span class="tag">cost-optimization</span></div>
-                <a href="posts/downloadable-ai-models-grok-cost-effective-testing.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">DevOps & Infrastructure</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/per-developer-environments-ai-agents-trend.html">Per-Developer Environments Meet AI Agent Reality</a></h2>
-                <p class="excerpt">For years, teams pursued per-developer environments as the ultimate DevOps goal. AI agents have fundamentally changed this landscape, creating a new requirement: per-agent-per-task environments that multiply faster than infrastructure can handle.</p>
-                <div class="tags"><span class="tag">AI agents</span><span class="tag">DevOps</span><span class="tag">environment management</span></div>
-                <a href="posts/per-developer-environments-ai-agents-trend.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">security</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/protect-ai-coding-agents-sentry-key-exploitation.html">Protect AI Coding Agents from Sentry Key Exploitation</a></h2>
-                <p class="excerpt">A critical vulnerability affecting popular AI coding assistants allows malicious actors to hijack Claude Code, Cursor, and Codex using exposed public Sentry keys. This security guide provides practical steps to mitigate the risk and protect your AI agents from telemetry interception and payload injection.</p>
-                <div class="tags"><span class="tag">AI security</span><span class="tag">Sentry vulnerability</span><span class="tag">Claude Code</span></div>
-                <a href="posts/protect-ai-coding-agents-sentry-key-exploitation.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">development-tools</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/cross-repo-review-qodo-ai-teams.html">Cross-Repo Code Review: AI Teams' New Lifeline</a></h2>
-                <p class="excerpt">Qodo shipped cross-repo review capabilities this week, offering relief to teams drowning in AI-generated pull requests. This feature marks a major shift in matching tooling velocity with AI-assisted development.</p>
-                <div class="tags"><span class="tag">code-review</span><span class="tag">AI-development</span><span class="tag">Qodo</span></div>
-                <a href="posts/cross-repo-review-qodo-ai-teams.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Security</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/sentry-key-hijack-claude-cursor-codex-defense.html">Hijack Claude Code, Cursor, Codex via Sentry Keys</a></h2>
-                <p class="excerpt">A critical vulnerability in AI coding assistants allows attackers to hijack sessions using publicly exposed Sentry DSN keys. This guide reveals the attack mechanism and provides essential detection and defense strategies.</p>
-                <div class="tags"><span class="tag">security</span><span class="tag">sentry</span><span class="tag">ai-coding-assistants</span></div>
-                <a href="posts/sentry-key-hijack-claude-cursor-codex-defense.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Development & DevOps</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/cross-repo-review-ai-teams-qodo.html">Cross-Repo Review: Why AI Teams Need This Now</a></h2>
-                <p class="excerpt">Qodo's new cross-repo review feature signals a fundamental shift in code quality management for AI-flooded teams. The move away from siloed repository analysis addresses critical gaps in how modern development teams maintain code standards at scale.</p>
-                <div class="tags"><span class="tag">code-review</span><span class="tag">AI-development</span><span class="tag">cross-repo</span></div>
-                <a href="posts/cross-repo-review-ai-teams-qodo.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">DevOps & Automation</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/valkey-ai-automated-backporting-bug-fixes.html">Backporting Bug Fixes: AI-Powered Automation Guide</a></h2>
-                <p class="excerpt">Project Valkey has transformed open source maintenance by automating backporting of bug fixes across multiple release branches using AI-powered bots. This guide explores how to implement similar automation in your projects to eliminate manual cherry-picking and merge conflict resolution.</p>
-                <div class="tags"><span class="tag">open-source</span><span class="tag">automation</span><span class="tag">devops</span></div>
-                <a href="posts/valkey-ai-automated-backporting-bug-fixes.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">trends</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/gemini-cli-vs-antigravity-real-world-performance.html">Gemini CLI vs Antigravity: Real-World Performance</a></h2>
-                <p class="excerpt">The AI coding tool wars have shifted from spec sheets to real-world testing. This week we examine Gemini CLI and Antigravity's actual performance in production environments, cutting through marketing noise to show security-conscious teams what really works.</p>
-                <div class="tags"><span class="tag">AI tools</span><span class="tag">CLI tools</span><span class="tag">Gemini</span></div>
-                <a href="posts/gemini-cli-vs-antigravity-real-world-performance.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Application Security</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/checkmarx-sast-engine-post-scan-intelligence.html">Checkmarx SAST Engine: Post-Scan Intelligence</a></h2>
-                <p class="excerpt">Checkmarx's new SAST engine focuses on post-scan intelligence rather than just LLM integration. Discover how modern SAST architectures address false positives and deliver actionable security results.</p>
-                <div class="tags"><span class="tag">SAST</span><span class="tag">application security</span><span class="tag">static analysis</span></div>
-                <a href="posts/checkmarx-sast-engine-post-scan-intelligence.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI & Development</span>
-                    <span class="read-time">~11 min read</span>
-                </div>
-                <h2><a href="posts/ai-code-review-better-than-teammates.html">AI Now Reviews Code Better Than Your Teammate</a></h2>
-                <p class="excerpt">AI models have matured from code suggestion tools to genuine development partners, exposing how most human-written code reviews are inconsistent and riddled with blind spots. This week's trends show AI doesn't just write code—it reviews with a rigor that makes traditional peer review look negligent.</p>
-                <div class="tags"><span class="tag">AI code review</span><span class="tag">software development</span><span class="tag">code quality</span></div>
-                <a href="posts/ai-code-review-better-than-teammates.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">how_to_guide</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/mcp-enterprise-authorization-layer-implementation.html">MCP Gets Its Missing Enterprise Authorization Layer</a></h2>
-                <p class="excerpt">The Model Context Protocol has become the standard for connecting AI agents to enterprise tools, but organizations face a critical security gap. This guide covers implementing the enterprise authorization layer MCP deployments need for secure, scalable adoption.</p>
-                <div class="tags"><span class="tag">MCP</span><span class="tag">enterprise-authorization</span><span class="tag">AI-agents</span></div>
-                <a href="posts/mcp-enterprise-authorization-layer-implementation.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Artificial Intelligence</span>
-                    <span class="read-time">~11 min read</span>
-                </div>
-                <h2><a href="posts/proactive-ai-agents-autonomous-business-operations.html">Proactive AI Agents: The New Frontier in Autonomous Business Operations</a></h2>
-                <p class="excerpt">Gusto's cofounder unveiled an AI agent that anticipates business needs, flags compliance risks, and manages benefits without waiting for user input. This shift toward proactive AI agents is reshaping how organizations approach software validation and security testing.</p>
-                <div class="tags"><span class="tag">AI agents</span><span class="tag">payroll automation</span><span class="tag">HR technology</span></div>
-                <a href="posts/proactive-ai-agents-autonomous-business-operations.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Cloud & DevOps</span>
-                    <span class="read-time">~9 min read</span>
-                </div>
-                <h2><a href="posts/kiro-mobile-aws-agentic-coding-iphone.html">Kiro Goes Mobile: AWS Agentic Coding on iPhone</a></h2>
-                <p class="excerpt">AWS Kiro now brings agentic coding supervision to mobile devices, letting developers monitor and steer AI agents from their iPhone without being desk-bound. This guide covers setting up, managing, and optimizing AI agent oversight from your pocket.</p>
-                <div class="tags"><span class="tag">AWS</span><span class="tag">agentic AI</span><span class="tag">mobile development</span></div>
-                <a href="posts/kiro-mobile-aws-agentic-coding-iphone.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Infrastructure</span>
-                    <span class="read-time">~12 min read</span>
-                </div>
-                <h2><a href="posts/aws-context-ai-agent-reasoning-trend.html">AWS Context Leads AI Agent Reasoning Revolution</a></h2>
-                <p class="excerpt">AWS launches Context service, signaling the end of "just add more data" thinking in AI development. The industry recognizes that agentic AI success depends on sophisticated context management and reasoning infrastructure.</p>
-                <div class="tags"><span class="tag">AI agents</span><span class="tag">AWS Context</span><span class="tag">reasoning infrastructure</span></div>
-                <a href="posts/aws-context-ai-agent-reasoning-trend.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Cloud Cost Management</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/aws-bill-spike-cost-agent-guide.html">AWS Bill Spike? Use the New Cost Agent</a></h2>
-                <p class="excerpt">AWS has introduced a new AI cost intelligence agent that helps DevOps teams detect and prevent billing anomalies. This practical guide shows how to leverage this frontier agent to diagnose unexpected cloud spending spikes.</p>
-                <div class="tags"><span class="tag">AWS</span><span class="tag">cost-management</span><span class="tag">cloud-billing</span></div>
-                <a href="posts/aws-bill-spike-cost-agent-guide.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Technology & Innovation</span>
-                    <span class="read-time">~11 min read</span>
-                </div>
-                <h2><a href="posts/spacex-cursor-acquisition-ai-coding.html">SpaceX's $60B Cursor Acquisition Reshapes AI Coding</a></h2>
-                <p class="excerpt">SpaceX's landmark $60 billion acquisition of Cursor marks the largest AI developer tools deal in history, fundamentally reshaping control over AI-assisted software development. For the software testing and security sectors, the implications are substantial and raise important questions about the future landscape.</p>
-                <div class="tags"><span class="tag">SpaceX</span><span class="tag">Cursor</span><span class="tag">AI Coding Tools</span></div>
-                <a href="posts/spacex-cursor-acquisition-ai-coding.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Development</span>
-                    <span class="read-time">~9 min read</span>
-                </div>
-                <h2><a href="posts/cohere-coding-model-enterprise-developers.html">Get Started with Cohere's Coding Model</a></h2>
-                <p class="excerpt">Cohere pivots from enterprise sovereign AI to target developers directly with its first dedicated coding model. This guide covers everything you need to get started with this powerful new tool.</p>
-                <div class="tags"><span class="tag">cohere</span><span class="tag">coding-model</span><span class="tag">enterprise-ai</span></div>
-                <a href="posts/cohere-coding-model-enterprise-developers.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Development</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/anthropic-fable-mess-explained.html">The Anthropic Fable Mess, Explained</a></h2>
-                <p class="excerpt">The Anthropic-Mythos-Fable story has dominated discussions since Friday, revealing critical issues with AI-assisted security testing and supply chain trust. This week's events offer essential lessons for anyone building AI-integrated testing pipelines.</p>
-                <div class="tags"><span class="tag">AI security</span><span class="tag">supply chain</span><span class="tag">Anthropic</span></div>
-                <a href="posts/anthropic-fable-mess-explained.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">development</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/ai-generated-apps-cloud-dependency-risks.html">AI Apps on Their Cloud: Risks & Solutions</a></h2>
-                <p class="excerpt">AI app generators like Replit and Lovable make shipping software trivial, but running exclusively on their cloud creates serious risks. This guide shows you how to recognize vendor lock-in and take back control of your application's future.</p>
-                <div class="tags"><span class="tag">AI development</span><span class="tag">cloud deployment</span><span class="tag">vendor lock-in</span></div>
-                <a href="posts/ai-generated-apps-cloud-dependency-risks.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Trends</span>
-                    <span class="read-time">~11 min read</span>
-                </div>
-                <h2><a href="posts/cohere-developer-pivot-sovereign-ai-enterprise.html">Cohere's Developer Pivot and Sovereign AI's Enterprise Moment</a></h2>
-                <p class="excerpt">Cohere pivots from enterprise sovereign AI to developers with its first dedicated coding model, signaling a strategic shift in the AI market. The move highlights the bifurcation between compliance-first enterprise buyers and capability-first developer builders.</p>
-                <div class="tags"><span class="tag">cohere</span><span class="tag">sovereign-ai</span><span class="tag">coding-models</span></div>
-                <a href="posts/cohere-developer-pivot-sovereign-ai-enterprise.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI & Machine Learning</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/ai-retrieval-ranking-beyond-vector-search.html">Beyond Vector Search: Advanced AI Retrieval Ranking</a></h2>
-                <p class="excerpt">Vector search revolutionized information retrieval through semantic similarity matching, but it has fundamental limitations that impact real-world AI systems. This guide explores practical strategies for implementing sophisticated retrieval architectures that go beyond basic vector search.</p>
-                <div class="tags"><span class="tag">AI retrieval</span><span class="tag">vector search</span><span class="tag">ranking algorithms</span></div>
-                <a href="posts/ai-retrieval-ranking-beyond-vector-search.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Development & Security</span>
-                    <span class="read-time">~12 min read</span>
-                </div>
-                <h2><a href="posts/ai-testing-security-weekly-fable-mythos-suspended.html">AI Models Suspended: Anthropic Faces Regulatory Standoff</a></h2>
-                <p class="excerpt">Anthropic's sudden suspension of Fable 5 and Mythos 5 has left development teams scrambling to understand the regulatory standoff and its impact on AI-integrated testing pipelines. This watershed moment signals potential reshaping of how AI providers and developers approach model deployment and security certifications.</p>
-                <div class="tags"><span class="tag">anthropic</span><span class="tag">ai-models</span><span class="tag">regulatory-compliance</span></div>
-                <a href="posts/ai-testing-security-weekly-fable-mythos-suspended.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI & Machine Learning</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/ai-coding-agents-stack-overflow-integration.html">Guide: Integrating AI Coding Agents with Stack Overflow</a></h2>
-                <p class="excerpt">AI coding agents like GitHub Copilot and CodeWhisperer have revolutionized development, but they often hallucinate answers. Stack Overflow has built a solution to connect these agents with verified knowledge. Discover how to integrate them effectively.</p>
-                <div class="tags"><span class="tag">AI agents</span><span class="tag">Stack Overflow</span><span class="tag">coding tools</span></div>
-                <a href="posts/ai-coding-agents-stack-overflow-integration.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI & Enterprise</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/enterprise-agent-wars-neutral-platform.html">Enterprise Agent Wars: Who Plays Switzerland?</a></h2>
-                <p class="excerpt">Enterprise AI vendors are positioning themselves as neutral orchestration platforms while aggressively expanding their own agent ecosystems. The vendors best positioned to play Switzerland are the ones nobody's talking about yet.</p>
-                <div class="tags"><span class="tag">enterprise-ai</span><span class="tag">ai-agents</span><span class="tag">orchestration</span></div>
-                <a href="posts/enterprise-agent-wars-neutral-platform.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Career Development</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/entry-level-tech-jobs-ai-disruption-guide.html">Entry-Level Tech Jobs in the Age of AI</a></h2>
-                <p class="excerpt">AI automation is shrinking entry-level tech positions while demand for AI-adjacent skills explodes, creating a paradox for newcomers. This practical guide reveals where entry-level tech jobs are going and how to position yourself for success in the AI era.</p>
-                <div class="tags"><span class="tag">entry-level jobs</span><span class="tag">AI automation</span><span class="tag">tech careers</span></div>
-                <a href="posts/entry-level-tech-jobs-ai-disruption-guide.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">Security</span>
-                    <span class="read-time">~9 min read</span>
-                </div>
-                <h2><a href="posts/chainguard-open-source-packages-supply-chain-security.html">AI Dependencies: Chainguard's 52K Package Security Wake-Up</a></h2>
-                <p class="excerpt">Chainguard's analysis of 52,000 open-source packages exposes how AI agents carelessly select dependencies with minimal security discernment, creating widespread supply chain vulnerabilities. The report marks a turning point for enterprise organizations relying on agentic coding tools.</p>
-                <div class="tags"><span class="tag">supply-chain-security</span><span class="tag">open-source</span><span class="tag">ai-agents</span></div>
-                <a href="posts/chainguard-open-source-packages-supply-chain-security.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI Development</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/optimize-fable-5-guardrails-burn-rate.html">Optimize Fable 5: Manage Guardrails & Burn Rate</a></h2>
-                <p class="excerpt">Fable 5 delivers superior code quality but frustrates users with restrictive guardrails and high token consumption. This guide reveals practical workarounds to optimize your workflow and ship faster despite the limitations.</p>
-                <div class="tags"><span class="tag">Fable 5</span><span class="tag">AI development</span><span class="tag">token optimization</span></div>
-                <a href="posts/optimize-fable-5-guardrails-burn-rate.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">trends</span>
-                    <span class="read-time">~11 min read</span>
-                </div>
-                <h2><a href="posts/observability-overload-drowning-engineers.html">Observability Overload Is Drowning Engineers</a></h2>
-                <p class="excerpt">The observability systems built to solve problems have become the problem themselves, creating data overload that drowns engineers in noise. This week's trends reveal how the industry is scrambling for solutions as observability paradox reaches a breaking point.</p>
-                <div class="tags"><span class="tag">observability</span><span class="tag">monitoring</span><span class="tag">data-overload</span></div>
-                <a href="posts/observability-overload-drowning-engineers.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">how_to_guide</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/claude-mythos-fable-5-testing-guide.html">Claude Mythos/Fable 5: Test Before Access Ends</a></h2>
-                <p class="excerpt">Anthropic launched Fable 5, a Mythos-class AI model with enhanced reasoning and code analysis capabilities, but unrestricted access ends soon. This guide helps you evaluate whether Claude Mythos/Fable 5 is right for your security and testing needs before enterprise pricing takes effect.</p>
-                <div class="tags"><span class="tag">Claude</span><span class="tag">AI Models</span><span class="tag">Testing</span></div>
-                <a href="posts/claude-mythos-fable-5-testing-guide.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI & Development</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/ai-agents-break-free-solo-dev-mode.html">AI Agents Break Free from Solo Dev Mode</a></h2>
-                <p class="excerpt">AI coding assistants are moving beyond individual developer use cases into collaborative team environments. This shift has significant implications for software testing, security practices, and enterprise development workflows.</p>
-                <div class="tags"><span class="tag">AI agents</span><span class="tag">software testing</span><span class="tag">developer tools</span></div>
-                <a href="posts/ai-agents-break-free-solo-dev-mode.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">DevOps</span>
-                    <span class="read-time">~7 min read</span>
-                </div>
-                <h2><a href="posts/microsoft-azure-repos-github-migration-guide.html">Evaluate Microsoft's Azure Repos to GitHub Migration</a></h2>
-                <p class="excerpt">Microsoft is actively pushing enterprises to migrate from Azure Repos to GitHub, despite GitHub's recent reliability issues and outages. This guide helps organizations evaluate the migration decision and manage the transition effectively.</p>
-                <div class="tags"><span class="tag">github</span><span class="tag">azure-repos</span><span class="tag">migration</span></div>
-                <a href="posts/microsoft-azure-repos-github-migration-guide.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI & Machine Learning</span>
-                    <span class="read-time">~9 min read</span>
-                </div>
-                <h2><a href="posts/ai-solving-memory-crunch-trend-roundup.html">How AI is Solving the Memory Crunch It Created</a></h2>
-                <p class="excerpt">The AI revolution has created an unprecedented memory crisis, but the industry is now solving it with innovative efficiency solutions. This week's trends reveal a maturing ecosystem where memory optimization is becoming essential to AI-powered testing and security pipelines.</p>
-                <div class="tags"><span class="tag">AI memory optimization</span><span class="tag">quantization</span><span class="tag">model efficiency</span></div>
-                <a href="posts/ai-solving-memory-crunch-trend-roundup.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">how_to_guide</span>
-                    <span class="read-time">~8 min read</span>
-                </div>
-                <h2><a href="posts/netlify-cto-dana-lawson-writing-code-no-longer-job.html">Writing Code Is No Longer the Job</a></h2>
-                <p class="excerpt">Netlify CTO Dana Lawson declares that writing code is no longer the primary job of developers as AI coding assistants transform the software development landscape. This practical guide explores how developers can evolve their roles to focus on higher-value tasks like testing, security, and architecture.</p>
-                <div class="tags"><span class="tag">AI development</span><span class="tag">software development</span><span class="tag">developer careers</span></div>
-                <a href="posts/netlify-cto-dana-lawson-writing-code-no-longer-job.html" class="read-more">Read article →</a>
-            </article>
-            <article class="post-card">
-                <div class="post-meta">
-                    <span class="category">AI & Automation</span>
-                    <span class="read-time">~10 min read</span>
-                </div>
-                <h2><a href="posts/joy-wars-ai-agents-competition-shift.html">The Joy Wars Begin: AI Agent Competition Shifts</a></h2>
-                <p class="excerpt">The enterprise AI conversation has pivoted from model superiority to building the most joyous products. AI agents are commoditizing rapidly, making user experience and developer happiness the new competitive battleground.</p>
-                <div class="tags"><span class="tag">AI agents</span><span class="tag">developer experience</span><span class="tag">enterprise AI</span></div>
-                <a href="posts/joy-wars-ai-agents-competition-shift.html" class="read-more">Read article →</a>
-            </article>
-  </div>
-  <footer>
-    <p>&copy; AI Dev Defense · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · 
+  
+            <section class="featured-week">
+              <div class="featured-copy">
+                <span class="badge">Article of the Week</span>
+                <h1>Dev and Security Champ: Managing the Dual Role</h1>
+                <p class="pitch">Getting appointed as a security champion while maintaining your dev duties is real—and often becomes an unpaid second job. Understand what the role actually entails and how to set boundaries.</p>
+                <a href="posts/developer-security-champion-dual-role.html" class="cta">Read article</a>
+              </div>
+              <div class="featured-panel" aria-hidden="true"></div>
+            </section>
+  
+            <section class="recent-block">
+              <div class="recent-header">
+                <h2>Recent</h2>
+                <a href="/archive.html">Full archive →</a>
+              </div>
+              <div class="recent-grid">
+                
+              <article class="recent-card">
+                <span class="category">DevSecOps</span>
+                <h3><a href="posts/gitlab-sast-jira-automate-tickets.html">GitLab SAST to Jira: Automate Security Tickets</a></h3>
+                <p>GitLab's SAST-to-Jira integration automates security ticket creation, but it's narrower than "auto-dump every finding" sounds. Discover what actually happens, the real settings, and how to avoid ticket spam.</p>
+                <span class="read-time">~3 min read</span>
+              </article>
+              <article class="recent-card">
+                <span class="category">AI Security</span>
+                <h3><a href="posts/claude-security-mythos-5-enterprise-beta.html">Claude Security Scans Now Run on Claude Mythos 5</a></h3>
+                <p>Anthropic launched Claude Security scans powered by Claude Mythos 5 for Enterprise customers in public beta. The service provides security findings through an automated scanner rather than direct model access.</p>
+                <span class="read-time">~3 min read</span>
+              </article>
+              <article class="recent-card">
+                <span class="category">DevOps & Security</span>
+                <h3><a href="posts/package-registry-shai-hulud-ci-cd-security.html">Package Registry Control: Securing Your CI/CD Pipeline</a></h3>
+                <p>Your package registry is the single point of trust that controls everything flowing through your CI/CD pipeline. Whoever controls that registry—whether through typosquatting, compromise, or malicious injection—controls what gets built, tested, and shipped into production.</p>
+                <span class="read-time">~2 min read</span>
+              </article>
+              </div>
+            </section>
+  <footer class="site-footer">
+    <p class="ai-disclosure">Most articles on AI Dev Defense are AI-drafted and then reviewed before publish.</p>
+    <p>&copy; 2026 AI Dev Defense &middot;
+    <a href="/archive.html">Archive</a> &middot;
+    <a href="/about.html">About</a> &middot;
+    <a href="/privacy.html">Privacy</a> &middot;
     <a href="/affiliate-disclosure.html">Affiliate Disclosure</a></p>
   </footer>
 </body>
