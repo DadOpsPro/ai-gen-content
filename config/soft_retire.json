@@ -1,22 +1,30 @@
 {
   "description": "Slugs excluded from homepage recent cards and archive month lists. Permalinks stay live and remain in sitemap.xml. Strip posts/ and .html if adding new entries.",
   "keep_listed": [
+    "chainguard-open-source-packages-supply-chain-security",
+    "claude-mythos-fable-5-testing-guide",
+    "claude-security-mythos-5-enterprise-beta",
     "developer-security-champion-dual-role",
     "gitlab-sast-jira-automate-tickets",
-    "claude-security-mythos-5-enterprise-beta",
-    "package-registry-shai-hulud-ci-cd-security",
-    "chainguard-open-source-packages-supply-chain-security"
+    "package-registry-shai-hulud-ci-cd-security"
   ],
   "slugs": [
     "ai-agents-break-free-solo-dev-mode",
     "ai-code-review-better-than-teammates",
+    "ai-coding-agents-stack-overflow-integration",
+    "ai-generated-apps-cloud-dependency-risks",
+    "ai-retrieval-ranking-beyond-vector-search",
     "ai-solving-memory-crunch-trend-roundup",
     "ai-testing-security-weekly-fable-mythos-suspended",
     "anthropic-fable-mess-explained",
+    "aws-bill-spike-cost-agent-guide",
     "aws-context-ai-agent-reasoning-trend",
+    "checkmarx-sast-engine-post-scan-intelligence",
+    "cohere-coding-model-enterprise-developers",
     "cohere-developer-pivot-sovereign-ai-enterprise",
     "cross-repo-review-ai-teams-qodo",
     "cross-repo-review-qodo-ai-teams",
+    "downloadable-ai-models-grok-cost-effective-testing",
     "enterprise-agent-wars-neutral-platform",
     "entry-level-tech-jobs-ai-disruption-guide",
     "gemini-cli-vs-antigravity-real-world-performance",
@@ -24,13 +32,18 @@
     "hijack-claude-cursor-codex-via-sentry-keys",
     "joy-wars-ai-agents-competition-shift",
     "kiro-mobile-aws-agentic-coding-iphone",
+    "mcp-enterprise-authorization-layer-implementation",
+    "microsoft-azure-repos-github-migration-guide",
     "netlify-cto-dana-lawson-writing-code-no-longer-job",
     "observability-overload-drowning-engineers",
     "optimize-fable-5-guardrails-burn-rate",
     "per-developer-environments-ai-agents-trend",
     "proactive-ai-agents-autonomous-business-operations",
+    "protect-ai-coding-agents-sentry-key-exploitation",
+    "replace-java-8-spring-boot-angular-strangler",
     "replit-auto-mode-picks-best-model",
     "sentry-key-hijack-claude-cursor-codex-defense",
-    "spacex-cursor-acquisition-ai-coding"
+    "spacex-cursor-acquisition-ai-coding",
+    "valkey-ai-automated-backporting-bug-fixes"
   ]
 }
