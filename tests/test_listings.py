@@ -6,6 +6,8 @@ from pipeline.listings import (
     featured_and_recent,
     is_in_listing_window,
     listed_articles,
+    load_soft_retired_slugs,
+    normalize_slug,
     parse_published_at,
 )
 
@@ -72,6 +74,47 @@ class ListingTests(unittest.TestCase):
         ]
         listed = listed_articles(registry, now=NOW)
         self.assertEqual([r["slug"] for r in listed], ["newer", "older"])
+
+    def test_normalize_slug_strips_posts_prefix_and_html(self):
+        self.assertEqual(
+            normalize_slug("posts/hijack-claude-cursor-codex-via-sentry-keys.html"),
+            "hijack-claude-cursor-codex-via-sentry-keys",
+        )
+
+    def test_denylist_excludes_from_home_and_archive_not_by_date(self):
+        keep = rec("developer-security-champion-dual-role", "2026-09-04T00:00:00Z")
+        trend = rec("spacex-cursor-acquisition-ai-coding", "2026-09-03T00:00:00Z")
+        broken = rec("hijack-claude-cursor-codex-via-sentry-keys", "2026-09-02T00:00:00Z")
+        retired = {"spacex-cursor-acquisition-ai-coding", "hijack-claude-cursor-codex-via-sentry-keys"}
+        listed = listed_articles(
+            [keep, trend, broken], now=NOW, retired_slugs=retired
+        )
+        self.assertEqual([r["slug"] for r in listed], [keep["slug"]])
+        featured, recent = featured_and_recent(
+            [keep, trend, broken], now=NOW, retired_slugs=retired
+        )
+        self.assertEqual(featured["slug"], keep["slug"])
+        self.assertEqual(recent, [])
+        groups = archive_by_month(
+            [keep, trend, broken], now=NOW, retired_slugs=retired
+        )
+        slugs = [article["slug"] for _, articles in groups for article in articles]
+        self.assertEqual(slugs, [keep["slug"]])
+
+    def test_soft_retire_file_keeps_practitioner_posts(self):
+        retired = load_soft_retired_slugs()
+        self.assertIn("hijack-claude-cursor-codex-via-sentry-keys", retired)
+        self.assertIn("sentry-key-hijack-claude-cursor-codex-defense", retired)
+        self.assertIn("spacex-cursor-acquisition-ai-coding", retired)
+        self.assertIn("joy-wars-ai-agents-competition-shift", retired)
+        keep = {
+            "developer-security-champion-dual-role",
+            "gitlab-sast-jira-automate-tickets",
+            "claude-security-mythos-5-enterprise-beta",
+            "package-registry-shai-hulud-ci-cd-security",
+            "chainguard-open-source-packages-supply-chain-security",
+        }
+        self.assertFalse(keep & retired)
 
 
 if __name__ == "__main__":

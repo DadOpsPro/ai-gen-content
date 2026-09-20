@@ -418,6 +418,8 @@ def run_review_pipeline():
 def run_pages_pipeline():
     """
     Rebuild homepage, archive, and static chrome from the article registry.
+    Applies the soft-retire denylist to human listings (sitemap stays full)
+    and caps manual AdSense units on restored post HTML.
     Does not generate or publish a new article — drafts stay drafts.
     """
     print(f"\n{'='*60}")
