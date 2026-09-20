@@ -6,7 +6,8 @@
     "claude-security-mythos-5-enterprise-beta",
     "developer-security-champion-dual-role",
     "gitlab-sast-jira-automate-tickets",
-    "package-registry-shai-hulud-ci-cd-security"
+    "package-registry-shai-hulud-ci-cd-security",
+    "replace-java-8-spring-boot-angular-strangler"
   ],
   "slugs": [
     "ai-agents-break-free-solo-dev-mode",
@@ -40,7 +41,6 @@
     "per-developer-environments-ai-agents-trend",
     "proactive-ai-agents-autonomous-business-operations",
     "protect-ai-coding-agents-sentry-key-exploitation",
-    "replace-java-8-spring-boot-angular-strangler",
     "replit-auto-mode-picks-best-model",
     "sentry-key-hijack-claude-cursor-codex-defense",
     "spacex-cursor-acquisition-ai-coding",

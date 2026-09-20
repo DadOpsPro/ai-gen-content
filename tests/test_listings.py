@@ -110,6 +110,7 @@ class ListingTests(unittest.TestCase):
             "developer-security-champion-dual-role",
             "gitlab-sast-jira-automate-tickets",
             "package-registry-shai-hulud-ci-cd-security",
+            "replace-java-8-spring-boot-angular-strangler",
         }
         must_retire = {
             "ai-agents-break-free-solo-dev-mode",
@@ -143,7 +144,6 @@ class ListingTests(unittest.TestCase):
             "per-developer-environments-ai-agents-trend",
             "proactive-ai-agents-autonomous-business-operations",
             "protect-ai-coding-agents-sentry-key-exploitation",
-            "replace-java-8-spring-boot-angular-strangler",
             "replit-auto-mode-picks-best-model",
             "sentry-key-hijack-claude-cursor-codex-defense",
             "spacex-cursor-acquisition-ai-coding",
@@ -152,9 +152,11 @@ class ListingTests(unittest.TestCase):
         self.assertFalse(keep & retired)
         self.assertTrue(must_retire <= retired)
         self.assertNotIn("claude-mythos-fable-5-testing-guide", retired)
+        self.assertNotIn("replace-java-8-spring-boot-angular-strangler", retired)
 
     def test_real_denylist_keeps_only_approved_archive_slugs(self):
         registry = [
+            rec("replace-java-8-spring-boot-angular-strangler", "2026-09-20T21:50:15Z"),
             rec("developer-security-champion-dual-role", "2026-09-04T00:00:00Z"),
             rec("claude-mythos-fable-5-testing-guide", "2026-06-15T00:00:00Z"),
             rec("downloadable-ai-models-grok-cost-effective-testing", "2026-08-10T00:00:00Z"),
@@ -165,10 +167,13 @@ class ListingTests(unittest.TestCase):
         self.assertEqual(
             [r["slug"] for r in listed],
             [
+                "replace-java-8-spring-boot-angular-strangler",
                 "developer-security-champion-dual-role",
                 "claude-mythos-fable-5-testing-guide",
             ],
         )
+        featured, recent = featured_and_recent(registry, now=NOW)
+        self.assertEqual(featured["slug"], "replace-java-8-spring-boot-angular-strangler")
 
 
 if __name__ == "__main__":
