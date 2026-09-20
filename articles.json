@@ -598,5 +598,20 @@
     ],
     "word_count": 749,
     "published_at": "2026-09-04T01:34:18.514610Z"
+  },
+  {
+    "slug": "replace-java-8-spring-boot-angular-strangler",
+    "title": "Replace Java 8 with Spring Boot & Angular",
+    "excerpt": "Instead of upgrading Java 8, use the strangler pattern to incrementally replace sections with modern Spring Boot and Angular. This approach keeps legacy systems running while gradually shrinking the old surface area.",
+    "category": "Java Development",
+    "tags": [
+      "Java 8",
+      "Spring Boot",
+      "Angular",
+      "strangler pattern",
+      "modernization"
+    ],
+    "word_count": 744,
+    "published_at": "2026-09-20T21:50:15.013603Z"
   }
 ]

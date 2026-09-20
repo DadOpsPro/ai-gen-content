@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Replace Java 8 with Spring Boot & Angular | AI Dev Defense</title>
+  <meta name="description" content="Modernize Java 8 apps using strangler pattern: replace risky parts with Spring Boot and Angular instead of risky JDK upgrades.">
+  <meta property="og:title" content="Replace Java 8 with Spring Boot & Angular">
+  <meta property="og:description" content="Modernize Java 8 apps using strangler pattern: replace risky parts with Spring Boot and Angular instead of risky JDK upgrades.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/replace-java-8-spring-boot-angular-strangler.html">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }
+    .site-header nav a:hover { color: #fff; }
+    .ai-disclosure { color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem;
+                     font-size: 0.82rem; line-height: 1.5; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+    ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; }
+    .ad-unit:has(ins[data-ad-status="unfilled"]) { display: none; margin: 0 !important; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/archive.html">Archive</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>Java Development</span> &middot;
+      <span>3 min read</span> &middot;
+      <span>744 words</span>
+    </div>
+    <h1>Replace Java 8 with Spring Boot & Angular</h1>
+        <p class="author-byline" style="margin-top:-0.75rem;margin-bottom:1.75rem;color:var(--color-muted);font-size:0.95rem;">
+        By <a href="/about.html" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Chris Clark</a>
+        · AppSec practitioner &amp; AWS Solutions Architect
+        </p>
+        <div class="article-content">
+        
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>Don't Upgrade Java 8 — Replace the Risky Parts</h1>
+</p>
+<p>Most "Java 8 modernization" advice assumes you will bump the JDK and keep the same app. That is one path. It is not the only path — and it is not the one I have lived.
+</p>
+<p>My experience is the other shape: keep the Java 8 system running, then carve out a section and replace it with a modern stack — Spring Boot on the server, Angular on the client — until the old surface area shrinks. That is a strangler pattern, not a compiler upgrade.
+</p>
+<p>If your team is stuck on 8, ask a sharper question than "when do we bump the runtime?" Ask: <strong>which slice can we replace first without pretending the monolith got younger?</strong>
+
+<h2>Why replacement beats a fake upgrade</h2>
+</p>
+<p>A JDK bump on a large Java 8 codebase still leaves you with the same business logic, the same shared mutable state, and often the same insecure defaults — just on a newer VM. The security debt in session handling, auth, file upload, crypto helpers, and "temporary" reflection hacks travels with the classes.
+</p>
+<p>Replacement forces a boundary. The new Spring Boot service has its own auth story, its own dependency set, its own test suite. The Angular app talks over explicit APIs instead of server-rendered pages stuffed with session cookies and hidden fields. You do not magically secure the old core — but you stop adding traffic to the worst doors.
+</p>
+<p>That trade is honest: <strong>two systems for a while</strong>, with a clear kill plan for the old path.
+
+<h2>What actually gets safer</h2>
+
+<strong>Auth and sessions.</strong> Old Java 8 apps often lean on container sessions, custom filters, and cookie habits that predate modern token and CSRF norms. A new Spring Security config on Boot is not free — but it is reviewable in one place. The Angular client uses explicit API calls; you can require HTTPS, short-lived tokens, and CSRF strategies that match the browser app you actually ship.
+
+<strong>Dependencies.</strong> The monolith's POM is a graveyard. The new service starts with a short BOM. You can turn on SCA — software composition analysis, meaning tools that flag vulnerable libraries — on the Boot app on day one. OWASP Dependency-Check, Snyk, GitLab dependency scanning. Pick what you already run. No waiting until the whole WAR is "ready for 17."
+
+<strong>Attack surface.</strong> Every JSP or legacy servlet you retire is one less page built for "works in IE mode" security. Angular routes and Spring controllers are still attackable — but they are smaller, newer, and easier to put behind the same gateway and WAF rules as the rest of your modern estate.
+
+<strong>Testing you can believe.</strong> Integration tests against a Boot API and an Angular e2e suite beat "we compiled on 8 and clicked through production." Contract tests between the old system and the new service catch the cutover bugs that kill strangler projects: wrong IDs, half-migrated data, dual-write drift.
+
+<h2>What stays dangerous until the old path dies</h2>
+</p>
+<p>Replacement does not forgive the leftover Java 8 core.
+<ul>
+<li>Shared databases mean the new service can still be hurt by weak authz in the old app writing the same tables.</li>
+<li>Dual-write or sync jobs become a new trust boundary. Treat them like an integration, not a cron footnote.</li>
+<li>SSO "temporary" bridges (old session → new token) are where teams accidentally create privilege escalation.</li>
+<li>The monolith's libraries still need triage if anything public still hits them.</li>
+</ul>
+</p>
+<p>So the security story is not "we modernized." It is "<strong>this percentage of user traffic no longer touches Java 8</strong>" — and you measure that.
+
+<h2>A practical cut sequence</h2>
+
+<li><strong>Pick a vertical slice</strong> with clear inputs/outputs. One workflow, one role, one report. Avoid the god module first.</li>
+<li><strong>Define the API contract</strong> before UI polish. Spring Boot owns the new rules; Angular consumes only that contract.</li>
+<li><strong>Put auth on the boundary.</strong> No "call the old session servlet from Angular and hope."</li>
+<li><strong>Instrument the split.</strong> Feature flag or gateway route so you can send 1% → 10% → 100% and roll back.</li>
+<li><strong>Kill the old entry points.</strong> Delete or hard-redirect the legacy URLs when the slice is done. Leaving them "just in case" keeps the risk.</li>
+<hr>
+The question I would ask your team: how much of your current traffic actually needs the Java 8 monolith, and how much just lands there because no one drew a new door?</p>
+<div class="ad-unit" style="margin:2rem 0;text-align:center;">
+  <!-- AdSense -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9384256595608147"
+       data-ad-slot="5959465348"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+        </div>
+    <div class="tags">Tags: Java 8 · Spring Boot · Angular · strangler pattern · modernization</div>
+  </main>
+  <footer>
+    <p class="ai-disclosure">Most articles on AI Dev Defense are AI-drafted and then reviewed before publish.</p>
+    <p>&copy; AI Dev Defense · <a href="/archive.html" style="color:#888">Archive</a> ·
+    <a href="/about.html" style="color:#888">About</a> ·
+    <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>
