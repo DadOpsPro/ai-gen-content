@@ -1,0 +1,30 @@
+{
+  "topic": "Don't Upgrade Java 8 \u2014 Replace the Risky Parts (strangler with Spring Boot + Angular)",
+  "article_type": "practitioner_explainer",
+  "keywords": [
+    "Java 8",
+    "strangler pattern",
+    "Spring Boot",
+    "Angular",
+    "legacy modernization",
+    "AppSec"
+  ],
+  "context": "Chris's firsthand beat: section replacement of Java 8 apps with modern Spring Boot / Angular (strangler), NOT in-place JDK 8\u2192LTS upgrades. Approved as-is with empty Chris take. GO 2026-09-20 for Monday publish.",
+  "sources": [
+    {
+      "title": "Martin Fowler \u2014 Strangler Fig Application",
+      "url": "https://martinfowler.com/bliki/StranglerFigApplication.html"
+    },
+    {
+      "title": "Spring Security reference",
+      "url": "https://docs.spring.io/spring-security/reference/"
+    },
+    {
+      "title": "OWASP Dependency-Check",
+      "url": "https://owasp.org/www-project-dependency-check/"
+    }
+  ],
+  "draft_markdown": "# Don't Upgrade Java 8 \u2014 Replace the Risky Parts\n\nMost \"Java 8 modernization\" advice assumes you will bump the JDK and keep the same app. That is one path. It is not the only path \u2014 and it is not the one I have lived.\n\nMy experience is the other shape: keep the Java 8 system running, then carve out a section and replace it with a modern stack \u2014 Spring Boot on the server, Angular on the client \u2014 until the old surface area shrinks. That is a strangler pattern, not a compiler upgrade.\n\nIf your team is stuck on 8, ask a sharper question than \"when do we bump the runtime?\" Ask: **which slice can we replace first without pretending the monolith got younger?**\n\n## Why replacement beats a fake upgrade\n\nA JDK bump on a large Java 8 codebase still leaves you with the same business logic, the same shared mutable state, and often the same insecure defaults \u2014 just on a newer VM. The security debt in session handling, auth, file upload, crypto helpers, and \"temporary\" reflection hacks travels with the classes.\n\nReplacement forces a boundary. The new Spring Boot service has its own auth story, its own dependency set, its own test suite. The Angular app talks over explicit APIs instead of server-rendered pages stuffed with session cookies and hidden fields. You do not magically secure the old core \u2014 but you stop adding traffic to the worst doors.\n\nThat trade is honest: **two systems for a while**, with a clear kill plan for the old path.\n\n## What actually gets safer\n\n**Auth and sessions.** Old Java 8 apps often lean on container sessions, custom filters, and cookie habits that predate modern token and CSRF norms. A new Spring Security config on Boot is not free \u2014 but it is reviewable in one place. The Angular client uses explicit API calls; you can require HTTPS, short-lived tokens, and CSRF strategies that match the browser app you actually ship.\n\n**Dependencies.** The monolith's POM is a graveyard. The new service starts with a short BOM. You can turn on SCA (OWASP Dependency-Check, Snyk, GitLab dependency scanning \u2014 pick what you already run) on the Boot app on day one, instead of waiting until the whole WAR is \"ready for 17.\"\n\n**Attack surface.** Every JSP/JSF or legacy servlet you retire is one less reflection of \"works in IE mode\" security. Angular routes and Spring controllers are still attackable \u2014 but they are smaller, newer, and easier to put behind the same gateway and WAF rules as the rest of your modern estate.\n\n**Testing you can believe.** Integration tests against a Boot API and an Angular e2e suite beat \"we compiled on 8 and clicked through production.\" Contract tests between the old system and the new service catch the cutover bugs that kill strangler projects: wrong IDs, half-migrated data, dual-write drift.\n\n## What stays dangerous until the old path dies\n\nReplacement does not forgive the leftover Java 8 core.\n\n- Shared databases mean the new service can still be hurt by weak authz in the old app writing the same tables.\n- Dual-write or sync jobs become a new trust boundary. Treat them like an integration, not a cron footnote.\n- SSO \"temporary\" bridges (old session \u2192 new token) are where teams accidentally create privilege escalation.\n- The monolith's libraries still need triage if anything public still hits them.\n\nSo the security story is not \"we modernized.\" It is \"**this percentage of user traffic no longer touches Java 8**\" \u2014 and you measure that.\n\n## A practical cut sequence\n\n1. **Pick a vertical slice** with clear inputs/outputs (one workflow, one role, one report). Avoid the god module first.\n2. **Define the API contract** before UI polish. Spring Boot owns the new rules; Angular consumes only that contract.\n3. **Put auth on the boundary.** No \"call the old session servlet from Angular and hope.\"\n4. **Instrument the split.** Feature flag or gateway route so you can send 1% \u2192 10% \u2192 100% and roll back.\n5. **Kill the old entry points.** Delete or hard-redirect the legacy URLs when the slice is done. Leaving them \"just in case\" keeps the risk.\n",
+  "slug_hint": "java-8-strangler-spring-boot-angular",
+  "chris_take": ""
+}
