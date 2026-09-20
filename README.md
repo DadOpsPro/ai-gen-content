@@ -134,8 +134,9 @@ AFFILIATE_LINKS = {
 
 ### Google AdSense
 1. Apply at [adsense.google.com](https://adsense.google.com)
-2. Add your Publisher ID + Slot ID to `.env`
-3. Ads auto-inject after the first H2 and at article end
+2. Add your Publisher ID + Slot ID to `.env` (do not change `ca-pub-9384256595608147`)
+3. Manual in-article units are capped at **1**, and only when the article body is at least ~900 words (after the 2nd heading, or at the end). Short posts get the `adsbygoogle.js` loader only.
+4. During AdSense "low value content" remediation, **disable Auto ads** in the AdSense UI so the loader does not place extra units.
 
 ### Amazon Associates
 1. Sign up at [affiliate-program.amazon.com](https://affiliate-program.amazon.com)

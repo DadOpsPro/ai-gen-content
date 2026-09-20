@@ -23,6 +23,12 @@ AI_DISCLOSURE = (
 LISTING_WINDOW_MONTHS = 12
 HOME_RECENT_COUNT = 3
 
+# Manual in-article AdSense units are skipped below this body word count.
+# The adsbygoogle.js loader may still be present for Auto ads — disable Auto ads
+# in the AdSense UI during "low value content" remediation.
+# Publisher id stays ca-pub-9384256595608147 (via ADSENSE_PUB_ID).
+MIN_IN_ARTICLE_AD_WORDS = 900
+
 # Topic clusters biased to Chris's regular stack so he can add firsthand
 # feedback. Deprioritize generic AI industry roundups / vendor news dumps.
 TOPIC_CLUSTERS = [

@@ -6,6 +6,8 @@ from pipeline.listings import (
     featured_and_recent,
     is_in_listing_window,
     listed_articles,
+    load_soft_retired_slugs,
+    normalize_slug,
     parse_published_at,
 )
 
@@ -72,6 +74,106 @@ class ListingTests(unittest.TestCase):
         ]
         listed = listed_articles(registry, now=NOW)
         self.assertEqual([r["slug"] for r in listed], ["newer", "older"])
+
+    def test_normalize_slug_strips_posts_prefix_and_html(self):
+        self.assertEqual(
+            normalize_slug("posts/hijack-claude-cursor-codex-via-sentry-keys.html"),
+            "hijack-claude-cursor-codex-via-sentry-keys",
+        )
+
+    def test_denylist_excludes_from_home_and_archive_not_by_date(self):
+        keep = rec("developer-security-champion-dual-role", "2026-09-04T00:00:00Z")
+        trend = rec("spacex-cursor-acquisition-ai-coding", "2026-09-03T00:00:00Z")
+        broken = rec("hijack-claude-cursor-codex-via-sentry-keys", "2026-09-02T00:00:00Z")
+        retired = {"spacex-cursor-acquisition-ai-coding", "hijack-claude-cursor-codex-via-sentry-keys"}
+        listed = listed_articles(
+            [keep, trend, broken], now=NOW, retired_slugs=retired
+        )
+        self.assertEqual([r["slug"] for r in listed], [keep["slug"]])
+        featured, recent = featured_and_recent(
+            [keep, trend, broken], now=NOW, retired_slugs=retired
+        )
+        self.assertEqual(featured["slug"], keep["slug"])
+        self.assertEqual(recent, [])
+        groups = archive_by_month(
+            [keep, trend, broken], now=NOW, retired_slugs=retired
+        )
+        slugs = [article["slug"] for _, articles in groups for article in articles]
+        self.assertEqual(slugs, [keep["slug"]])
+
+    def test_soft_retire_file_keeps_practitioner_posts(self):
+        retired = load_soft_retired_slugs()
+        keep = {
+            "chainguard-open-source-packages-supply-chain-security",
+            "claude-mythos-fable-5-testing-guide",
+            "claude-security-mythos-5-enterprise-beta",
+            "developer-security-champion-dual-role",
+            "gitlab-sast-jira-automate-tickets",
+            "package-registry-shai-hulud-ci-cd-security",
+            "replace-java-8-spring-boot-angular-strangler",
+        }
+        must_retire = {
+            "ai-agents-break-free-solo-dev-mode",
+            "ai-code-review-better-than-teammates",
+            "ai-coding-agents-stack-overflow-integration",
+            "ai-generated-apps-cloud-dependency-risks",
+            "ai-retrieval-ranking-beyond-vector-search",
+            "ai-solving-memory-crunch-trend-roundup",
+            "ai-testing-security-weekly-fable-mythos-suspended",
+            "anthropic-fable-mess-explained",
+            "aws-bill-spike-cost-agent-guide",
+            "aws-context-ai-agent-reasoning-trend",
+            "checkmarx-sast-engine-post-scan-intelligence",
+            "cohere-coding-model-enterprise-developers",
+            "cohere-developer-pivot-sovereign-ai-enterprise",
+            "cross-repo-review-ai-teams-qodo",
+            "cross-repo-review-qodo-ai-teams",
+            "downloadable-ai-models-grok-cost-effective-testing",
+            "enterprise-agent-wars-neutral-platform",
+            "entry-level-tech-jobs-ai-disruption-guide",
+            "gemini-cli-vs-antigravity-real-world-performance",
+            "google-double-blind-gemini-testing",
+            "hijack-claude-cursor-codex-via-sentry-keys",
+            "joy-wars-ai-agents-competition-shift",
+            "kiro-mobile-aws-agentic-coding-iphone",
+            "mcp-enterprise-authorization-layer-implementation",
+            "microsoft-azure-repos-github-migration-guide",
+            "netlify-cto-dana-lawson-writing-code-no-longer-job",
+            "observability-overload-drowning-engineers",
+            "optimize-fable-5-guardrails-burn-rate",
+            "per-developer-environments-ai-agents-trend",
+            "proactive-ai-agents-autonomous-business-operations",
+            "protect-ai-coding-agents-sentry-key-exploitation",
+            "replit-auto-mode-picks-best-model",
+            "sentry-key-hijack-claude-cursor-codex-defense",
+            "spacex-cursor-acquisition-ai-coding",
+            "valkey-ai-automated-backporting-bug-fixes",
+        }
+        self.assertFalse(keep & retired)
+        self.assertTrue(must_retire <= retired)
+        self.assertNotIn("claude-mythos-fable-5-testing-guide", retired)
+        self.assertNotIn("replace-java-8-spring-boot-angular-strangler", retired)
+
+    def test_real_denylist_keeps_only_approved_archive_slugs(self):
+        registry = [
+            rec("replace-java-8-spring-boot-angular-strangler", "2026-09-20T21:50:15Z"),
+            rec("developer-security-champion-dual-role", "2026-09-04T00:00:00Z"),
+            rec("claude-mythos-fable-5-testing-guide", "2026-06-15T00:00:00Z"),
+            rec("downloadable-ai-models-grok-cost-effective-testing", "2026-08-10T00:00:00Z"),
+            rec("microsoft-azure-repos-github-migration-guide", "2026-06-01T00:00:00Z"),
+            rec("protect-ai-coding-agents-sentry-key-exploitation", "2026-06-20T00:00:00Z"),
+        ]
+        listed = listed_articles(registry, now=NOW)
+        self.assertEqual(
+            [r["slug"] for r in listed],
+            [
+                "replace-java-8-spring-boot-angular-strangler",
+                "developer-security-champion-dual-role",
+                "claude-mythos-fable-5-testing-guide",
+            ],
+        )
+        featured, recent = featured_and_recent(registry, now=NOW)
+        self.assertEqual(featured["slug"], "replace-java-8-spring-boot-angular-strangler")
 
 
 if __name__ == "__main__":

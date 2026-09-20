@@ -10,6 +10,7 @@ Publishes generated articles to:
 import httpx
 import json
 import os
+import re
 import sys
 from base64 import b64encode
 from datetime import datetime
@@ -23,6 +24,7 @@ from config.settings import (
     MAILCHIMP_API_KEY, MAILCHIMP_LIST_ID,
     SITE_NAME, SITE_URL, ADSENSE_PUBLISHER_ID, ADSENSE_SLOT_ID,
     OUTPUT_DIR, AI_DISCLOSURE, LISTING_WINDOW_MONTHS,
+    MIN_IN_ARTICLE_AD_WORDS,
 )
 from pipeline.featured_image import (
     EXTENSIONS as FEATURED_IMAGE_EXTS,
@@ -95,8 +97,8 @@ class WordPressPublisher:
             print("  [SKIP] WordPress not configured")
             return {}
 
-        # Wrap content with AdSense + affiliate disclaimer
-        full_content = wrap_with_ads(article.content_html)
+        # Wrap content with AdSense + affiliate disclaimer (capped at 1 unit)
+        full_content = wrap_with_ads(article.content_html, article.word_count)
 
         # Resolve tag/category IDs
         tag_ids = [self.get_or_create_tag(t) for t in article.tags[:5]]
@@ -319,6 +321,7 @@ class StaticSiteGenerator:
         self.build_archive()
         self.build_sitemap()
         self.copy_static_assets()
+        self.sanitize_post_ad_units()
         return str(index_path)
 
     def _render_featured_panel(self, record: Optional[dict],
@@ -425,6 +428,26 @@ class StaticSiteGenerator:
         print(f"  ✅ Archive built: {total} posts in {len(groups)} month(s)")
         return str(path)
 
+    def sanitize_post_ad_units(self) -> int:
+        """Cap manual AdSense units already written to posts/*.html.
+
+        Pages rebuilds restore live HTML from gh-pages. Older articles may
+        still have an in-article unit after the first H2 plus an end unit.
+        Reduce those to the current cap without rewriting article copy.
+        """
+        if not self.posts_dir.exists():
+            return 0
+        changed = 0
+        for path in sorted(self.posts_dir.glob("*.html")):
+            original = path.read_text(encoding="utf-8")
+            updated = cap_manual_ad_units(original)
+            if updated != original:
+                path.write_text(updated, encoding="utf-8")
+                changed += 1
+        if changed:
+            print(f"  ✅ Ad density: capped manual units in {changed} post(s)")
+        return changed
+
     def build_sitemap(self) -> str:
         """Generate a clean, valid sitemap.xml."""
         lines = [
@@ -476,7 +499,7 @@ class StaticSiteGenerator:
       
     def _render_article_page(self, article: GeneratedArticle) -> str:
         """Render article to full HTML page."""
-        content_with_ads = wrap_with_ads(article.content_html)
+        content_with_ads = wrap_with_ads(article.content_html, article.word_count)
         return ARTICLE_TEMPLATE.format(
             title=article.title,
             meta_description=article.meta_description,
@@ -589,9 +612,37 @@ class MailchimpPublisher:
 
 # ── HELPERS ────────────────────────────────────────────────────────────────────
 
-def wrap_with_ads(content_html: str) -> str:
-    """Insert AdSense ad unit after first H2 and at end of content."""
-    ad_unit = f"""
+# Manual in-article units only. The page <head> still loads adsbygoogle.js so
+# Auto ads can run if enabled — Chris should disable Auto ads in the AdSense UI
+# until the "low value content" review passes. Publisher id is not changed here
+# (live value: ca-pub-9384256595608147 via ADSENSE_PUB_ID).
+_HEADING_CLOSE_RE = re.compile(r"</h[23]>", re.IGNORECASE)
+_AD_UNIT_RE = re.compile(
+    r'\s*<div class="ad-unit"[^>]*>.*?</div>',
+    re.IGNORECASE | re.DOTALL,
+)
+_ARTICLE_BODY_RE = re.compile(
+    r'<div class="article-content">(.*)</div>\s*<div class="tags">',
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def html_word_count(html: str) -> int:
+    """Approximate visible-word count from HTML (scripts/styles stripped)."""
+    text = re.sub(r"<script\b[^>]*>.*?</script>", " ", html, flags=re.I | re.S)
+    text = re.sub(r"<style\b[^>]*>.*?</style>", " ", text, flags=re.I | re.S)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return len(text.split())
+
+
+def article_body_word_count(html: str) -> int:
+    """Word count of the article body, falling back to the full document."""
+    match = _ARTICLE_BODY_RE.search(html)
+    return html_word_count(match.group(1) if match else html)
+
+
+def _manual_ad_unit() -> str:
+    return f"""
 <div class="ad-unit" style="margin:2rem 0;text-align:center;">
   <!-- AdSense -->
   <ins class="adsbygoogle"
@@ -603,6 +654,26 @@ def wrap_with_ads(content_html: str) -> str:
   <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
 </div>"""
 
+
+def _insert_after_second_heading(content_html: str, ad_unit: str) -> str:
+    """Prefer mid-article (after the 2nd H2/H3). Otherwise a single end unit."""
+    matches = list(_HEADING_CLOSE_RE.finditer(content_html))
+    if len(matches) >= 2:
+        pos = matches[1].end()
+        return content_html[:pos] + ad_unit + content_html[pos:]
+    return content_html + ad_unit
+
+
+def wrap_with_ads(content_html: str, word_count: Optional[int] = None) -> str:
+    """Insert at most one manual AdSense unit, or none on short posts.
+
+    Rules (AdSense low-value-content remediation):
+    - Under ~900 body words: no in-article unit. adsbygoogle.js may still load
+      in the page head for Auto ads (disable those in the AdSense UI).
+    - Long enough: one unit after the 2nd heading, or at the end if there
+      are fewer than two headings.
+    - Never inject after the first H2 on short posts.
+    """
     affiliate_disclaimer = """
 <div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
      padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
@@ -610,9 +681,40 @@ def wrap_with_ads(content_html: str) -> str:
   We may earn a commission at no extra cost to you if you purchase through them.
 </div>"""
 
-    # Do not inject ads after the first H2. Unfilled AdSense auto-units
-    # reserve a large empty block and blow a hole in short articles.
-    return affiliate_disclaimer + content_html + ad_unit
+    words = word_count if word_count is not None else html_word_count(content_html)
+    if words < MIN_IN_ARTICLE_AD_WORDS:
+        return affiliate_disclaimer + content_html
+
+    placed = _insert_after_second_heading(content_html, _manual_ad_unit())
+    return affiliate_disclaimer + placed
+
+
+def cap_manual_ad_units(html: str, word_count: Optional[int] = None) -> str:
+    """Reduce existing article HTML to the current in-article ad cap.
+
+    Keeps the adsbygoogle.js loader and hide-unfilled CSS. Does not change
+    publisher id. Used when --mode pages restores already-published posts.
+    """
+    words = word_count if word_count is not None else article_body_word_count(html)
+    units = list(_AD_UNIT_RE.finditer(html))
+    if not units:
+        return html
+    if words < MIN_IN_ARTICLE_AD_WORDS:
+        return _AD_UNIT_RE.sub("", html)
+    if len(units) == 1:
+        return html
+    # Keep a single end unit. Older HTML often injected after the first H2;
+    # dropping those extra early units is the density fix.
+    keep = units[-1]
+    pieces = []
+    cursor = 0
+    for match in units:
+        if match is keep:
+            continue
+        pieces.append(html[cursor:match.start()])
+        cursor = match.end()
+    pieces.append(html[cursor:])
+    return "".join(pieces)
 
 
 # ── HTML TEMPLATES ─────────────────────────────────────────────────────────────
@@ -642,6 +744,9 @@ ARTICLE_TEMPLATE = """<!DOCTYPE html>
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
+  <!-- adsbygoogle.js loader only: no extra manual units here. Disable Auto ads
+       in the AdSense UI during low-value-content remediation. Publisher:
+       ca-pub-9384256595608147 -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={adsense_pub}" crossorigin="anonymous"></script>
   <style>
     :root {{
@@ -852,7 +957,7 @@ ARCHIVE_TEMPLATE = f"""<!DOCTYPE html>
     <h1>Archive</h1>
     <p class="archive-lede">Reverse-chronological posts from the last {LISTING_WINDOW_MONTHS} months, grouped by month.</p>
     {{{{MONTHS}}}}
-    <p class="retire-note">Articles older than {LISTING_WINDOW_MONTHS} months are quietly retired from home and archive listings. Their permalinks stay live.</p>
+    <p class="retire-note">Articles older than {LISTING_WINDOW_MONTHS} months, plus some older or thinner posts, may be omitted from this index. They are quietly retired from home and archive listings. Their permalinks stay live.</p>
   </main>
 {site_footer_html()}
 </body>
