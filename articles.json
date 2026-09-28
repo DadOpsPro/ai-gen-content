@@ -613,5 +613,20 @@
     ],
     "word_count": 744,
     "published_at": "2026-09-20T21:50:15.013603Z"
+  },
+  {
+    "slug": "xss-plain-english-cve-type-still-ships",
+    "title": "XSS in Plain English: The CVE Type That Still Ships",
+    "excerpt": "Cross-site scripting (XSS) occurs when untrusted data like usernames or search terms are rendered as JavaScript code in a browser. The attacker doesn't need to breach your server—they just need your app to execute their payload in another user's session.",
+    "category": "Security",
+    "tags": [
+      "XSS",
+      "cybersecurity",
+      "web-security",
+      "CVE",
+      "injection-attacks"
+    ],
+    "word_count": 957,
+    "published_at": "2026-09-28T13:05:02.184251Z"
   }
 ]
