@@ -51,6 +51,14 @@ class InArticleDisclosureTests(unittest.TestCase):
         text = "AI-generated tests missed the XSS sink. Chris reviews code before merge."
         self.assertEqual(strip_in_article_ai_disclosure(text), text)
 
+    def test_leaves_code_blank_lines_alone(self):
+        code = "def f():\n    x = 1\n\n\n    return x\n"
+        self.assertEqual(strip_in_article_ai_disclosure(code), code)
+        text = f"Intro.\n\n{SENTENCE}\n\n{code}"
+        cleaned = strip_in_article_ai_disclosure(text)
+        self.assertNotIn("goes live", cleaned)
+        self.assertIn("\n\n\n    return x\n", cleaned)
+
 
 if __name__ == "__main__":
     unittest.main()

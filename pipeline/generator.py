@@ -210,13 +210,16 @@ _IN_ARTICLE_AI_DISCLOSURE_RES = (
 
 
 def strip_in_article_ai_disclosure(text: str) -> str:
-    """Drop the in-body AI disclosure paragraph. Site-footer copy is left alone."""
+    """Drop the in-body AI disclosure paragraph. Site-footer copy is left alone.
+
+    Text that does not contain the sentence is returned unchanged, including
+    blank lines inside code samples.
+    """
     if not text:
         return text
     cleaned = text
     for pattern in _IN_ARTICLE_AI_DISCLOSURE_RES:
         cleaned = pattern.sub("", cleaned)
-    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
     return cleaned
 
 CHRIS_PERSONA = """
