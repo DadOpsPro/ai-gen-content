@@ -32,7 +32,7 @@ from pipeline.featured_image import (
     ensure_featured_image,
     featured_image_alt,
 )
-from pipeline.generator import GeneratedArticle
+from pipeline.generator import GeneratedArticle, strip_in_article_ai_disclosure
 from pipeline.chrome import SITE_CHROME_CSS, site_footer_html, site_nav_html
 from pipeline.listings import (
     archive_by_month, featured_and_recent, listed_articles, read_time_minutes,
@@ -499,7 +499,10 @@ class StaticSiteGenerator:
       
     def _render_article_page(self, article: GeneratedArticle) -> str:
         """Render article to full HTML page."""
-        content_with_ads = wrap_with_ads(article.content_html, article.word_count)
+        content_with_ads = wrap_with_ads(
+            strip_in_article_ai_disclosure(article.content_html),
+            article.word_count,
+        )
         return ARTICLE_TEMPLATE.format(
             title=article.title,
             meta_description=article.meta_description,

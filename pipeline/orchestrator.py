@@ -227,6 +227,10 @@ def run_newsletter_pipeline():
     print(f"📧 NEWSLETTER PIPELINE")
     print(f"{'='*60}")
 
+    # Deploy publishes the whole output dir. Restore live posts first so a
+    # newsletter run cannot delete HTML that was published on gh-pages.
+    _restore_live_site_into_output()
+
     # Load recent articles from static site
     posts_dir = Path(OUTPUT_DIR) / "posts"
     if not posts_dir.exists():
