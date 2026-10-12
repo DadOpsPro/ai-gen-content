@@ -152,9 +152,7 @@
 
 <h2>The short version</h2>
 </p>
-<p>Insecure deserialization means your server rebuilt an object graph from bytes an attacker shaped—and Java's native serializer can run code while it does that. Fix it by not accepting untrusted Java-serialized streams: move strangler edges to JSON DTOs, allowlist-filter anything that must remain, drop HTTP Invoker, and keep Angular on boring REST contracts. Filters are seatbelts for the migration window—not a reason to keep binary object graphs on the public edge.
-
-<strong>Chris's take:</strong></p>
+<p>Insecure deserialization means your server rebuilt an object graph from bytes an attacker shaped—and Java's native serializer can run code while it does that. Fix it by not accepting untrusted Java-serialized streams: move strangler edges to JSON DTOs, allowlist-filter anything that must remain, drop HTTP Invoker, and keep Angular on boring REST contracts. Filters are seatbelts for the migration window—not a reason to keep binary object graphs on the public edge.</p>
         </div>
     <div class="tags">Tags: insecure deserialization · Java security · code execution · OWASP A08 · application security</div>
   </main>
