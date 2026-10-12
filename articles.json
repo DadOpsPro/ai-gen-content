@@ -628,5 +628,20 @@
     ],
     "word_count": 957,
     "published_at": "2026-09-28T13:05:02.184251Z"
+  },
+  {
+    "slug": "insecure-deserialization-plain-english",
+    "title": "Insecure Deserialization: When Bytes Become Code",
+    "excerpt": "Insecure deserialization occurs when applications rebuild objects from untrusted byte streams, allowing attackers to execute arbitrary code. Native Java serialization can run constructor logic and custom methods during object reconstruction, making it a critical security vulnerability.",
+    "category": "Security",
+    "tags": [
+      "insecure deserialization",
+      "Java security",
+      "code execution",
+      "OWASP A08",
+      "application security"
+    ],
+    "word_count": 796,
+    "published_at": "2026-10-12T14:18:16.593146Z"
   }
 ]
