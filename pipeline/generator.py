@@ -188,7 +188,39 @@ CRITICAL RULES — violations will cause this content to be rejected:
 - Do NOT create fictional quotes or attribute statements to real people unless directly quoting a provided source.
 - Do NOT invent contact information, editorial team members, or bylines.
 - If a claim is not in the sources, leave it out. Do not write [UNVERIFIED]. Do not guess.
+- Do NOT add an in-article disclosure that content is AI-generated. The site footer already says most articles are AI-drafted and reviewed. Never write a sentence like: "Most of the content on this site is AI-generated. Chris reviews drafts before anything goes live."
 """
+
+# Standalone in-body disclosure. The site footer uses different copy and must stay.
+_IN_ARTICLE_AI_DISCLOSURE_RES = (
+    re.compile(
+        r"(?is)(?:<p[^>]*>\s*)?"
+        r"(?:\*\*|__)?Most of the content on this site is AI-?generated\.?(?:\*\*|__)?"
+        r"\s+"
+        r"(?:\*\*|__)?Chris reviews drafts before anything goes live\.?(?:\*\*|__)?"
+        r"\s*(?:</p>\s*)?"
+    ),
+    re.compile(
+        r"(?is)<p[^>]*>\s*(?:\*\*|__)?Most of the content on this site is AI-?generated\.?"
+        r"(?:\*\*|__)?\s*</p>\s*"
+        r"<p[^>]*>\s*(?:\*\*|__)?Chris reviews drafts before anything goes live\.?"
+        r"(?:\*\*|__)?\s*</p>\s*"
+    ),
+)
+
+
+def strip_in_article_ai_disclosure(text: str) -> str:
+    """Drop the in-body AI disclosure paragraph. Site-footer copy is left alone.
+
+    Text that does not contain the sentence is returned unchanged, including
+    blank lines inside code samples.
+    """
+    if not text:
+        return text
+    cleaned = text
+    for pattern in _IN_ARTICLE_AI_DISCLOSURE_RES:
+        cleaned = pattern.sub("", cleaned)
+    return cleaned
 
 CHRIS_PERSONA = """
 You are writing as Chris Clark, founder and editor of AI Dev Defense.
@@ -302,7 +334,7 @@ def generate_draft_for_review(
         max_tokens=4000,
         messages=[{"role": "user", "content": prompt}],
     )
-    draft_markdown = response.content[0].text
+    draft_markdown = strip_in_article_ai_disclosure(response.content[0].text)
 
     slug_hint = topic[:50].lower().replace(" ", "-").replace("/", "-")
     slug_hint = re.sub(r"[^a-z0-9-]", "", slug_hint)
@@ -324,13 +356,14 @@ def generate_final_article(draft: ArticleDraft, chris_take: str) -> GeneratedArt
     Replaces [CHRIS TAKE] with Chris's actual words, then does a final polish pass.
     """
     # Inject Chris's take into the draft
-    if "[CHRIS TAKE]" in draft.draft_markdown:
-        filled = draft.draft_markdown.replace(
+    draft_markdown = strip_in_article_ai_disclosure(draft.draft_markdown)
+    if "[CHRIS TAKE]" in draft_markdown:
+        filled = draft_markdown.replace(
             "[CHRIS TAKE]",
             f"**Chris's take:** {chris_take.strip()}"
         )
     else:
-        filled = draft.draft_markdown + f"\n\n**Chris's take:** {chris_take.strip()}"
+        filled = draft_markdown + f"\n\n**Chris's take:** {chris_take.strip()}"
 
     # Final polish pass — tighten and ensure voice consistency
     polish_prompt = f"""
@@ -357,7 +390,7 @@ Draft:
         max_tokens=4000,
         messages=[{"role": "user", "content": polish_prompt}],
     )
-    final_markdown = response.content[0].text
+    final_markdown = strip_in_article_ai_disclosure(response.content[0].text)
 
     # Generate metadata
     meta_prompt = f"""Given this article, return ONLY valid JSON metadata (no markdown fences):
@@ -519,7 +552,7 @@ def convert_and_inject(markdown_content: str) -> tuple:
     Convert markdown to HTML and inject affiliate links.
     Returns (html_content, list_of_injected_tool_names)
     """
-    html = markdown_content
+    html = strip_in_article_ai_disclosure(markdown_content)
 
     # Step 1: Extract code blocks and replace with placeholders
     # This prevents header/bold regexes from corrupting code content
