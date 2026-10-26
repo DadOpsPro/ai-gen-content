@@ -138,6 +138,15 @@ class WordPressPublisher:
             return {"success": False, "error": str(e)}
 
 
+def _is_redirect_stub(slug: str) -> bool:
+    """True if static/posts/<slug>.html is a meta-refresh redirect stub."""
+    stub = Path(__file__).resolve().parent.parent / "static" / "posts" / f"{slug}.html"
+    try:
+        return 'http-equiv="refresh"' in stub.read_text(encoding="utf-8")[:2000]
+    except OSError:
+        return False
+
+
 # ── STATIC SITE GENERATOR ─────────────────────────────────────────────────────
 
 REGISTRY_FILE = "articles.json"
@@ -479,6 +488,8 @@ class StaticSiteGenerator:
         # Articles
         for record in self._registry:
             slug = record["slug"]
+            if _is_redirect_stub(slug):
+                continue  # meta-refresh stub in static/posts: Google reports it as "Page with redirect"
             lastmod = record.get("published_at", "")[:10]
             lines.append('  <url>')
             lines.append(f'    <loc>{SITE_URL}/posts/{slug}.html</loc>')
@@ -494,7 +505,7 @@ class StaticSiteGenerator:
         sitemap = '\n'.join(lines)
         path = self.output_dir / "sitemap.xml"
         path.write_text(sitemap, encoding="utf-8")
-        print(f"  ✅ Sitemap: {len(self._registry) + 1 + len(static_pages)} URLs written")
+        print(f"  ✅ Sitemap: {sitemap.count('<loc>')} URLs written")
         return str(path)
       
     def _render_article_page(self, article: GeneratedArticle) -> str:
@@ -905,6 +916,7 @@ INDEX_TEMPLATE = f"""<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{SITE_NAME} — Article of the Week</title>
+  <link rel="canonical" href="{SITE_URL}/">
   <meta name="description" content="{SITE_NAME}: featured weekly writing on Java, GitLab AppSec, and developer-as-security-champion work.">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
