@@ -643,5 +643,20 @@
     ],
     "word_count": 796,
     "published_at": "2026-10-12T14:18:16.593146Z"
+  },
+  {
+    "slug": "sql-injection-plain-english-user-input",
+    "title": "SQL Injection in Plain English: User Input Rewrites Query",
+    "excerpt": "SQL injection remains a critical vulnerability where user input is concatenated into database queries, allowing attackers to execute unintended SQL commands. This guide explains the concept in plain language with practical examples from real applications.",
+    "category": "Security",
+    "tags": [
+      "sql-injection",
+      "database-security",
+      "application-security",
+      "appsec",
+      "vulnerability"
+    ],
+    "word_count": 802,
+    "published_at": "2026-10-26T13:49:35.295230Z"
   }
 ]

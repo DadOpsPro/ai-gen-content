@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Injection in Plain English: User Input Rewrites Query | AI Dev Defense</title>
+  <meta name="description" content="Learn SQL injection vulnerabilities: how attackers exploit text concatenation in database queries. Understand CWE-89 and OWASP A05:2025 with real code examples.">
+  <meta property="og:title" content="SQL Injection in Plain English: User Input Rewrites Query">
+  <meta property="og:description" content="Learn SQL injection vulnerabilities: how attackers exploit text concatenation in database queries. Understand CWE-89 and OWASP A05:2025 with real code examples.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/sql-injection-plain-english-user-input.html">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <!-- adsbygoogle.js loader only: no extra manual units here. Disable Auto ads
+       in the AdSense UI during low-value-content remediation. Publisher:
+       ca-pub-9384256595608147 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }
+    .site-header nav a:hover { color: #fff; }
+    .ai-disclosure { color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem;
+                     font-size: 0.82rem; line-height: 1.5; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+    ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; }
+    .ad-unit:has(ins[data-ad-status="unfilled"]) { display: none; margin: 0 !important; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/archive.html">Archive</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>Security</span> &middot;
+      <span>4 min read</span> &middot;
+      <span>802 words</span>
+    </div>
+    <h1>SQL Injection in Plain English: User Input Rewrites Query</h1>
+        <p class="author-byline" style="margin-top:-0.75rem;margin-bottom:1.75rem;color:var(--color-muted);font-size:0.95rem;">
+        By <a href="/about.html" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Chris Clark</a>
+        · AppSec practitioner &amp; AWS Solutions Architect
+        </p>
+        <div class="article-content">
+        
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>SQL Injection in Plain English: When User Input Rewrites Your Query</h1>
+</p>
+<p>SQL injection is the oldest bug on most AppSec lists, and it still turns up in code review. The idea is simple: your app builds a database query by gluing text together, and part of that text came from a user. If the user's text contains SQL, the database can't tell where your query ends and theirs begins.
+</p>
+<p>MITRE files it as <a href="https://cwe.mitre.org/data/definitions/89.html">CWE-89</a>. OWASP's Top 10:2025 groups it under <a href="https://owasp.org/Top10/2025/A05_2025-Injection/">A05:2025 Injection</a>. Long names, same problem: data got treated as code.
+
+<h2>What it looks like in a Java 8 app</h2>
+</p>
+<p>Here's the classic version, straight from the <a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html">OWASP SQL Injection Prevention Cheat Sheet</a>:
+</p>
+<p><pre><code class="language-java">String query = "SELECT account_balance FROM user_data WHERE user_name = "
+             + request.getParameter("customerName");
+Statement statement = connection.createStatement();
+ResultSet results = statement.executeQuery(query);
+</code></pre>
+</p>
+<p>Send <code>tom' or '1'='1</code> instead of a name and the WHERE clause matches every row. On databases that allow stacked statements, <code>'; DELETE FROM items; --</code> does worse.
+</p>
+<p>Hibernate doesn't make it go away. HQL and JPQL (the object-flavored query languages Hibernate and JPA use) have the same bug when you build them with <code>+</code>. MITRE has a child entry for it, <a href="https://cwe.mitre.org/data/definitions/564.html">CWE-564</a>:
+</p>
+<p><pre><code class="language-java">session.createQuery("from Inventory where productID='" + userSuppliedParameter + "'");
+</code></pre>
+
+<h2>The fix: placeholders, not glue</h2>
+</p>
+<p>Parameterized queries (also called prepared statements) flip the order. You write the whole SQL first with <code>?</code> or <code>:name</code> holes, then hand the values over separately. The database settles the shape of the query before it sees the value, so <code>tom' or '1'='1</code> is just a weird username that matches nobody.
+</p>
+<p>Plain JDBC:
+</p>
+<p><pre><code class="language-java">PreparedStatement ps = connection.prepareStatement(
+    "SELECT account_balance FROM user_data WHERE user_name = ?");
+ps.setString(1, custname);
+</code></pre>
+</p>
+<p>Spring's <a href="https://docs.spring.io/spring-framework/reference/data-access/jdbc/core.html"><code>JdbcTemplate</code></a> does the same with less ceremony:
+</p>
+<p><pre><code class="language-java">int count = jdbcTemplate.queryForObject(
+    "select count(*) from t_actor where first_name = ?", Integer.class, firstName);
+</code></pre>
+</p>
+<p>On the JPA side, <a href="https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html">Spring Data JPA</a> derived queries like <code>findByEmailAddress(String email)</code> are bound for you. <code>@Query("select u from User u where u.emailAddress = ?1")</code> binds the same way.
+
+<h2>The trap: PreparedStatement isn't the fix, the <code>?</code> is</h2>
+</p>
+<p><pre><code class="language-java">connection.prepareStatement("SELECT * FROM users WHERE name = '" + name + "'");
+</code></pre>
+</p>
+<p>That's a PreparedStatement, and it's still injectable. The class name doesn't matter. What matters is whether the user's value went into the SQL string or into a bind slot.
+
+<h2>Where it hides during a strangler replacement</h2>
+</p>
+<p>When you carve a section out of the Java 8 monolith and rebuild it in Spring Boot, the risky move is porting the old DAO's query-building code "as-is, so behavior stays identical."
+</p>
+<p>A Spring Data <code>@Query</code> string has to be a compile-time constant (<a href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.7.1">a Java annotation rule</a>), so you can't glue request input into it directly. That's good. It also means the old concatenation tends to land right next to it: a custom repository method calling <code>entityManager.createNativeQuery(sql + filter)</code>, or a <code>JdbcTemplate</code> call with a hand-built WHERE clause. It sits in a fresh Spring Boot service with constructor injection and unit tests. It reads like modern code. It isn't.
+</p>
+<p>Review rule: every user value arrives as a method argument and lands on a <code>?</code> or <code>:name</code>. Never as a piece of a string.
+
+<h2>What GitLab SAST flags</h2>
+</p>
+<p>GitLab's <a href="https://docs.gitlab.com/user/application_security/sast/">standard SAST</a> for Java runs a Semgrep-based analyzer. The SQL rule (<a href="https://gitlab.com/gitlab-org/security-products/sast-rules/-/blob/main/rules/lgpl-cc/java/inject/rule-SqlInjection.yml"><code>java_inject_rule-SqlInjection</code></a>) is a taint rule. "Taint" means it follows data from where it enters to where it gets used. It tracks values through <code>+</code>, <code>concat</code>, <code>StringBuilder.append</code>, and <code>String.format</code>, then flags them when they reach sinks like <code>Statement.executeQuery</code>, <code>JdbcTemplate.query</code>, or <code>EntityManager.createNativeQuery</code>.
+</p>
+<p>When the finding lands in Jira:
+
+<li><strong>Go to the sink line.</strong> If the SQL argument was built with <code>+</code> from anything that isn't a constant, treat it as real.</li>
+<li><strong>Make the fix mechanical.</strong> Move the value to a placeholder and pass it as an argument. Don't "fix" it with escaping. OWASP marks escaping as strongly discouraged because it's database-specific and fragile.</li>
+<li><strong>Shrink the blast radius anyway.</strong> The app's database account shouldn't be DBA or owner. One missed query shouldn't be able to read or drop everything.</li>
+
+<h2>The short version</h2>
+</p>
+<p>SQL injection happens when user text becomes part of the SQL instead of a value handed to it. In Java and Spring Boot the fix is boring: PreparedStatement with <code>?</code>, JdbcTemplate with trailing arguments, <code>:name</code> parameters in JPQL and <code>@Query</code>. Watch the strangler port, where old string-built queries move into new-looking Spring Boot code.
+<hr>
+<strong>Chris's take:</strong> I tag every SQL injection ticket by which side of the strangler it's on. Old-side findings in code already scheduled for deletion get a dated risk acceptance tied to the cutover, and new-side findings block the merge request. Otherwise the team burns a sprint parameterizing a DAO that won't exist next quarter while the new service quietly picks up the same pattern.</p>
+        </div>
+    <div class="tags">Tags: sql-injection · database-security · application-security · appsec · vulnerability</div>
+  </main>
+  <footer>
+    <p class="ai-disclosure">Most articles on AI Dev Defense are AI-drafted and then reviewed before publish.</p>
+    <p>&copy; AI Dev Defense · <a href="/archive.html" style="color:#888">Archive</a> ·
+    <a href="/about.html" style="color:#888">About</a> ·
+    <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>
