@@ -138,6 +138,34 @@ class WordPressPublisher:
             return {"success": False, "error": str(e)}
 
 
+NOINDEX_POSTS_PATH = Path(__file__).resolve().parent.parent / "config" / "noindex_posts.json"
+ROBOTS_NOINDEX_TAG = '<meta name="robots" content="noindex">'
+
+
+def load_noindex_slugs(path: Optional[Path] = None) -> set:
+    """Slugs of orphan posts that should carry robots noindex."""
+    p = Path(path) if path else NOINDEX_POSTS_PATH
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    raw = data.get("slugs", []) if isinstance(data, dict) else data
+    return {str(s).strip() for s in raw if s}
+
+
+def add_robots_noindex(html: str) -> str:
+    """Insert a robots noindex meta after <meta charset> (idempotent)."""
+    if re.search(r'<meta\s+name="robots"', html, re.I):
+        return html
+    m = re.search(r'<meta\s+charset=[^>]*>', html, re.I)
+    if m:
+        return html[:m.end()] + "\n  " + ROBOTS_NOINDEX_TAG + html[m.end():]
+    m = re.search(r'<head[^>]*>', html, re.I)
+    if m:
+        return html[:m.end()] + "\n  " + ROBOTS_NOINDEX_TAG + html[m.end():]
+    return html
+
+
 def _is_redirect_stub(slug: str) -> bool:
     """True if static/posts/<slug>.html is a meta-refresh redirect stub."""
     stub = Path(__file__).resolve().parent.parent / "static" / "posts" / f"{slug}.html"
@@ -239,6 +267,28 @@ class StaticSiteGenerator:
         if n < 10:
             n = extract("8f4aba764f")
         print(f"  📚 Restored {n} existing post HTML files")
+        self.apply_noindex_to_orphan_posts()
+
+    def apply_noindex_to_orphan_posts(self) -> int:
+        """Keep robots noindex on orphan posts listed in config/noindex_posts.json.
+
+        Restored HTML can come from a stale Actions cache, so re-apply on every
+        deploy. Never touches a slug that is in the article registry.
+        """
+        registry_slugs = {r.get("slug") for r in self._registry}
+        changed = 0
+        for slug in sorted(load_noindex_slugs() - registry_slugs):
+            path = self.posts_dir / f"{slug}.html"
+            if not path.exists():
+                continue
+            original = path.read_text(encoding="utf-8")
+            updated = add_robots_noindex(original)
+            if updated != original:
+                path.write_text(updated, encoding="utf-8")
+                changed += 1
+        if changed:
+            print(f"  ✅ Robots noindex applied to {changed} orphan post(s)")
+        return changed
 
     def restore_existing_drafts(self) -> None:
         """Copy pending draft JSON into the output dir so a deploy does not drop unpublished reviews."""
@@ -485,8 +535,9 @@ class StaticSiteGenerator:
                 '  </url>',
             ])
 
-        # Articles
-        for record in self._registry:
+        # Articles: only promoted (listed) posts. Soft-retired posts keep live
+        # permalinks but are left out of the sitemap so Google focuses on them.
+        for record in listed_articles(self._registry):
             slug = record["slug"]
             if _is_redirect_stub(slug):
                 continue  # meta-refresh stub in static/posts: Google reports it as "Page with redirect"
