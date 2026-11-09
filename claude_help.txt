@@ -1,0 +1,26 @@
+- Put all temporary files in ./.tmp/ and delete them there when done.
+- Never delete anything outside ./.tmp/. If something else should go, list it and ask me.
+
+
+
+"hooks": {
+  "PreToolUse": [
+    { "matcher": "Bash",
+      "hooks": [{ "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/guard-delete.sh" }] }
+  ]
+}
+
+
+#!/usr/bin/env bash
+cmd=$(jq -r '.tool_input.command')
+if echo "$cmd" | grep -qE '(^|[;&| ])(rm|rmdir|unlink)( |$)|-delete|git clean'; then
+  targets=$(echo "$cmd" | grep -oE '(rm|rmdir|unlink)( -[a-zA-Z]+)* +[^;&|]+' | sed -E 's/^(rm|rmdir|unlink)( -[a-zA-Z]+)* +//')
+  for t in $targets; do
+    case "$t" in
+      .tmp/*|./.tmp/*|/tmp/*) ;;
+      *) echo "Blocked: deletes only allowed in ./.tmp or /tmp ($t)" >&2; exit 2 ;;
+    esac
+  done
+  echo "$cmd" | grep -qE -- '-delete|git clean' && { echo "Blocked: use rm inside ./.tmp" >&2; exit 2; }
+fi
+exit 0
