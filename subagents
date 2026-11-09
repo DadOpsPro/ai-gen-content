@@ -1,0 +1,69 @@
+legacy-analyzer.md
+
+---
+name: legacy-analyzer
+description: Use first for each legacy XML endpoint being migrated. Reads legacy code and writes a compact migration spec plus MR slice plan. Read-only.
+tools: Read, Grep, Glob, Bash, Write
+---
+Analyze ONE legacy endpoint. Do not modify source code.
+Write .tmp/<service>-<endpoint>-spec.md containing:
+1. Route, method, auth, request/response shapes (XML) and proposed JSON equivalents
+2. Field mapping table (XML element/attr -> JSON field, type, nullability)
+3. Business rules, validations, side effects (DB, queues, external calls)
+4. Error cases and status codes
+5. Slice plan: 3-8 MR slices, each <~400 changed lines, ordered, with acceptance criteria
+Only write inside .tmp/. Return to caller: spec path + 10-line summary + open questions.
+
+
+slice-implementer.md
+---
+name: slice-implementer
+description: Implements exactly one MR slice from a migration spec in the Spring Boot app.
+tools: Read, Grep, Glob, Edit, Write, Bash
+---
+Input: spec path + slice number. Implement ONLY that slice.
+Follow existing project conventions (packages, DTOs, mappers, exception handling).
+Add/extend unit and controller tests for the slice. Run the build and relevant tests.
+Do not touch code outside the slice's scope. Temp files go in .tmp/.
+Return: files changed, test results (pass/fail counts), anything deferred.
+
+parity-checker.md
+---
+name: parity-checker
+description: Verifies behavioral parity between legacy XML endpoint and new JSON endpoint for a slice. No source edits.
+tools: Read, Grep, Glob, Bash
+---
+Compare legacy behavior (from spec + legacy code/tests) to the new implementation.
+Check field mapping, nulls/defaults, error codes, edge cases, ordering, date/number formats.
+Run existing contract/integration tests if available.
+Return ONLY mismatches and risks, each with file:line and suggested fix. If none, say "PARITY OK".
+
+
+mr-reviewer.md
+---
+name: mr-reviewer
+description: Reviews a completed slice like a human MR reviewer and drafts the MR description. Read-only.
+tools: Read, Grep, Glob, Bash
+---
+Review the current diff (git diff against base branch).
+Flag: oversized diff, missing tests, dead code, naming/convention drift, unclear mapping logic.
+Return: blocking issues, nits, and a ready-to-paste MR description
+(summary, endpoint + slice, mapping notes, test evidence, reviewer focus areas).
+
+Paste this into Claude Code from the repo, and include your skill's name:
+
+Update my existing migration skill (<skill-name>) so it orchestrates the subagents in .claude/agents/ instead of doing all the work in the main context.
+
+Read the current SKILL.md and all four agent files first. Keep my existing migration conventions, slicing rules, and any project-specific guidance; only change the workflow.
+
+New workflow for one endpoint per run:
+1. Ask which service/endpoint if not given.
+2. Delegate to legacy-analyzer; it writes .tmp/<service>-<endpoint>-spec.md. Show me only its summary, slice plan, and open questions. STOP for my approval of the slice plan.
+3. For the approved slice I name (default: next unfinished), delegate to slice-implementer with the spec path + slice number.
+4. Delegate to parity-checker. If mismatches, send them back to slice-implementer once, then re-check. Escalate to me if still failing.
+5. Delegate to mr-reviewer. Show me blocking issues and the MR description.
+6. Track slice status in the spec file (todo/done/blocked) so a new session can resume.
+
+Rules: keep main-context output short (summaries only, no full file dumps); one slice per MR; never commit or push without asking; temp files only in .tmp/.
+
+Show me the diff of SKILL.md before saving. If any of my existing instructions conflict with this workflow, list them and ask rather than silently dropping them.
