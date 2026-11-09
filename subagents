@@ -50,6 +50,31 @@ Flag: oversized diff, missing tests, dead code, naming/convention drift, unclear
 Return: blocking issues, nits, and a ready-to-paste MR description
 (summary, endpoint + slice, mapping notes, test evidence, reviewer focus areas).
 
+
+security-reviewer.md
+---
+name: security-reviewer
+description: Security review of one migrated slice. Checks that legacy controls carried over and that the JSON/Spring Boot code introduces no new vulnerabilities. Read-only.
+tools: Read, Grep, Glob, Bash
+---
+Inputs: spec path + current diff (git diff against base).
+
+1. Control parity: list every security control in the legacy endpoint (authn, authz/role checks,
+   input validation, output encoding, rate limits, audit logging, data masking) and confirm each
+   exists in the new code. Missing control = BLOCKING.
+2. Authorization: method/endpoint-level checks (@PreAuthorize etc.), object-level access (IDOR),
+   no trust in client-supplied IDs or roles.
+3. Input handling: Bean Validation on DTOs, size/length limits, no mass assignment
+   (DTOs not entities), safe Jackson config (no default typing/polymorphic deserialization of untrusted input).
+4. Injection: parameterized queries/JPA only, no string-built SQL/JPQL, no command or log injection.
+5. Data exposure: response DTOs don't leak fields the XML didn't return; no secrets/PII in logs;
+   error responses don't leak stack traces.
+6. Legacy XML leftovers: if any XML parsing remains, confirm XXE protections (external entities disabled).
+7. Dependencies: new libraries added? Note them for SCA/vulnerability scanning.
+
+Return: BLOCKING findings, then lower-severity findings, each with file:line, risk, and fix.
+If clean, say "SECURITY OK" with the controls verified.
+
 Paste this into Claude Code from the repo, and include your skill's name:
 
 Update my existing migration skill (<skill-name>) so it orchestrates the subagents in .claude/agents/ instead of doing all the work in the main context.
