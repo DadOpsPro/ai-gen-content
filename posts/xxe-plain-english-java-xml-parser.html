@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XXE in Plain English: When Your XML Parser Fetches Files for the Attacker | AI Dev Defense</title>
+  <meta name="description" content="XXE explained in plain English: how Java XML parsers fetch files for attackers, and the one-line fix when porting legacy XML code into Spring Boot.">
+  <meta property="og:title" content="XXE in Plain English: When Your XML Parser Fetches Files for the Attacker">
+  <meta property="og:description" content="XXE explained in plain English: how Java XML parsers fetch files for attackers, and the one-line fix when porting legacy XML code into Spring Boot.">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://aidevdefense.com/posts/xxe-plain-english-java-xml-parser.html">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DZEHG6QFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4DZEHG6QFW');
+  </script>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <!-- adsbygoogle.js loader only: no extra manual units here. Disable Auto ads
+       in the AdSense UI during low-value-content remediation. Publisher:
+       ca-pub-9384256595608147 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9384256595608147" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --font-sans: 'Georgia', serif;
+      --font-mono: 'Courier New', monospace;
+      --max-width: 760px;
+      --color-text: #1a1a2e;
+      --color-accent: #00c896;
+      --color-muted: #666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--color-text);
+            line-height: 1.7; background: #fff; }
+    .site-header { background: #0a0f1e; color: #fff; padding: 1rem 2rem;
+                    display: flex; align-items: center; gap: 1rem; }
+    .site-header a.logo { color: #00c896; text-decoration: none; font-weight: bold; font-size: 1.2rem; }
+    .site-header nav { margin-left: auto; display: flex; gap: 1.5rem; }
+    .site-header nav a { color: #aaa; text-decoration: none; font-size: 0.9rem; font-weight: normal; }
+    .site-header nav a:hover { color: #fff; }
+    .ai-disclosure { color: #9aa3ad; max-width: 640px; margin: 0 auto 0.85rem;
+                     font-size: 0.82rem; line-height: 1.5; }
+    .article-container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+    .article-meta { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2;
+          margin-bottom: 1.5rem; color: #0a0f1e; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #0a0f1e; }
+    h3 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+    p { margin-bottom: 1.25rem; }
+    ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+    li { margin-bottom: 0.4rem; }
+    code { background: #f4f4f4; padding: 0.15rem 0.4rem;
+            border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }
+    pre { background: #0a0f1e; color: #e0e0e0; padding: 1.25rem;
+       border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;
+       position: relative; }
+    pre .filename { display: block; color: #00c896; font-size: 0.8rem;
+                 margin-bottom: 0.75rem; font-family: var(--font-mono); }
+    pre code { background: none; padding: 0; color: inherit; }
+    pre .code-filename { display: block; color: #00c896; font-size: 0.8rem;
+                      font-family: var(--font-mono); margin-bottom: 0.5rem;
+                      opacity: 0.8; }
+    .affiliate-link { color: var(--color-accent); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f4f4f4; font-weight: bold; }
+    .tags { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;
+             color: var(--color-muted); font-size: 0.85rem; }
+    footer { background: #0a0f1e; color: #888; text-align: center;
+              padding: 2rem; margin-top: 4rem; font-size: 0.85rem; }
+    ins.adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; }
+    .ad-unit:has(ins[data-ad-status="unfilled"]) { display: none; margin: 0 !important; }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="logo">AI Dev Defense</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/archive.html">Archive</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </header>
+  <main class="article-container">
+    <div class="article-meta">
+      <span>Application Security</span> &middot;
+      <span>5 min read</span> &middot;
+      <span>1,190 words</span>
+    </div>
+    <h1>XXE in Plain English: When Your XML Parser Fetches Files for the Attacker</h1>
+        <p class="author-byline" style="margin-top:-0.75rem;margin-bottom:1.75rem;color:var(--color-muted);font-size:0.95rem;">
+        By <a href="/about.html" style="color:var(--color-accent);text-decoration:none;font-weight:600;">Chris Clark</a>
+        · AppSec practitioner &amp; AWS Solutions Architect
+        </p>
+        <div class="article-content">
+        
+<div class="affiliate-notice" style="background:#f8f9fa;border-left:4px solid #0070f3;
+     padding:0.75rem 1rem;margin:1.5rem 0;font-size:0.85rem;color:#666;">
+  <strong>Disclosure:</strong> Some links in this article are affiliate links.
+  We may earn a commission at no extra cost to you if you purchase through them.
+</div><p><h1>XXE in Plain English: When Your XML Parser Fetches Files for the Attacker</h1>
+</p>
+<p>By Chris Clark · AppSec practitioner & AWS Solutions Architect
+</p>
+<p>XML has a feature most developers never use on purpose. A document can define shortcuts called <em>entities</em>. Think of an entity as a named placeholder: write <code>&name;</code> and the parser swaps in whatever <code>name</code> stands for. Those definitions live in a <em>DTD</em> (Document Type Definition), the <code><!DOCTYPE ...></code> block at the top of a file. An entity can point at a URL, and then the parser goes and fetches that URL for you.
+</p>
+<p>That's XXE, or XML External Entity injection. Someone sends your app XML with a DOCTYPE that says "this entity is <code>file:///etc/passwd</code>," and your parser opens the file and drops its contents into the document. If any of that document ends up in a response or an error message, they just read a file off your server. Point the entity at an <code>http://</code> URL instead and your server makes requests to places the attacker can't reach directly.
+</p>
+<p>MITRE files it as CWE-611, Improper Restriction of XML External Entity Reference. OWASP's Top 10:2025 lists it under A02:2025 Security Misconfiguration, not Injection. That placement tells you something. The bug isn't in your code's logic. It's a parser left on settings you never chose.
+
+<h2>What it looks like in a Java 8 app</h2>
+</p>
+<p>Here's the attacker's side, in the same entity syntax Oracle's JAXP Security Guide uses:
+</p>
+<p><pre><code class="language-xml"><?xml version="1.0"?>
+<!DOCTYPE doc [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
+<doc>&xxe;</doc>
+</code></pre>
+</p>
+<p>And here's the app side. It's the one-liner you'll find in a lot of older Java code:
+</p>
+<p><pre><code class="language-java">DocumentBuilder builder =
+    DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document doc = builder.parse(untrustedStream);
+</code></pre>
+</p>
+<p>Nothing looks wrong, and that's the problem. Oracle's guide says the JDK XML processors, by default, "make a connection and fetch the external resources as specified." The default limit on which protocols they're allowed to use for external DTDs and entities is <code>all</code>.
+</p>
+<p>Older Java apps take in XML from everywhere: SOAP endpoints, file uploads, partner feeds, config files, SAML assertions. Every one of those is a <code>DocumentBuilderFactory</code>, <code>SAXParserFactory</code>, <code>XMLInputFactory</code>, or <code>TransformerFactory</code> that somebody set up years ago.
+
+<h2>The fix: refuse the DOCTYPE</h2>
+</p>
+<p>The OWASP XXE Prevention Cheat Sheet's first rule is simple: if you don't need DTDs, turn them off and reject any document that has a DOCTYPE. Most business XML never needs one.
+</p>
+<p>On Java 8, with the factory your legacy code already uses:
+</p>
+<p><pre><code class="language-java">DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+DocumentBuilder builder = dbf.newDocumentBuilder();
+</code></pre>
+</p>
+<p>SAX gets the same <code>disallow-doctype-decl</code> feature, set on the factory before you create the reader. StAX (the streaming <code>XMLInputFactory</code>) doesn't support that feature, so the cheat sheet has you turn off both DTD support and external entities:
+</p>
+<p><pre><code class="language-java">xif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+</code></pre>
+</p>
+<p>XSLT and schema validation can load outside files on their own, with no entities involved. For <code>TransformerFactory</code> and <code>SchemaFactory</code>, the cheat sheet sets <code>ACCESS_EXTERNAL_DTD</code> to <code>""</code>, plus <code>ACCESS_EXTERNAL_STYLESHEET</code> or <code>ACCESS_EXTERNAL_SCHEMA</code> to <code>""</code>, before compiling. An empty string means "no protocols allowed."
+</p>
+<p>One more rule from the cheat sheet: if a security setting throws because the parser doesn't support it, stop. Don't catch the exception and parse anyway.
+
+<h2>The trap: flags that look like the fix</h2>
+
+<code>setExpandEntityReferences(false)</code> sounds like exactly the right switch. It isn't. The cheat sheet says it only changes how entity references show up in the parsed tree, and you shouldn't use it in place of blocking external resources.
+</p>
+<p>The SAX version is subtler. Suppose you allow DTDs and install a custom <code>EntityResolver</code> that rejects outside references. If you then call <code>SAXParser.parse(source, handler)</code>, the handler replaces your resolver. The cheat sheet says to call <code>reader.parse(...)</code> directly when you depend on a resolver.
+</p>
+<p>Same lesson as the SQL injection piece: the class name isn't the fix. The settings on that specific factory instance are.
+
+<h2>Where it hides during a strangler replacement</h2>
+</p>
+<p>When you carve a section out of the Java 8 monolith and rebuild it in Spring Boot, the XML handling often gets ported as-is. Nobody wants to re-test the partner's SOAP format, so the old <code>XmlUtils.parse()</code> helper comes along unchanged.
+</p>
+<p>Two things make that worse in the new service.
+</p>
+<p>First, Spring gives you a false sense of safety. <code>Jaxb2Marshaller</code> (Spring's JAXB wrapper) defaults to DTDs off and external entities off. But Spring's own docs say that setting only applies when you hand it a <code>SAXSource</code> or <code>StreamSource</code>. It has no effect on a <code>DOMSource</code>. So if the ported helper parses the XML into a DOM with the old unhardened factory and then passes that DOM to the marshaller, the safe default never runs. The XXE already happened.
+</p>
+<p>Second, <code>newInstance()</code> uses the JAXP lookup, which can pick a third-party parser off the classpath, like that old Xerces jar the monolith dragged along. Its settings can differ from the JDK's. On the new service's modern JDK, the cheat sheet uses <code>newDefaultInstance()</code> (Java 9+), which always picks the built-in implementation.
+</p>
+<p>Review rule: one hardened factory per service, built once, and every XML entry point goes through it.
+
+<h2>What GitLab SAST flags</h2>
+</p>
+<p>GitLab's Semgrep-based Java analyzer ships a family of XXE rules, all tagged CWE-611 and A02:2025. A few you'll see in Jira:
+<ul>
+<li><code>java_xxe_rule-DocumentBuilderFactoryDisallowDoctypeDeclMissing</code> and <code>java_xxe_rule-SAXParserFactoryDisallowDoctypeDeclMissing</code></li>
+<li><code>java_xxe_rule-XMLStreamRdr</code> (StAX reader created without DTD/external-entity settings)</li>
+<li><code>java_xxe_rule-TransformerfactoryDTDNotDisabled</code></li>
+<li><code>java_xxe_rule-DisallowDoctypeDeclFalse</code>, <code>java_xxe_rule-ExternalGeneralEntitiesTrue</code>, <code>java_xxe_rule-XMLInputFactoryExternalEntitiesEnabled</code> (someone switched protection off on purpose)</li>
+</ul>
+</p>
+<p>Here's how they differ from the SQL injection rule. The DocumentBuilderFactory rule is still a taint rule ("taint" means following something from where it starts to where it's used), but what it follows is the factory, not user input. It starts at <code>DocumentBuilderFactory.newInstance()</code> and flags <code>newDocumentBuilder()</code> if neither <code>disallow-doctype-decl</code> nor both external-entity features got set on the way. The finding means "this parser is unhardened." It doesn't tell you who can send it XML.
+</p>
+<p>When the finding lands in Jira:
+</p>
+<p>Go to the factory, not the parse call. Check whether the feature gets set before <code>newDocumentBuilder()</code>. If it doesn't, the fix is mechanical: add <code>disallow-doctype-decl</code>, or route the call through the service's hardened factory. Don't argue reachability first. Fixing it is usually one line, while proving the XML is trusted means following it through every caller. If the code truly needs a DTD, that's a design conversation: external entities off, a rejecting resolver, and entity limits. It's not a one-line fix.
+
+<h2>The short version</h2>
+</p>
+<p>XXE happens when an XML parser follows a link the document hands it, to a file or to an internal URL. In Java, the default factories will do it. The fix is boring: reject DOCTYPEs with <code>disallow-doctype-decl</code>, turn off DTDs and external entities on StAX, and lock down external access on transformers and schema validators. Watch the strangler port, where an old parsing helper rides into a clean Spring Boot service and sidesteps the framework's safe defaults.
+
+<strong>Chris's take:</strong> I don't accept "that XML comes from a partner, not a user" as a reason to close an XXE ticket. A partner feed is input you didn't write, coming from a server you don't patch. The fix is one line. The trust argument takes a meeting, and it's only true until their side gets popped.</p>
+        </div>
+    <div class="tags">Tags: XXE · CWE-611 · Java · Spring Boot · XML security</div>
+  </main>
+  <footer>
+    <p class="ai-disclosure">Most articles on AI Dev Defense are AI-drafted and then reviewed before publish.</p>
+    <p>&copy; AI Dev Defense · <a href="/archive.html" style="color:#888">Archive</a> ·
+    <a href="/about.html" style="color:#888">About</a> ·
+    <a href="/privacy.html" style="color:#888">Privacy</a> ·
+    <a href="/affiliate-disclosure.html" style="color:#888">Affiliate Disclosure</a></p>
+  </footer>
+</body>
+</html>

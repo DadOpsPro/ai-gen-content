@@ -658,5 +658,20 @@
     ],
     "word_count": 802,
     "published_at": "2026-10-26T13:49:35.295230Z"
+  },
+  {
+    "slug": "xxe-plain-english-java-xml-parser",
+    "title": "XXE in Plain English: When Your XML Parser Fetches Files for the Attacker",
+    "excerpt": "XML parsers can be tricked into fetching local files and internal URLs for an attacker. Here is how XXE works in Java and how to shut it off, especially when legacy XML code gets ported into Spring Boot.",
+    "category": "Application Security",
+    "tags": [
+      "XXE",
+      "CWE-611",
+      "Java",
+      "Spring Boot",
+      "XML security"
+    ],
+    "word_count": 1190,
+    "published_at": "2026-11-09T14:39:08.094620Z"
   }
 ]
