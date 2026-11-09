@@ -71,6 +71,12 @@ Inputs: spec path + current diff (git diff against base).
    error responses don't leak stack traces.
 6. Legacy XML leftovers: if any XML parsing remains, confirm XXE protections (external entities disabled).
 7. Dependencies: new libraries added? Note them for SCA/vulnerability scanning.
+8. GitLab Advanced SAST: if a pipeline exists for this branch, fetch the SAST report
+   (job artifact gl-sast-report.json, via `glab` CLI or `glab api`). For each finding
+   touching changed files: confirm or mark false-positive with reasoning, and give a fix.
+   Do not re-report issues SAST already found; focus your own review on what SAST misses:
+   authorization/IDOR, business logic, missing legacy controls, data exposure in DTOs.
+   If no pipeline/report is available, say so and continue.
 
 Return: BLOCKING findings, then lower-severity findings, each with file:line, risk, and fix.
 If clean, say "SECURITY OK" with the controls verified.
