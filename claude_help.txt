@@ -11,3 +11,34 @@ Write unit tests for [function/module]. Rules:
 9. Don't change production code to make tests pass. If you find a bug, report it and leave the failing test in place.
 
 Before writing, list the behaviors you plan to test and why. Then write the tests.
+
+
+
+Write Playwright tests (TypeScript) for use case [UC-ID]. The requirements are in [path/to/requirements/UC-ID.json]. Read that file first and treat it as the only source of truth for expected behavior. Don't infer expected results from the current app code or UI.
+
+Rules:
+1. Test the user's goal, not clicks. Each test maps to an acceptance criterion in the JSON and ends by asserting the outcome a user would see or rely on (confirmation, saved data shown after reload, correct error message). A test that only clicks through steps without asserting results is not allowed.
+2. Every test must be able to fail. For each test, state in a comment which acceptance criterion it covers and what bug it would catch. If you can't name one, drop it.
+3. Selectors: use getByRole, getByLabel, getByText, or getByTestId, in that order of preference. No CSS/XPath tied to layout, classes, or nth-child. If an element lacks an accessible name or test id, list it as a recommendation instead of using a brittle selector.
+4. No hard waits. Never use waitForTimeout or sleep. Rely on auto-waiting and web-first assertions (expect(locator).toBeVisible(), toHaveText, toHaveURL). Wait on specific network responses only when the UI gives no signal.
+5. Independent tests. Each test sets up its own data (via API or fixtures, not by clicking through other features) and cleans up after itself. No test may depend on another's order or leftovers. Must pass with --workers=4 and in random order.
+6. Use the UI only for what's under test. Do login, seeding, and setup through API calls or storageState, not the UI, unless login itself is the use case.
+7. Cover: the happy path, key validation/error paths, permission or role differences, and boundary inputs named in the requirements. Skip exhaustive data permutations; those belong in lower-level tests. Flag them instead.
+8. Safety: tests run against BASE_URL from env, never a hardcoded URL. Never delete or modify data the test didn't create. Use unique identifiers (timestamp or UUID) for created records.
+9. Structure: use the Page Object pattern or shared fixtures for repeated flows; reuse existing page objects and fixtures in the repo before creating new ones. Keep assertions in the test, not inside page objects. Use descriptive names like "user can submit claim with valid attachment". Tag each test with @smoke or @regression.
+10. Don't change application code to make tests pass. If the app appears buggy, write the test to assert the correct behavior per the JSON, mark it test.fail() with a comment describing the bug, and report it.
+11. Don't test third-party services (payment providers, SSO pages, external APIs). Mock them with page.route() so tests don't depend on systems we don't control.
+12. Every Playwright call must be awaited; code must pass the @typescript-eslint/no-floating-promises lint rule.
+13. Use soft assertions (expect.soft) when checking several independent fields on one page, so one failure doesn't hide others.
+14. Traceability: tag each test with the requirement and acceptance-criterion IDs from the JSON (e.g. @UC-142 @AC-142.3). Never silently skip a criterion.
+
+Before writing code:
+- List every acceptance criterion in the JSON and mark each as covered, intentionally skipped (with reason, e.g. backend-only process logic), or ambiguous.
+- For each covered criterion, list the test cases you'll write and the data each needs.
+- List any missing test ids or ambiguities in the requirements.
+
+Then write the tests.
+
+After writing:
+- Name 3 plausible regressions (e.g. button submits twice, error message missing, saved value not persisted) and confirm which test would catch each. Add a test for any that would slip through.
+- Output a short coverage table: criterion ID, test name(s), status.
