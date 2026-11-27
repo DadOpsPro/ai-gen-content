@@ -1,26 +1,13 @@
-- Put all temporary files in ./.tmp/ and delete them there when done.
-- Never delete anything outside ./.tmp/. If something else should go, list it and ask me.
+Write unit tests for [function/module]. Rules:
 
+1. Test behavior, not implementation. Assert on outputs, return values, state changes, and side effects a caller can observe. Don't assert on private methods, internal call order, or how many times a helper was called unless that IS the contract.
+2. Every test must be able to fail. For each test, briefly state what bug it would catch. If you can't name one, delete the test.
+3. Cover what matters: the happy path, boundaries (empty, zero, one, max, off-by-one), invalid input and error paths, and any business rule in the code or requirements.
+4. Mock only at real boundaries (network, DB, clock, filesystem, third-party APIs). Never mock the unit under test or simple collaborators. No test should just check that a mock returned what you told it to.
+5. No tautologies. Don't recompute the expected value with the same logic as the code; use concrete literal expected values.
+6. One behavior per test, with a descriptive name like "rejects_expired_token" or "returns_empty_list_when_no_matches".
+7. Tests must be deterministic and independent: no real time, randomness, or shared state between tests.
+8. After writing, run a mutation check in your head: list 3 plausible bugs someone could introduce (flipped comparison, missing null check, wrong default) and confirm at least one test fails for each. Add tests for any that would slip through.
+9. Don't change production code to make tests pass. If you find a bug, report it and leave the failing test in place.
 
-
-"hooks": {
-  "PreToolUse": [
-    { "matcher": "Bash",
-      "hooks": [{ "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/guard-delete.sh" }] }
-  ]
-}
-
-
-#!/usr/bin/env bash
-cmd=$(jq -r '.tool_input.command')
-if echo "$cmd" | grep -qE '(^|[;&| ])(rm|rmdir|unlink)( |$)|-delete|git clean'; then
-  targets=$(echo "$cmd" | grep -oE '(rm|rmdir|unlink)( -[a-zA-Z]+)* +[^;&|]+' | sed -E 's/^(rm|rmdir|unlink)( -[a-zA-Z]+)* +//')
-  for t in $targets; do
-    case "$t" in
-      .tmp/*|./.tmp/*|/tmp/*) ;;
-      *) echo "Blocked: deletes only allowed in ./.tmp or /tmp ($t)" >&2; exit 2 ;;
-    esac
-  done
-  echo "$cmd" | grep -qE -- '-delete|git clean' && { echo "Blocked: use rm inside ./.tmp" >&2; exit 2; }
-fi
-exit 0
+Before writing, list the behaviors you plan to test and why. Then write the tests.
